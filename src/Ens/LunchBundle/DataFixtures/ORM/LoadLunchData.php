@@ -13,12 +13,10 @@ class LoadLunchData extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $em)
     {
         $lunch_sensio_labs = new Lunch();
-        $lunch_sensio_labs->setCategory($em->merge($this->getReference('category-salad')));
-        $lunch_sensio_labs->setDay($em->merge($this->getReference('day-monday')));
-        $lunch_sensio_labs->setType('salad');
-        $lunch_sensio_labs->setDescription('Салат оливье');
-        $lunch_sensio_labs->setCount('0');
-        $lunch_sensio_labs->setDayOfWeek('monday');
+        $lunch_sensio_labs->setCategories("Salad");
+        $lunch_sensio_labs->setDay("Monday");
+        $lunch_sensio_labs->setDescription("Оливье");
+        $lunch_sensio_labs->setCount(0);
 
         $em->persist($lunch_sensio_labs);
         $em->flush();

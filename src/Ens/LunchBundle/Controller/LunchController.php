@@ -23,16 +23,31 @@ class LunchController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $categories = $em->getRepository('EnsLunchBundle:Category')->getWithLunches();
+        $categories[] = "Soup";
+        $categories[] = "Salad";
+        $categories[] = "Main Course";
+        $categories[] = "Dessert";
 
-        foreach($categories as $category) {
-            $category->setActiveLunches($em->getRepository('EnsLunchBundle:Lunch')->getDaysLunch());
+        $days[] = "Monday";
+        $days[] = "Tuesday";
+        $days[] = "Wednesday";
+        $days[] = "Thursday";
+        $days[] = "Friday";
+
+        foreach ($categories as $category) {
+            foreach ($days as $day) {
+                $entities = $em->getRepository('EnsLunchBundle:Lunch')->getCategoryDayLunches($category, $day);
+            }
         }
 
-        return $this->render('EnsLunchBundle:Lunch:index.html.twig', array(
-            'categories' => $categories
-        ));
+        return $this->render(
+            'EnsLunchBundle:Lunch:index.html.twig',
+            array(
+                'entities' => $entities
+            )
+        );
     }
+
     /**
      * Creates a new Lunch entity.
      *
@@ -51,10 +66,13 @@ class LunchController extends Controller
             return $this->redirect($this->generateUrl('ens_lunch_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('EnsLunchBundle:Lunch:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        return $this->render(
+            'EnsLunchBundle:Lunch:new.html.twig',
+            array(
+                'entity' => $entity,
+                'form' => $form->createView(),
+            )
+        );
     }
 
     /**
@@ -66,10 +84,14 @@ class LunchController extends Controller
      */
     private function createCreateForm(Lunch $entity)
     {
-        $form = $this->createForm(new LunchType(), $entity, array(
-            'action' => $this->generateUrl('ens_lunch_create'),
-            'method' => 'POST',
-        ));
+        $form = $this->createForm(
+            new LunchType(),
+            $entity,
+            array(
+                'action' => $this->generateUrl('ens_lunch_create'),
+                'method' => 'POST',
+            )
+        );
 
         $form->add('submit', 'submit', array('label' => 'Create'));
 
@@ -83,12 +105,15 @@ class LunchController extends Controller
     public function newAction()
     {
         $entity = new Lunch();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
-        return $this->render('EnsLunchBundle:Lunch:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        return $this->render(
+            'EnsLunchBundle:Lunch:new.html.twig',
+            array(
+                'entity' => $entity,
+                'form' => $form->createView(),
+            )
+        );
     }
 
     /**
@@ -107,10 +132,13 @@ class LunchController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('EnsLunchBundle:Lunch:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'EnsLunchBundle:Lunch:show.html.twig',
+            array(
+                'entity' => $entity,
+                'delete_form' => $deleteForm->createView(),
+            )
+        );
     }
 
     /**
@@ -130,31 +158,39 @@ class LunchController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('EnsLunchBundle:Lunch:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'EnsLunchBundle:Lunch:edit.html.twig',
+            array(
+                'entity' => $entity,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+            )
+        );
     }
 
     /**
-    * Creates a form to edit a Lunch entity.
-    *
-    * @param Lunch $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Lunch entity.
+     *
+     * @param Lunch $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Lunch $entity)
     {
-        $form = $this->createForm(new LunchType(), $entity, array(
-            'action' => $this->generateUrl('ens_lunch_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
+        $form = $this->createForm(
+            new LunchType(),
+            $entity,
+            array(
+                'action' => $this->generateUrl('ens_lunch_update', array('id' => $entity->getId())),
+                'method' => 'PUT',
+            )
+        );
 
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
+
     /**
      * Edits an existing Lunch entity.
      *
@@ -179,12 +215,16 @@ class LunchController extends Controller
             return $this->redirect($this->generateUrl('ens_lunch_edit', array('id' => $id)));
         }
 
-        return $this->render('EnsLunchBundle:Lunch:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'EnsLunchBundle:Lunch:edit.html.twig',
+            array(
+                'entity' => $entity,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+            )
+        );
     }
+
     /**
      * Deletes a Lunch entity.
      *
@@ -222,7 +262,6 @@ class LunchController extends Controller
             ->setAction($this->generateUrl('ens_lunch_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

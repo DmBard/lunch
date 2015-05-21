@@ -2,53 +2,53 @@
 
 {% block body -%}
     <h1>Lunch list</h1>
-<div id="lunches">
-    {% for category in categories %}
-    <div>
-        <div class="category">
-            {#<div class="feed">#}
-                {#<a href="">Feed</a>#}
-            {#</div>#}
-            <h1>{{ category.name }}</h1>
-        </div>
+{#<div id="lunches">#}
+    {#{% for category in categories %}#}
+    {#<div>#}
+        {#<div class="category">#}
+            {#&#123;&#35;<div class="feed">&#35;&#125;#}
+                {#&#123;&#35;<a href="">Feed</a>&#35;&#125;#}
+            {#&#123;&#35;</div>&#35;&#125;#}
+            {#<h1>{{ category.name }}</h1>#}
+        {#</div>#}
                 <table class="records_list">
                     <thead>
                     <tr>
                         <th>Monday</th>
-                        <th></th>
+                        {#<th></th>#}
                         <th>Tuesday</th>
-                        <th></th>
+                        {#<th></th>#}
                         <th>Wednesday</th>
-                        <th></th>
+                        {#<th></th>#}
                         <th>Thursday</th>
-                        <th></th>
+                        {#<th></th>#}
                         <th>Friday</th>
-                        <th></th>
+                        {#<th></th>#}
                     </tr>
                     </thead>
                     <tbody>
-                    {% for entity in category.activelunches %}
-                        <tr>
-                            <td>{{ entity.type }}</td>
-                            <td>{{ entity.dayofweek }}</td>
+                    {% for entity in entities %}
+                        {#<tr>#}
+                            {#&#123;&#35;<td>{{ entity.type }}</td>&#35;&#125;#}
+                            {#&#123;&#35;<td>{{ entity.day }}</td>&#35;&#125;#}
                             <td>{{ entity.description }}</td>
-                            <td>
-                                <ul>
-                                    <li>
-                                        <a href="{{ path('ens_lunch_show', { 'id': entity.id }) }}">Show</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('ens_lunch_edit', { 'id': entity.id }) }}">Edit</a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
+                            {#<td>#}
+                                {#<ul>#}
+                                    {#<li>#}
+                                        {#<a href="{{ path('ens_lunch_show', { 'id': entity.id }) }}">Show</a>#}
+                                    {#</li>#}
+                                    {#<li>#}
+                                        {#<a href="{{ path('ens_lunch_edit', { 'id': entity.id }) }}">Edit</a>#}
+                                    {#</li>#}
+                                {#</ul>#}
+                            {#</td>#}
+                        {#</tr>#}
                     {% endfor %}
                     </tbody>
                 </table>
-            </div>
-        {% endfor %}
-    </div>
+            {#</div>#}
+        {#{% endfor %}#}
+    {#</div>#}
 
     <ul>
         <li>

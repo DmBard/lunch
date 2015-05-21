@@ -14,19 +14,6 @@ class Lunch
      */
     private $id;
 
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $day_of_week;
-
-    /**
-     * @var string
-     */
     private $count;
 
     /**
@@ -47,15 +34,15 @@ class Lunch
     /**
      * @var \Ens\LunchBundle\Entity\Category
      */
-    private $category;
-
-    /**
-     * @var \Ens\LunchBundle\Entity\Day
-     */
     private $day;
 
     /**
-     * @return Day
+     * @var string
+     */
+    private $categories;
+
+    /**
+     * @return string
      */
     public function getDay()
     {
@@ -63,7 +50,7 @@ class Lunch
     }
 
     /**
-     * @param Day $day
+     * @param string $day
      */
     public function setDay($day)
     {
@@ -82,55 +69,9 @@ class Lunch
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     * @return Lunch
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set day_of_week
-     *
-     * @param string $dayOfWeek
-     * @return Lunch
-     */
-    public function setDayOfWeek($dayOfWeek)
-    {
-        $this->day_of_week = $dayOfWeek;
-
-        return $this;
-    }
-
-    /**
-     * Get day_of_week
-     *
-     * @return string
-     */
-    public function getDayOfWeek()
-    {
-        return $this->day_of_week;
-    }
-
-    /**
      * Set count
      *
-     * @param string $count
+     * @param integer $count
      * @return Lunch
      */
     public function setCount($count)
@@ -143,7 +84,7 @@ class Lunch
     /**
      * Get count
      *
-     * @return string
+     * @return integer
      */
     public function getCount()
     {
@@ -219,28 +160,28 @@ class Lunch
         return $this->updated_at;
     }
 
-    /**
-     * Set category
-     *
-     * @param \Ens\LunchBundle\Entity\Category $category
-     * @return Lunch
-     */
-    public function setCategory(\Ens\LunchBundle\Entity\Category $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \Ens\LunchBundle\Entity\Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
+//    /**
+//     * Set category
+//     *
+//     * @param \Ens\LunchBundle\Entity\Category $category
+//     * @return Lunch
+//     */
+//    public function setCategory(\Ens\LunchBundle\Entity\Category $category = null)
+//    {
+//        $this->category = $category;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get category
+//     *
+//     * @return \Ens\LunchBundle\Entity\Category
+//     */
+//    public function getCategory()
+//    {
+//        return $this->category;
+//    }
 
 
     /**
@@ -259,5 +200,28 @@ class Lunch
     public function setUpdatedAtValue()
     {
         $this->updated_at = new \DateTime();
+    }
+
+    /**
+     * Set categories
+     *
+     * @param string $categories
+     * @return Lunch
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return string
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }
