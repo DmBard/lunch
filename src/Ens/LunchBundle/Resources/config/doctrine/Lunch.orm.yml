@@ -31,13 +31,13 @@ Ens\LunchBundle\Entity\Lunch:
             joinColumn:
                 name: category_id
                 referencedColumnName: id
-    manyToOne:
-        day:
-            targetEntity: Day
-            inversedBy: lunches
-            joinColumn:
-                name: day_id
-                referencedColumnName: id
+#    manyToOne:
+#        day:
+#            targetEntity: Day
+#            inversedBy: lunches
+#            joinColumn:
+#                name: day_id
+#                referencedColumnName: id
 
     lifecycleCallbacks:
         prePersist: [ setCreatedAtValue ]

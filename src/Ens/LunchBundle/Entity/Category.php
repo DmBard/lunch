@@ -30,25 +30,21 @@ class Category
 
     private $active_lunches;
 
-    /**
-     * @return mixed
-     */
+
+
+    public function __construct()
+    {
+        $this->lunches = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     public function getActiveLunches()
     {
         return $this->active_lunches;
     }
 
-    /**
-     * @param mixed $active_lunches
-     */
     public function setActiveLunches($active_lunches)
     {
         $this->active_lunches = $active_lunches;
-    }
-
-    public function __construct()
-    {
-        $this->lunches = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

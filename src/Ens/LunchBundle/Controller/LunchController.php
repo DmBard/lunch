@@ -23,10 +23,14 @@ class LunchController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('EnsLunchBundle:Lunch')->getDaysLunch();
+        $categories = $em->getRepository('EnsLunchBundle:Category')->getWithLunches();
+
+        foreach($categories as $category) {
+            $category->setActiveLunches($em->getRepository('EnsLunchBundle:Lunch')->getDaysLunch());
+        }
 
         return $this->render('EnsLunchBundle:Lunch:index.html.twig', array(
-            'entities' => $entities
+            'categories' => $categories
         ));
     }
     /**

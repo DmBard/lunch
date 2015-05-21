@@ -14,10 +14,14 @@ class CategoryRepository extends EntityRepository
 {
     public function getWithLunches()
     {
-        $query = $this->getEntityManager()->createQuery(
-            'SELECT c FROM EnsLunchBundle:Category c LEFT JOIN c.lunches j WHERE j.day_of_week > :day'
-        )->setParameter('day', "friday");
+        {
+            $query = $this->getEntityManager()->createQuery(
+                'SELECT c FROM EnsLunchBundle:Category c LEFT JOIN c.lunches j WHERE j.day_of_week = :dayweek'
+            )
+                -> setParameter('dayweek', 'friday');
 
-        return $query->getResult();
+
+            return $query->getResult();
+        }
     }
 }
