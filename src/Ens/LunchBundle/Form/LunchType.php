@@ -21,10 +21,16 @@ class LunchType extends AbstractType
             ->add('description')
             ->add('created_at')
             ->add('updated_at')
-            ->add('day')
-            ->add('category')
+            ->add('category', 'entity', array(
+                'label' => 'Вид блюда',
+                'required' => true,
+                'class' => 'Ens\\LunchBundle\\Entity\\Category'))
+            ->add('day', 'entity', array(
+                'label' => 'День Недели',
+                'required' => true,
+//                'group_by' => false,
+                'class' => 'Ens\\LunchBundle\\Entity\\Day'))
         ;
-//            ->add('category');
     }
 
     /**
