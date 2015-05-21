@@ -54,6 +54,22 @@ class Lunch
      */
     private $day;
 
+    /**
+     * @return Day
+     */
+    public function getDay()
+    {
+        return $this->day;
+    }
+
+    /**
+     * @param Day $day
+     */
+    public function setDay($day)
+    {
+        $this->day = $day;
+    }
+
 
     /**
      * Get id
@@ -226,28 +242,6 @@ class Lunch
         return $this->category;
     }
 
-    /**
-     * Set day
-     *
-     * @param \Ens\LunchBundle\Entity\Day $day
-     * @return Lunch
-     */
-    public function setDay(Day $day = null)
-    {
-        $this->day = $day;
-
-        return $this;
-    }
-
-    /**
-     * Get day
-     *
-     * @return \Ens\LunchBundle\Entity\Day
-     */
-    public function getDay()
-    {
-        return $this->day;
-    }
 
     /**
      * @ORM\PrePersist
