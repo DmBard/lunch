@@ -28,22 +28,22 @@ class Category
      * Constructor
      */
 
-    private $active_jobs;
+    private $active_lunches;
 
     /**
      * @return mixed
      */
-    public function getActiveJobs()
+    public function getActiveLunches()
     {
-        return $this->active_jobs;
+        return $this->active_lunches;
     }
 
     /**
-     * @param mixed $active_jobs
+     * @param mixed $active_lunches
      */
-    public function setActiveJobs($active_jobs)
+    public function setActiveLunches($active_lunches)
     {
-        $this->active_jobs = $active_jobs;
+        $this->active_lunches = $active_lunches;
     }
 
     public function __construct()

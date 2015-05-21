@@ -15,7 +15,7 @@ class CategoryRepository extends EntityRepository
     public function getWithLunches()
     {
         $query = $this->getEntityManager()->createQuery(
-            'SELECT c FROM EnsLunchBundle:Category c LEFT JOIN c.lunches l WHERE l.day_of_week = :day'
+            'SELECT c FROM EnsLunchBundle:Category c LEFT JOIN c.lunches j WHERE j.day_of_week > :day'
         )->setParameter('day', "friday");
 
         return $query->getResult();
