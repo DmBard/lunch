@@ -22,6 +22,7 @@ class LunchController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $tmp = $em->getRepository('EnsLunchBundle:Lunch');
 
         $categories[] = "Soup";
         $categories[] = "Salad";
@@ -34,11 +35,12 @@ class LunchController extends Controller
         $days[] = "Thursday";
         $days[] = "Friday";
 
-        foreach ($categories as $category) {
-            foreach ($days as $day) {
-                $entities = $em->getRepository('EnsLunchBundle:Lunch')->getCategoryDayLunches($category, $day);
-            }
-        }
+//        foreach ($categories as $category) {
+//            foreach ($days as $day) {
+                $entities = $tmp->getCategoryDayLunches();
+
+//            }
+//        }
 
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',

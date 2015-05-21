@@ -28,21 +28,21 @@
                     </thead>
                     <tbody>
                     {% for entity in entities %}
-                        {#<tr>#}
-                            {#&#123;&#35;<td>{{ entity.type }}</td>&#35;&#125;#}
-                            {#&#123;&#35;<td>{{ entity.day }}</td>&#35;&#125;#}
+                        <tr>
+                            {#<td>{{ entity.type }}</td>#}
+                            {#<td>{{ entity.day }}</td>#}
                             <td>{{ entity.description }}</td>
-                            {#<td>#}
-                                {#<ul>#}
-                                    {#<li>#}
-                                        {#<a href="{{ path('ens_lunch_show', { 'id': entity.id }) }}">Show</a>#}
-                                    {#</li>#}
-                                    {#<li>#}
-                                        {#<a href="{{ path('ens_lunch_edit', { 'id': entity.id }) }}">Edit</a>#}
-                                    {#</li>#}
-                                {#</ul>#}
-                            {#</td>#}
-                        {#</tr>#}
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('ens_lunch_show', { 'id': entity.id }) }}">Show</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('ens_lunch_edit', { 'id': entity.id }) }}">Edit</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>
