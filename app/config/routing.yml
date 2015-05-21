@@ -1,0 +1,11 @@
+EnsLunchBundle_lunch:
+        resource: "@EnsLunchBundle/Resources/config/routing/lunch.yml"
+        prefix:   /lunch
+
+ens_lunch:
+    resource: "@EnsLunchBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

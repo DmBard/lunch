@@ -1,0 +1,44 @@
+# src/Ens/LunchBundle/Resources/config/doctrine/lunch.orm.yml
+Ens\LunchBundle\Entity\Lunch:
+    type: entity
+    repositoryClass: Ens\LunchBundle\Repository\LunchRepository
+    table: lunch
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        type:
+            type: string
+            length: 255
+        day_of_week:
+            type: string
+            length: 255
+        count:
+            type: string
+            length: 255
+        description:
+            type: text
+        created_at:
+            type: datetime
+        updated_at:
+            type: datetime
+            nullable: true
+    manyToOne:
+        category:
+            targetEntity: Category
+            inversedBy: lunches
+            joinColumn:
+                name: category_id
+                referencedColumnName: id
+    manyToOne:
+        day:
+            targetEntity: Day
+            inversedBy: lunches
+            joinColumn:
+                name: day_id
+                referencedColumnName: id
+
+    lifecycleCallbacks:
+        prePersist: [ setCreatedAtValue ]
+        preUpdate: [ setUpdatedAtValue ]

@@ -1,0 +1,30 @@
+ens_lunch:
+    path:     /
+    defaults: { _controller: "EnsLunchBundle:Lunch:index" }
+
+ens_lunch_show:
+    path:     /{id}/show
+    defaults: { _controller: "EnsLunchBundle:Lunch:show" }
+
+ens_lunch_new:
+    path:     /new
+    defaults: { _controller: "EnsLunchBundle:Lunch:new" }
+
+ens_lunch_create:
+    path:     /create
+    defaults: { _controller: "EnsLunchBundle:Lunch:create" }
+    methods:  POST
+
+ens_lunch_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EnsLunchBundle:Lunch:edit" }
+
+ens_lunch_update:
+    path:     /{id}/update
+    defaults: { _controller: "EnsLunchBundle:Lunch:update" }
+    methods:  [POST, PUT]
+
+ens_lunch_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EnsLunchBundle:Lunch:delete" }
+    methods:  [POST, DELETE]

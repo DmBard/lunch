@@ -1,0 +1,17 @@
+# src/Ens/LunchBundle/Resources/config/doctrine/Category.orm.yml
+Ens\LunchBundle\Entity\Day:
+    type: entity
+    table: day
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 255
+            unique: true
+    oneToMany:
+        lunches:
+            targetEntity: Lunch
+            mappedBy: day
