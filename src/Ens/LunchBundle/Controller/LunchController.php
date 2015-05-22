@@ -65,6 +65,22 @@ class LunchController extends Controller
         );
     }
 
+    public function allAction()
+    {
+        /** @var ManagerRegistry $em */
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('EnsLunchBundle:Lunch');
+
+        $entities = $repo->findAll();
+
+        return $this->render(
+            'EnsLunchBundle:Lunch:all.html.twig',
+            array(
+                'entities' => $entities
+            )
+        );
+    }
+
     /**
      * Creates a new Lunch entity.
      *

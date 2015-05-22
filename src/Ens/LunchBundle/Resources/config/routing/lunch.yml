@@ -28,3 +28,8 @@ ens_lunch_delete:
     path:     /{id}/delete
     defaults: { _controller: "EnsLunchBundle:Lunch:delete" }
     methods:  [POST, DELETE]
+
+ens_lunch_all:
+    path:     /{id}/all
+    defaults: { _controller: "EnsLunchBundle:Lunch:all" }
+    methods:  [POST, DELETE]
