@@ -12,14 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class LunchRepository extends EntityRepository
 {
-    public function getCategoryDayLunches()
+    public function getCategoryDayLunches($currentDay = null, $currentCategory = null)
     {
-        $query = $this->getEntityManager()->createQuery(
-            'SELECT c FROM EnsLunchBundle:Lunch c ORDER BY FIELD(c.day, "Monday", "Tuesday"   ) '
-        );
+        $qb = $this->createQueryBuilder('l');
+
+        if ($currentDay) {
+            $qb->where('l.day = :dayOfWeek')
+                ->setParameter('dayOfWeek', $currentDay);
+        }
+
+        if ($currentCategory) {
+            $qb->andWhere('l.categories = :category_i')
+                ->setParameter('category_i', $currentCategory);
+        }
+
+        $query = $qb->getQuery();
 
         return $query->getResult();
-
     }
 
 }

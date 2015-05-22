@@ -2,11 +2,11 @@
 
 namespace Ens\LunchBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Ens\LunchBundle\Entity\Lunch;
 use Ens\LunchBundle\Form\LunchType;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Lunch controller.
@@ -21,26 +21,41 @@ class LunchController extends Controller
      */
     public function indexAction()
     {
+        /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
-        $tmp = $em->getRepository('EnsLunchBundle:Lunch');
+        $repo = $em->getRepository('EnsLunchBundle:Lunch');
 
-        $categories[] = "Soup";
-        $categories[] = "Salad";
-        $categories[] = "Main Course";
-        $categories[] = "Dessert";
-
-        $days[] = "Monday";
-        $days[] = "Tuesday";
-        $days[] = "Wednesday";
-        $days[] = "Thursday";
-        $days[] = "Friday";
-
+//        /** @var string[] $categories */
+//        $categories = [
+//            'Salad',
+//            'Soup',
+//            'Main Course',
+//            'Dessert',
+//        ];
+//
+//        /** @var string[] $days */
+//        $days = [
+//            'Monday',
+//            'Tuesday',
+//            'Wednesday',
+//            'Thursday',
+//            'Friday',
+//        ];
+//
+//        $entities = [];
 //        foreach ($categories as $category) {
 //            foreach ($days as $day) {
-                $entities = $tmp->getCategoryDayLunches();
-
+//                $entity = $repo->getCategoryDayLunches($day, $category);
+//
+//                if ($entity != null) {
+//                    foreach ($entity as $item) {
+//                        array_push($entities, $item);
+//                    }
+//                }
 //            }
 //        }
+
+        $entities = $repo->findAll();
 
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',
