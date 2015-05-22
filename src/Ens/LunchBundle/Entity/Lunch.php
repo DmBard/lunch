@@ -2,6 +2,7 @@
 
 namespace Ens\LunchBundle\Entity;
 
+use Doctrine\Common\Annotations\Annotation;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,11 +14,14 @@ class Lunch
      * @var integer
      */
     private $id;
-
+    /**
+     * @var integer
+     */
     private $count;
 
     /**
      * @var string
+     *
      */
     private $description;
 
@@ -160,30 +164,6 @@ class Lunch
         return $this->updated_at;
     }
 
-//    /**
-//     * Set category
-//     *
-//     * @param \Ens\LunchBundle\Entity\Category $category
-//     * @return Lunch
-//     */
-//    public function setCategory(\Ens\LunchBundle\Entity\Category $category = null)
-//    {
-//        $this->category = $category;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get category
-//     *
-//     * @return \Ens\LunchBundle\Entity\Category
-//     */
-//    public function getCategory()
-//    {
-//        return $this->category;
-//    }
-
-
     /**
      * @ORM\PrePersist
      */
@@ -223,5 +203,31 @@ class Lunch
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    public static function getListCategories()
+    {
+        return array('Salad' => 'Salad', 'Soup' => 'Soup', 'Main Course' => 'Main Course', 'Dessert' => 'Dessert');
+    }
+
+    public static function getListCategoriesValues()
+    {
+        return array_keys(self::getListCategories());
+    }
+
+    public static function getListDays()
+    {
+        return array(
+            'Monday' => 'Monday',
+            'Tuesday' => 'Tuesday',
+            'Wednesday' => 'Wednesday',
+            'Thursday' => 'Thursday',
+            'Friday' => 'Friday'
+        );
+    }
+
+    public static function getListDaysValues()
+    {
+        return array_keys(self::getListDays());
     }
 }

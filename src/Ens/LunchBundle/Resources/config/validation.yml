@@ -1,0 +1,14 @@
+Ens\LunchBundle\Entity\Lunch:
+    properties:
+        categories:
+            - NotBlank: ~
+#            - Choice: {callback: getListCategoriesValues}
+        day:
+            - NotBlank: ~
+#            - Choice: {callback: getListDaysValues}
+        description:
+            - NotBlank: ~
+        count:
+            - NotBlank: ~
+            - Type: integer
+

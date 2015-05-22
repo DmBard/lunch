@@ -2,6 +2,7 @@
 
 namespace Ens\LunchBundle\Form;
 
+use Ens\LunchBundle\Entity\Lunch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,10 +16,10 @@ class LunchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('day')
-            ->add('categories')
-            ->add('count')
-            ->add('description')
+            ->add('day', 'choice', array('choices' => Lunch::getListDays(), 'expanded' => false))
+            ->add('categories', 'choice', array('choices' => Lunch::getListCategories()))
+            ->add('count', 'integer')
+            ->add('description', 'textarea')
             ->add('created_at')
             ->add('updated_at')
         ;
