@@ -19,10 +19,10 @@
             <td>Salad</td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="salad_mon">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -30,10 +30,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="salad_tue">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -41,10 +41,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="salad_wed">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -52,10 +52,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="salad_thu">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -63,10 +63,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="salad_fri">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -78,10 +78,10 @@
             <td>Soup</td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="soup_mon">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -89,10 +89,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="soup_tue">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -100,10 +100,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="soup_wed">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -111,10 +111,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="soup_thu">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -122,10 +122,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="soup_fri">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -137,10 +137,10 @@
             <td>Main Course</td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="main_mon">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -148,10 +148,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="main_tue">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -159,10 +159,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="main_wed">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -170,10 +170,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="main_thu">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -181,10 +181,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="main_fri">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -196,10 +196,10 @@
             <td>Dessert</td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="dessert_mon">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -207,10 +207,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="dessert_tue">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -218,10 +218,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="dessert_wed">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -229,10 +229,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="dessert_thu">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -240,10 +240,10 @@
             </td>
             <td>
                 <label>
-                    <select name="pty_select">
+                    <select name="dessert_fri">
                         {% for entity in entities %}
                             {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.day>{{ entity.description }}</option>
+                                <option value=entity.id>{{ entity.description }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
