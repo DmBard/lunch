@@ -36,7 +36,7 @@ class Lunch
     private $updated_at;
 
     /**
-     * @var \Ens\LunchBundle\Entity\Category
+     * @var string
      */
     private $day;
 
@@ -44,6 +44,27 @@ class Lunch
      * @var string
      */
     private $categories;
+
+    /**
+     * @var Person
+     */
+    private $person;
+
+    /**
+     * @return Person
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param Person $person
+     */
+    public function setPerson($person)
+    {
+        $this->person = $person;
+    }
 
     /**
      * @return string

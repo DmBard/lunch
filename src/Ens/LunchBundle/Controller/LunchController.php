@@ -65,7 +65,7 @@ class LunchController extends Controller
         );
     }
 
-    public function allAction()
+    public function showAllAction()
     {
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();

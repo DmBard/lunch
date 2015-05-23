@@ -16,7 +16,7 @@ class LunchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('day', 'choice', array('choices' => Lunch::getListDays(), 'expanded' => false))
+            ->add('day', 'choice', array('choices' => Lunch::getListDays()))
             ->add('categories', 'choice', array('choices' => Lunch::getListCategories()))
             ->add('count', 'integer')
             ->add('description', 'textarea')

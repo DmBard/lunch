@@ -1,5 +1,5 @@
-# src/Ens/LunchBundle/Resources/config/doctrine/Category.orm.yml
-Ens\LunchBundle\Entity\Category:
+# src/Ens/LunchBundle/Resources/config/doctrine/Person.orm.yml
+Ens\LunchBundle\Entity\Person:
     type: entity
     repositoryClass: Ens\LunchBundle\Repository\CategoryRepository
     table: category
@@ -15,4 +15,4 @@ Ens\LunchBundle\Entity\Category:
     oneToMany:
         lunches:
             targetEntity: Lunch
-            mappedBy: category
+            mappedBy: person

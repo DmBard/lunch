@@ -1,6 +1,7 @@
 ens_lunch:
     path:     /
     defaults: { _controller: "EnsLunchBundle:Lunch:index" }
+    methods:  GET
 
 ens_lunch_show:
     path:     /{id}/show
@@ -29,7 +30,6 @@ ens_lunch_delete:
     defaults: { _controller: "EnsLunchBundle:Lunch:delete" }
     methods:  [POST, DELETE]
 
-ens_lunch_all:
-    path:     /{id}/all
-    defaults: { _controller: "EnsLunchBundle:Lunch:all" }
-    methods:  [POST, DELETE]
+ens_lunch_show_all:
+    path:     /all
+    defaults: { _controller: "EnsLunchBundle:Lunch:showAll" }

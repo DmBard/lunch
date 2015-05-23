@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Category
  */
-class Category
+class Person
 {
     /**
      * @var integer
@@ -61,7 +61,7 @@ class Category
      * Set name
      *
      * @param string $name
-     * @return Category
+     * @return Person
      */
     public function setName($name)
     {
@@ -84,7 +84,7 @@ class Category
      * Add lunches
      *
      * @param \Ens\LunchBundle\Entity\Lunch $lunches
-     * @return Category
+     * @return Person
      */
     public function addLunch(\Ens\LunchBundle\Entity\Lunch $lunches)
     {
