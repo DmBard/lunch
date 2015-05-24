@@ -50,6 +50,8 @@ class Lunch
      */
     private $person;
 
+    public $file;
+
     /**
      * @return Person
      */
@@ -251,4 +253,51 @@ class Lunch
     {
         return array_keys(self::getListDays());
     }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/file';
+    }
+
+    protected function getUploadRootDir()
+    {
+        return '/home/bard/PhpstormProjects/lunch/web/'.$this->getUploadDir();
+    }
+
+    public function getWebPath()
+    {
+        return $this->getUploadDir().'/'.'menu';
+    }
+
+    public function getAbsolutePath()
+    {
+        return $this->getUploadRootDir().'/'.'menu';
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function upload()
+    {
+        if (null === $this->file) {
+            return;
+        }
+
+        // if there is an error when moving the file, an exception will
+        // be automatically thrown by move(). This will properly prevent
+        // the entity from being persisted to the database on error
+
+        unset($this->file);
+    }
+
+    /**
+     * @ORM\PostRemove
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
 }

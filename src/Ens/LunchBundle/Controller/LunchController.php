@@ -81,6 +81,11 @@ class LunchController extends Controller
         );
     }
 
+    public function saveChoiceAction(Request $request)
+    {
+
+    }
+
     /**
      * Creates a new Lunch entity.
      *
@@ -93,6 +98,7 @@ class LunchController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->file->move('/home/bard/PhpstormProjects/lunch/web/uploads/file', $entity->file->getClientOriginalName());
             $em->persist($entity);
             $em->flush();
 

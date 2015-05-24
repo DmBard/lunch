@@ -21,7 +21,8 @@ class LunchType extends AbstractType
             ->add('count', 'integer')
             ->add('description', 'textarea')
             ->add('created_at')
-            ->add('updated_at')
+            ->add('updated_at');
+            $builder->add('file', 'file', array('label' => 'File', 'required' => false));
         ;
     }
 

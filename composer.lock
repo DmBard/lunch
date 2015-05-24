@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2480a84b7bfcc171f714a36d169ca20e",
+    "hash": "cb6de74ab09abe3808bf500bdd97a387",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -869,6 +869,65 @@
             "time": "2013-12-07 10:10:39"
         },
         {
+            "name": "iphp/filestore-bundle",
+            "version": "dev-master",
+            "target-dir": "Iphp/FileStoreBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vitiko/IphpFileStoreBundle.git",
+                "reference": "ca1254176096e00061e6d507e0324a8364510d6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vitiko/IphpFileStoreBundle/zipball/ca1254176096e00061e6d507e0324a8364510d6f",
+                "reference": "ca1254176096e00061e6d507e0324a8364510d6f",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/framework-bundle": "~2.2"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "@stable",
+                "doctrine/orm": "@stable",
+                "mikey179/vfsstream": "@stable",
+                "sensio/framework-extra-bundle": "@stable",
+                "symfony/browser-kit": "@stable",
+                "symfony/class-loader": "@stable",
+                "symfony/css-selector": "@stable",
+                "symfony/finder": "@stable",
+                "symfony/form": "@stable",
+                "symfony/process": "@stable",
+                "symfony/twig-bundle": "@stable",
+                "symfony/validator": "@stable",
+                "symfony/yaml": "@stable"
+            },
+            "type": "bundle",
+            "autoload": {
+                "psr-0": {
+                    "Iphp\\FileStoreBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vitiko",
+                    "email": "vitiko@mail.ru"
+                }
+            ],
+            "description": "Upload files for doctrine entities in symfony 2 project",
+            "homepage": "http://symfonydev.ru",
+            "keywords": [
+                "file upload",
+                "sonata admin file upload",
+                "symfony file upload",
+                "upload"
+            ],
+            "time": "2014-12-10 08:01:03"
+        },
+        {
             "name": "jdorn/sql-formatter",
             "version": "v1.2.17",
             "source": {
@@ -1220,16 +1279,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v2.0.2",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "cecb1397087dc9c733796eda6e9d121336039cdc"
+                "reference": "cde03c48d490d805ef1349e5108f8b3085981ead"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/cecb1397087dc9c733796eda6e9d121336039cdc",
-                "reference": "cecb1397087dc9c733796eda6e9d121336039cdc",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/cde03c48d490d805ef1349e5108f8b3085981ead",
+                "reference": "cde03c48d490d805ef1349e5108f8b3085981ead",
                 "shasum": ""
             },
             "require": {
@@ -1261,7 +1320,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2015-04-21 07:52:05"
+            "time": "2015-05-22 14:21:04"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1777,7 +1836,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "doctrine/doctrine-fixtures-bundle": 20,
-        "doctrine/data-fixtures": 20
+        "doctrine/data-fixtures": 20,
+        "iphp/filestore-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

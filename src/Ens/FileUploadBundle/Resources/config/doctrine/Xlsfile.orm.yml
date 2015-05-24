@@ -1,0 +1,17 @@
+# src/Ens/LunchBundle/Resources/config/doctrine/lunch.orm.yml
+Ens\FileUploadBundle\Entity\Xlsfile:
+    type: entity
+    repositoryClass: Ens\FileUploadBundle\Repository\XlsFileRepository
+    table: xlsfile
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        title:
+            type: string
+            length: 255
+        date:
+            type: datetime
+        file:
+            type: array
