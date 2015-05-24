@@ -4,9 +4,11 @@ namespace Ens\LunchBundle\Controller;
 
 use Ens\LunchBundle\Entity\Lunch;
 use Ens\LunchBundle\Form\LunchType;
+use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * Lunch controller.
@@ -98,11 +100,20 @@ class LunchController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->file->move('/home/bard/PhpstormProjects/lunch/web/uploads/file', $entity->file->getClientOriginalName());
+            $entity->file->move(
+                '/home/bard/PhpstormProjects/lunch/web/uploads/file',
+                $entity->file->getClientOriginalName()
+            );
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('ens_lunch_show', array('id' => $entity->getId())));
+            $this->parseXlsFile();
+
+            $em = $this->getDoctrine()->getManager();
+            $repo = $em->getRepository('EnsLunchBundle:Lunch');
+            $entities = $repo->findAll();
+
+            return $this->redirect($this->generateUrl('ens_lunch_show_all', array('entities' => $entities)));
         }
 
         return $this->render(
@@ -302,5 +313,82 @@ class LunchController extends Controller
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm();
+    }
+
+    /**
+     * @return mixed
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function parseXlsFile()
+    {
+        $inputFileName = '/home/bard/PhpstormProjects/lunch/web/uploads/file/menu.xls';
+
+//  Read your Excel workbook
+        try {
+            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+
+            $objPHPExcel = $objReader->load($inputFileName);
+
+        } catch (Exception $e) {
+            die('Error loading file "'.pathinfo($inputFileName, PATHINFO_BASENAME).'": '.$e->getMessage());
+        }
+
+//  Get worksheet dimensions
+        $sheet = $objPHPExcel->getSheet(0);
+        $highestRow = $sheet->getHighestRow();
+        $arrayLabel = array("B", "D", "F", "H", "J");
+
+        /** @var string[] $categories */
+        $categories = [
+            'Salad',
+            'Main Course',
+            'Soup',
+            'Dessert',
+        ];
+
+        /** @var string[] $days */
+        $days = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+        ];
+
+        /** @var integer $num_category */
+        $num_category = 0;
+
+        $em = $this->getDoctrine()->getManager();
+        $lunches = $em->getRepository('EnsLunchBundle:Lunch')->findAll();
+        foreach ($lunches as $item) {
+            $em->remove($item);
+        }
+        $em->flush();
+
+//  Loop through each row of the worksheet in turn
+        for ($row = 2; $row <= $highestRow; $row++) {
+            if ($sheet->getCell("B".$row)->getValue() != "") {
+                for ($column = 0; $column < count($arrayLabel); $column++) {
+                    $description = $sheet->getCell($arrayLabel[$column].$row)->getValue();
+                    $em = $this->getDoctrine()->getManager();
+                    $lunch = new Lunch();
+                    //== display each cell value
+                    $lunch->setCategories($categories[$num_category]);
+                    $lunch->setDay($days[$column]);
+                    $lunch->setCount(0);
+                    $lunch->setDescription($description);
+                    $em->persist($lunch);
+                    $em->flush();
+                }
+            } else {
+                $num_category++;
+            }
+
+            if ($num_category == 4) {
+                break;
+            }
+        }
     }
 }

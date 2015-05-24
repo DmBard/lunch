@@ -23,7 +23,8 @@
     "incenteev/composer-parameter-handler": "~2.0",
     "doctrine/doctrine-fixtures-bundle": "dev-master",
     "doctrine/data-fixtures": "dev-master",
-    "iphp/filestore-bundle":"dev-master"
+    "iphp/filestore-bundle":"dev-master",
+    "phpoffice/phpexcel": "dev-master"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"
