@@ -3,7 +3,6 @@
 namespace Ens\LunchBundle\Controller;
 
 use Ens\LunchBundle\Entity\Lunch;
-use Ens\LunchBundle\Form\CreatingMenuType;
 use Ens\LunchBundle\Form\LunchType;
 use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -125,7 +124,7 @@ class LunchController extends Controller
     private function createCreateForm(Lunch $entity)
     {
         $form = $this->createForm(
-            new CreatingMenuType(),
+            new LunchType(),
             $entity,
             array(
                 'action' => $this->generateUrl('ens_lunch_create'),
