@@ -15,241 +15,26 @@
         </thead>
         <tbody>
 
-        <tr>
-            <td>Salad</td>
-            <td>
-                <label>
-                    <select name="salad_mon">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="salad_tue">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="salad_wed">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="salad_thu">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="salad_fri">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Salad')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-        </tr>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category }}</td>
+                {% for day in days %}
+                    <td>
+                        <label>
+                            <select name={{ category }}{{ day }}>
+                                {% for entity in entities %}
+                                    {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
+                                        <option value=entity.id>{{ entity.description }}</option>
+                                     {% endif %}
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
 
         <tr>
-            <td>Soup</td>
-            <td>
-                <label>
-                    <select name="soup_mon">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="soup_tue">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="soup_wed">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="soup_thu">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="soup_fri">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Soup')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-        </tr>
-
-        <tr>
-            <td>Main Course</td>
-            <td>
-                <label>
-                    <select name="main_mon">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="main_tue">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="main_wed">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="main_thu">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="main_fri">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Main Course')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-        </tr>
-
-        <tr>
-            <td>Dessert</td>
-            <td>
-                <label>
-                    <select name="dessert_mon">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Monday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="dessert_tue">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Tuesday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="dessert_wed">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Wednesday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="dessert_thu">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Thursday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <select name="dessert_fri">
-                        {% for entity in entities %}
-                            {% if ((entity.day  == 'Friday') and ((entity.categories  == 'Dessert')) ) %}
-                                <option value=entity.id>{{ entity.description }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-            </td>
-        </tr>
         </tbody>
     </table>
     <ul>
@@ -262,7 +47,7 @@
     <ul>
         <li>
             <a href="{{ path('ens_lunch_new') }}">
-                Create a new entry
+                Create a new menu
             </a>
         </li>
     </ul>

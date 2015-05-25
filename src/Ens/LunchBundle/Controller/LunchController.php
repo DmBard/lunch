@@ -3,6 +3,7 @@
 namespace Ens\LunchBundle\Controller;
 
 use Ens\LunchBundle\Entity\Lunch;
+use Ens\LunchBundle\Form\CreatingMenuType;
 use Ens\LunchBundle\Form\LunchType;
 use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -27,42 +28,31 @@ class LunchController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('EnsLunchBundle:Lunch');
 
-//        /** @var string[] $categories */
-//        $categories = [
-//            'Salad',
-//            'Soup',
-//            'Main Course',
-//            'Dessert',
-//        ];
-//
-//        /** @var string[] $days */
-//        $days = [
-//            'Monday',
-//            'Tuesday',
-//            'Wednesday',
-//            'Thursday',
-//            'Friday',
-//        ];
-//
-//        $entities = [];
-//        foreach ($categories as $category) {
-//            foreach ($days as $day) {
-//                $entity = $repo->getCategoryDayLunches($day, $category);
-//
-//                if ($entity != null) {
-//                    foreach ($entity as $item) {
-//                        array_push($entities, $item);
-//                    }
-//                }
-//            }
-//        }
+        /** @var string[] $categories */
+        $categories = [
+            'Salad',
+            'Main Course',
+            'Soup',
+            'Dessert',
+        ];
+
+        /** @var string[] $days */
+        $days = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+        ];
 
         $entities = $repo->findAll();
 
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',
             array(
-                'entities' => $entities
+                'entities' => $entities,
+                'days' => $days,
+                'categories' => $categories
             )
         );
     }
@@ -135,7 +125,7 @@ class LunchController extends Controller
     private function createCreateForm(Lunch $entity)
     {
         $form = $this->createForm(
-            new LunchType(),
+            new CreatingMenuType(),
             $entity,
             array(
                 'action' => $this->generateUrl('ens_lunch_create'),
