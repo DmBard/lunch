@@ -261,7 +261,7 @@ class Lunch
 
     protected function getUploadRootDir()
     {
-        return '/home/bard/PhpstormProjects/lunch/web/'.$this->getUploadDir();
+        return '/web/sites/lunch.local/web/'.$this->getUploadDir();
     }
 
     public function getWebPath()

@@ -19,8 +19,6 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new Ens\LunchBundle\EnsLunchBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-            new Iphp\FileStoreBundle\IphpFileStoreBundle(),
-            new Ens\FileUploadBundle\EnsFileUploadBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

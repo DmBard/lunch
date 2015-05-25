@@ -72,12 +72,12 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-iphp_file_store:
-        mappings:
-           xlsupload:
-               upload_dir:  %kernel.root_dir%/../web/xlsupload
-               upload_path: /xlsupload
-               directory_namer:
-                   date:
-                      params: { field : date, depth : month }
-               namer: ~
+#iphp_file_store:
+#        mappings:
+#           xlsupload:
+#               upload_dir:  %kernel.root_dir%/../web/xlsupload
+#               upload_path: /xlsupload
+#               directory_namer:
+#                   date:
+#                      params: { field : date, depth : month }
+#               namer: ~

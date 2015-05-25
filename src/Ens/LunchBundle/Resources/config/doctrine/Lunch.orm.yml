@@ -24,13 +24,13 @@ Ens\LunchBundle\Entity\Lunch:
         updated_at:
             type: datetime
             nullable: true
-    manyToOne:
-        person:
-            targetEntity: Person
-            inversedBy: lunches
-            joinColumn:
-                name: person_id
-                referencedColumnName: id
+#    manyToOne:
+#        person:
+#            targetEntity: Person
+#            inversedBy: lunches
+#            joinColumn:
+#                name: person_id
+#                referencedColumnName: id
 #    manyToOne:
 #        day:
 #            targetEntity: Day

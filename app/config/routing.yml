@@ -1,6 +1,6 @@
-ens_file_upload:
-    resource: "@EnsFileUploadBundle/Resources/config/routing.yml"
-    prefix:   /
+#ens_file_upload:
+#    resource: "@EnsFileUploadBundle/Resources/config/routing.yml"
+#    prefix:   /
 
 EnsLunchBundle_lunch:
         resource: "@EnsLunchBundle/Resources/config/routing/lunch.yml"

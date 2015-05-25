@@ -101,7 +101,7 @@ class LunchController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->file->move(
-                '/home/bard/PhpstormProjects/lunch/web/uploads/file',
+                '/web/sites/lunch.local/web/uploads/file',
                 $entity->file->getClientOriginalName()
             );
             $em->persist($entity);
@@ -321,7 +321,7 @@ class LunchController extends Controller
      */
     public function parseXlsFile()
     {
-        $inputFileName = '/home/bard/PhpstormProjects/lunch/web/uploads/file/menu.xls';
+        $inputFileName = '/web/sites/lunch.local/web/uploads/file/menu.xls';
 
 //  Read your Excel workbook
         try {
