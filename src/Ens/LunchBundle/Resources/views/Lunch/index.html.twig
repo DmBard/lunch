@@ -16,24 +16,24 @@
         <tbody>
         <form action="{{ path('ens_lunch_create') }}" method="post">
 
-        {% for category in categories %}
-            <tr>
-                <td>{{ category }}</td>
-                {% for day in days %}
-                    <td>
-                        <label>
-                            <select name="{{ category }}[{{ day }}]">
-                                {% for entity in entities %}
-                                    {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
-                                        <option value="{{ entity.id }}">{{ entity.description }}</option>
-                                     {% endif %}
-                                {% endfor %}
-                            </select>
-                        </label>
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category }}</td>
+                    {% for day in days %}
+                        <td>
+                            <label>
+                                <select name="{{ category }}[{{ day }}]">
+                                    {% for entity in entities %}
+                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
+                                            <option value="{{ entity.id }}">{{ entity.description }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
             <tr>
                 <td>
                     <input type="submit" value="Save">

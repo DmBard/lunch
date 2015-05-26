@@ -24,9 +24,11 @@ Ens\LunchBundle\Entity\Lunch:
         updated_at:
             type: datetime
             nullable: true
-    manyToOne:
+    manyToMany:
         person:
             targetEntity: Person
+            joinTable:
+                name: persons_lunches
             inversedBy: lunches
             joinColumn:
                 name: person_id

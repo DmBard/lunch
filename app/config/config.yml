@@ -75,4 +75,4 @@ swiftmailer:
 easy_admin:
     entities:
         - Ens\LunchBundle\Entity\Lunch
-        - Ens\LunchBundle\Entity\Person
+        - Ens\LunchBundle\Entity\User

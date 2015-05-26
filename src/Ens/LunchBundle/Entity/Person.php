@@ -3,6 +3,9 @@
 namespace Ens\LunchBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
  * Category
@@ -20,13 +23,13 @@ class Person
     private $name;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
+     * @ManyToMany(targetEntity="Ens\LunchBundle\Entity\Lunch")
+     * @JoinTable(name="persons_lunches",
+     *      joinColumns={@JoinColumn(name="person_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="lunch_id", referencedColumnName="id")}
+     *      )
+     * */
     private $lunches;
-
-    /**
-     * Constructor
-     */
 
     private $active_lunches;
 
