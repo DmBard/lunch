@@ -52,24 +52,51 @@
 #        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
 
-security:
-    firewalls:
-        secured_area:
-            pattern:    ^/
-            anonymous: ~
-            form_login:
-                login_path:  /login
-                check_path:  /login_check
-            logout:
-                            path:   /logout
-                            target: /
+#security:
+#    firewalls:
+#        secured_area:
+#            pattern:    ^/
+#            anonymous: ~
+#            form_login:
+#                login_path:  /login
+#                check_path:  /login_check
+#            logout:
+#                            path:   /logout
+#                            target: /
+#
+#    access_control:
+#        - { path: ^/admin, roles: ROLE_ADMIN }
+#
+#    providers:
+#            main:
+#                entity: { class: Ens\LunchBundle\Entity\User, property: username }
+#
+#    encoders:
+#            Ens\LunchBundle\Entity\User: sha512
 
-    access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     providers:
-            main:
-                entity: { class: Ens\LunchBundle\Entity\User, property: username }
+        fos_userbundle:
+            id: fos_user.user_provider.username
 
-    encoders:
-            Ens\LunchBundle\Entity\User: sha512
+    firewalls:
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+            logout:       true
+            anonymous:    true
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: IS_AUTHENTICATED_ANONYMOUSLY  }

@@ -25,14 +25,20 @@ Ens\LunchBundle\Entity\Lunch:
             type: datetime
             nullable: true
     manyToMany:
-        person:
-            targetEntity: Person
-            joinTable:
-                name: persons_lunches
-            inversedBy: lunches
-            joinColumn:
-                name: person_id
-                referencedColumnName: id
+        user:
+            targetEntity: Ens\LunchBundle\Entity\User
+
+    joinTable:
+            name: users_lunches
+            joinColumns:
+                      name: lunch_id
+                      referencedColumnName: id
+            inverseJoinColumns:
+                      joinColumn:
+                      name: user_id
+                      referencedColumnName: id
+
+
 #    manyToOne:
 #        day:
 #            targetEntity: Day

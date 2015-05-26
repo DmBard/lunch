@@ -76,3 +76,8 @@ easy_admin:
     entities:
         - Ens\LunchBundle\Entity\Lunch
         - Ens\LunchBundle\Entity\User
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: Ens\LunchBundle\Entity\User

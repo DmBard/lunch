@@ -46,26 +46,26 @@ class Lunch
     private $categories;
 
     /**
-     * @var Person
+     * @var User
      */
-    private $person;
+    private $user;
 
     public $file;
 
     /**
      * @return Person
      */
-    public function getPerson()
+    public function getUser()
     {
-        return $this->person;
+        return $this->user;
     }
 
     /**
-     * @param Person $person
+     * @param Person $user
      */
-    public function setPerson($person)
+    public function setUser($user)
     {
-        $this->person = $person;
+        $this->user = $user;
     }
 
     /**

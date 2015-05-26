@@ -23,7 +23,9 @@
     "incenteev/composer-parameter-handler": "~2.0",
     "doctrine/doctrine-fixtures-bundle": "dev-master",
     "phpoffice/phpexcel": "dev-master",
-    "javiereguiluz/easyadmin-bundle": "dev-master"
+    "javiereguiluz/easyadmin-bundle": "dev-master",
+    "friendsofsymfony/user-bundle": "dev-master"
+
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"
