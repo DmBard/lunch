@@ -33,3 +33,8 @@ ens_lunch_delete:
 ens_lunch_show_all:
     path:     /all
     defaults: { _controller: "EnsLunchBundle:Lunch:showAll" }
+
+ens_lunch_order:
+    path:     /order
+    defaults: { _controller: "EnsLunchBundle:Lunch:order" }
+    methods:  POST

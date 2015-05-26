@@ -30,7 +30,7 @@ class LunchController extends Controller
         /** @var string[] $categories */
         $categories = [
             'Salad',
-            'Main Course',
+            'Main_Course',
             'Soup',
             'Dessert',
         ];
@@ -208,6 +208,50 @@ class LunchController extends Controller
     }
 
     /**
+     * Displays a order form
+     *
+     */
+    public function orderAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $categories = [
+            'Salad',
+            'Main_Course',
+            'Soup',
+            'Dessert',
+        ];
+
+        /** @var string[] $days */
+        $days = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+        ];
+        $entities = [];
+
+        foreach ($categories as $category) {
+            foreach ($days as $day) {
+                $id = $_POST[$category][$day];
+
+                $entity = $em->getRepository('EnsLunchBundle:Lunch')->find($id);
+                array_push($entities, $entity);
+            }
+        }
+
+        return $this->render(
+            'EnsLunchBundle:Lunch:order.html.twig',
+            array(
+                'days' => $days,
+                'categories' => $categories,
+                'entities' => $entities,
+            )
+        );
+    }
+
+    /**
      * Creates a form to edit a Lunch entity.
      *
      * @param Lunch $entity The entity
@@ -332,7 +376,7 @@ class LunchController extends Controller
         /** @var string[] $categories */
         $categories = [
             'Salad',
-            'Main Course',
+            'Main_Course',
             'Soup',
             'Dessert',
         ];
@@ -349,8 +393,12 @@ class LunchController extends Controller
         /** @var integer $num_category */
         $num_category = 0;
 
+        /** @var integer $num */
+        $num = 0;
+
         $em = $this->getDoctrine()->getManager();
         $lunches = $em->getRepository('EnsLunchBundle:Lunch')->findAll();
+
         foreach ($lunches as $item) {
             $em->remove($item);
         }
@@ -358,6 +406,7 @@ class LunchController extends Controller
 
 //  Loop through each row of the worksheet in turn
         for ($row = 2; $row <= $highestRow; $row++) {
+            $num++;
             if ($sheet->getCell("B".$row)->getValue() != "") {
                 for ($column = 0; $column < count($arrayLabel); $column++) {
                     $description = $sheet->getCell($arrayLabel[$column].$row)->getValue();
@@ -366,13 +415,14 @@ class LunchController extends Controller
                     //== display each cell value
                     $lunch->setCategories($categories[$num_category]);
                     $lunch->setDay($days[$column]);
-                    $lunch->setCount(0);
+                    $lunch->setCount($num);
                     $lunch->setDescription($description);
                     $em->persist($lunch);
                     $em->flush();
                 }
             } else {
                 $num_category++;
+                $num = 0;
             }
 
             if ($num_category == 4) {

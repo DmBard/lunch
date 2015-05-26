@@ -6,6 +6,7 @@
         <thead>
         <tr>
             <th></th>
+            <th></th>
             <th>Monday</th>
             <th>Tuesday</th>
             <th>Wednesday</th>
@@ -14,21 +15,20 @@
         </tr>
         </thead>
         <tbody>
-        <form action="{{ path('ens_lunch_order') }}" method="post">
 
+        {#<form action="{{ path('ens_lunch_create') }}" method="post">#}
             {% for category in categories %}
                 <tr>
+                    <td> user </td>
                     <td>{{ category }}</td>
                     {% for day in days %}
                         <td>
                             <label>
-                                <select name="{{ category }}{{ day }}">
                                     {% for entity in entities %}
                                         {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
-                                            <option value="{{ entity.id }}">{{ entity.description }}</option>
+                                            {{ entity.count }}
                                         {% endif %}
                                     {% endfor %}
-                                </select>
                             </label>
                         </td>
                     {% endfor %}
@@ -40,28 +40,7 @@
                 </td>
             </tr>
 
-        </form>
+        {#</form>#}
         </tbody>
     </table>
-    <ul>
-        <li>
-            <a href="{{ path('ens_lunch_new') }}">
-                Save
-            </a>
-        </li>
-    </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_lunch_new') }}">
-                Create a new menu
-            </a>
-        </li>
-    </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_lunch_show_all') }}">
-                Show all
-            </a>
-        </li>
-    </ul>
 {% endblock %}

@@ -27,7 +27,6 @@ Ens\LunchBundle\Entity\Lunch:
     manyToMany:
         user:
             targetEntity: Ens\LunchBundle\Entity\User
-
     joinTable:
             name: users_lunches
             joinColumns:
