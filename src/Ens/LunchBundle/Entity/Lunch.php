@@ -230,7 +230,7 @@ class Lunch
 
     public static function getListCategories()
     {
-        return array('Salad' => 'Salad', 'Soup' => 'Soup', 'Main Course' => 'Main Course', 'Dessert' => 'Dessert');
+        return array('Salad' => 'Salad', 'Soup' => 'Soup', 'Main_Course' => 'Main_Course', 'Dessert' => 'Dessert');
     }
 
     public static function getListCategoriesValues()

@@ -211,7 +211,7 @@ class LunchController extends Controller
      * Displays a order form
      *
      */
-    public function orderAction(Request $request)
+    public function orderAction()
     {
         $em = $this->getDoctrine()->getManager();
 

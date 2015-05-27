@@ -22,7 +22,7 @@
                     {% for day in days %}
                         <td>
                             <label>
-                                <select name="{{ category }}{{ day }}">
+                                <select name="{{ category }}[{{ day }}]">
                                     {% for entity in entities %}
                                         {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
                                             <option value="{{ entity.id }}">{{ entity.description }}</option>
