@@ -53,7 +53,28 @@ class Lunch
     public $file;
 
     /**
-     * @return Person
+     * @var  boolean
+     */
+    private $active;
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return User
      */
     public function getUser()
     {
@@ -61,7 +82,7 @@ class Lunch
     }
 
     /**
-     * @param Person $user
+     * @param User $user
      */
     public function setUser($user)
     {
@@ -279,9 +300,9 @@ class Lunch
      */
     public function upload()
     {
-        if (null === $this->file) {
-            return;
-        }
+//        if (null === $this->file) {
+//            return;
+//        }
 
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent

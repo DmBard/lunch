@@ -12,24 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class LunchRepository extends EntityRepository
 {
-    public function getCategoryDayLunches($currentDay, $currentCategory, $currentDescription)
+    public function getActiveLunches()
     {
         $qb = $this->createQueryBuilder('l');
 
-        if ($currentDay) {
-            $qb->where('l.day = :dayOfWeek')
-                ->setParameter('dayOfWeek', $currentDay);
-        }
-
-        if ($currentCategory) {
-            $qb->andWhere('l.categories = :category_i')
-                ->setParameter('category_i', $currentCategory);
-        }
-
-        if ($currentDescription) {
-            $qb->andWhere('l.description = :description_i')
-                ->setParameter('description_i', $currentDescription);
-        }
+            $qb->where('l.active = :isActive')
+                ->setParameter('isActive', true);
 
         $query = $qb->getQuery();
 

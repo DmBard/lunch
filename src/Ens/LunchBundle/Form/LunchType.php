@@ -15,13 +15,14 @@ class LunchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('day', 'choice', array('choices' => Lunch::getListDays()))
-            ->add('categories', 'choice', array('choices' => Lunch::getListCategories()))
-            ->add('count', 'integer')
-            ->add('description', 'textarea')
-            ->add('created_at')
-            ->add('updated_at');
+//        $builder
+//            ->add('day', 'choice', array('choices' => Lunch::getListDays()))
+//            ->add('categories', 'choice', array('choices' => Lunch::getListCategories()))
+//            ->add('count', 'integer')
+//            ->add('active')
+//            ->add('description', 'textarea')
+//            ->add('created_at')
+//            ->add('updated_at');
             $builder->add('file', 'file', array('label' => 'File', 'required' => false));
         ;
     }

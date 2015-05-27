@@ -24,7 +24,7 @@
                             <label>
                                 <select name="{{ category }}[{{ day }}]">
                                     {% for entity in entities %}
-                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
+                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) and (entity.active  ==  true )) %}
                                             <option value="{{ entity.id }}">{{ entity.description }}</option>
                                         {% endif %}
                                     {% endfor %}

@@ -11,16 +11,24 @@ Ens\LunchBundle\Entity\Lunch:
         categories:
             type: string
             length: 255
+            nullable: true
         day:
             type: string
             length: 255
+            nullable: true
+        active:
+            type: boolean
+            nullable: true
         count:
             type: integer
+            nullable: true
         description:
             type: string
             length: 255
+            nullable: true
         created_at:
             type: datetime
+            nullable: true
         updated_at:
             type: datetime
             nullable: true

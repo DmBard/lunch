@@ -44,7 +44,7 @@ class LunchController extends Controller
             'Friday',
         ];
 
-        $entities = $repo->findAll();
+        $entities = $repo->getActiveLunches();
 
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',
@@ -397,10 +397,11 @@ class LunchController extends Controller
         $num = 0;
 
         $em = $this->getDoctrine()->getManager();
-        $lunches = $em->getRepository('EnsLunchBundle:Lunch')->findAll();
+        $lunches = $em->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
 
         foreach ($lunches as $item) {
-            $em->remove($item);
+            $item->setActive(0);
+            $em->persist($item);
         }
         $em->flush();
 
@@ -416,6 +417,7 @@ class LunchController extends Controller
                     $lunch->setCategories($categories[$num_category]);
                     $lunch->setDay($days[$column]);
                     $lunch->setCount($num);
+                    $lunch->setActive(1);
                     $lunch->setDescription($description);
                     $em->persist($lunch);
                     $em->flush();

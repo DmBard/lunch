@@ -14,6 +14,7 @@
     "doctrine/dbal": "<2.5",
     "doctrine/doctrine-bundle": "~1.2",
     "twig/extensions": "~1.0",
+    "ext-ldap": "*",
    "symfony/symfony": "2.6.*",
     "symfony/assetic-bundle": "~2.3",
     "symfony/swiftmailer-bundle": "~2.3",
@@ -24,7 +25,8 @@
     "doctrine/doctrine-fixtures-bundle": "dev-master",
     "phpoffice/phpexcel": "dev-master",
     "javiereguiluz/easyadmin-bundle": "dev-master",
-    "friendsofsymfony/user-bundle": "dev-master"
+    "friendsofsymfony/user-bundle": "dev-master",
+    "imag/ldap-bundle": "dev-master"
 
   },
   "require-dev": {
