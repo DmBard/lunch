@@ -1,0 +1,17 @@
+{% extends '::index.html.twig' %}
+{% block adminBlock %}
+    <ul>
+        <li>
+            <a href="{{ path('ens_lunch_new') }}">
+                Create a new menu
+            </a>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a href="{{ path('ens_lunch_show_all') }}">
+                Show all
+            </a>
+        </li>
+    </ul>
+{% endblock %}

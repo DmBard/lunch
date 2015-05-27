@@ -3,37 +3,42 @@ ens_lunch:
     defaults: { _controller: "EnsLunchBundle:Lunch:index" }
     methods:  GET
 
+ens_lunch_admin:
+    path:     /admin
+    defaults: { _controller: "EnsLunchBundle:Lunch:adminIndex" }
+    methods:  GET
+
 ens_lunch_show:
-    path:     /{id}/show
+    path:     /admin/{id}/show
     defaults: { _controller: "EnsLunchBundle:Lunch:show" }
 
 ens_lunch_new:
-    path:     /new
+    path:     /admin/new
     defaults: { _controller: "EnsLunchBundle:Lunch:new" }
 
 ens_lunch_create:
-    path:     /create
+    path:     /admin/creating
     defaults: { _controller: "EnsLunchBundle:Lunch:create" }
     methods:  POST
 
 ens_lunch_edit:
-    path:     /{id}/edit
+    path:     /admin/{id}/edit
     defaults: { _controller: "EnsLunchBundle:Lunch:edit" }
 
 ens_lunch_update:
-    path:     /{id}/update
+    path:     /admin/{id}/update
     defaults: { _controller: "EnsLunchBundle:Lunch:update" }
     methods:  [POST, PUT]
 
 ens_lunch_delete:
-    path:     /{id}/delete
+    path:     /admin/{id}/delete
     defaults: { _controller: "EnsLunchBundle:Lunch:delete" }
     methods:  [POST, DELETE]
 
 ens_lunch_show_all:
-    path:     /all
+    path:     /admin/all
     defaults: { _controller: "EnsLunchBundle:Lunch:showAll" }
-
+    methods:  GET
 ens_lunch_order:
     path:     /order
     defaults: { _controller: "EnsLunchBundle:Lunch:order" }

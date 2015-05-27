@@ -1,79 +1,3 @@
-## you can read more about security in the related section of the documentation
-## http://symfony.com/doc/current/book/security.html
-#security:
-#    # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
-#    encoders:
-#        Symfony\Component\Security\Core\User\User: plaintext
-#
-#    # http://symfony.com/doc/current/book/security.html#hierarchical-roles
-#    role_hierarchy:
-#        ROLE_ADMIN:       ROLE_USER
-#        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-#
-#    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
-#    providers:
-#        in_memory:
-#            memory:
-#                users:
-#                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-#                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
-#
-#    # the main part of the security, where you can set up firewalls
-#    # for specific sections of your app
-#    firewalls:
-#        # disables authentication for assets and the profiler, adapt it according to your needs
-#        dev:
-#            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-#            security: false
-#        # the login page has to be accessible for everybody
-#        demo_login:
-#            pattern:  ^/demo/secured/login$
-#            security: false
-#
-#        # secures part of the application
-#        demo_secured_area:
-#            pattern:    ^/demo/secured/
-#            # it's important to notice that in this case _demo_security_check and _demo_login
-#            # are route names and that they are specified in the AcmeDemoBundle
-#            form_login:
-#                check_path: _demo_security_check
-#                login_path: _demo_login
-#            logout:
-#                path:   _demo_logout
-#                target: _demo
-#            #anonymous: ~
-#            #http_basic:
-#            #    realm: "Secured Demo Area"
-#
-#    # with these settings you can restrict or allow access for different parts
-#    # of your application based on roles, ip, host or methods
-#    # http://symfony.com/doc/current/cookbook/security/access_control.html
-#    access_control:
-#        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-
-
-#security:
-#    firewalls:
-#        secured_area:
-#            pattern:    ^/
-#            anonymous: ~
-#            form_login:
-#                login_path:  /login
-#                check_path:  /login_check
-#            logout:
-#                            path:   /logout
-#                            target: /
-#
-#    access_control:
-#        - { path: ^/admin, roles: ROLE_ADMIN }
-#
-#    providers:
-#            main:
-#                entity: { class: Ens\LunchBundle\Entity\User, property: username }
-#
-#    encoders:
-#            Ens\LunchBundle\Entity\User: sha512
-
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface: sha512
@@ -97,6 +21,7 @@ security:
                 csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
             logout:       true
             anonymous:    true
+
 #        restricted_area:
 #              pattern:          ^/
 #              anonymous:        ~
@@ -132,63 +57,3 @@ security:
 ##        name_attribute: cn
 ##        user_attribute: member
 ##        user_id: d.baryshev
-
-#security:
-#    hide_user_not_found: false
-#    firewalls:
-#        restricted_area:
-#            form_login:
-#                  check_path: /login_check
-#                  login_path: /login
-#                  always_use_default_target_path: true
-#                  default_target_path: /admin
-#                  csrf_provider: form.csrf_provider
-#                  intention: authenticate
-#                  provider: ldap
-#            pattern:          ^/admin
-#            anonymous:        ~
-#            imag_ldap:
-#                provider: multiples
-#
-#            logout:
-#              path:   /logout
-#              target: /
-#              invalidate_session: false
-#    providers:
-#        multiples:
-#            chain:
-#                providers: [ ldap, memory ]
-#        ldap:
-#            id: imag_ldap.security.user.provider
-#        memory:
-#          memory:
-#            users:
-#              demo:
-#                password:           demo
-#                roles:              ROLE_USER
-#              admin:
-#                password:           admin
-#                roles:              [ROLE_USER, ROLE_ADMIN]
-#
-#    encoders:
-#        IMAG\LdapBundle\User\LdapUser: plaintext
-#        Symfony\Component\Security\Core\User\User: plaintext
-#
-#    access_control:
-#        - { path: ^/login,          roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: ^/secured,        roles: IS_AUTHENTICATED_FULLY }
-#
-#imag_ldap:
-#  client:
-#    host: tps.local
-#    port: 80
-#    username: tps\d.baryshev #change to your login with access to group
-#    password: tanya220964 #change to your password
-#    version: 3
-#    referrals_enabled: false
-#    bind_username_before: false
-#    skip_roles: true
-#
-#  user:
-#    base_dn: CN=Users,DC=local
-##    name_attribute: sAMAccountName # or uid

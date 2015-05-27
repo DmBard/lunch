@@ -1,11 +1,19 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+    <h4>
+        You are logged as:
+        {% if user %}
+            {{ user.username }}
+        {#{% else %}#}
+            {#guest#}
+        {% endif %}
+       |  <a href="{{ path('fos_user_security_logout') }}"> Logout </a>
+    </h4>
     <h1>Lunch list</h1>
     <table class="records_list">
         <thead>
         <tr>
-            <th></th>
             <th></th>
             <th>Monday</th>
             <th>Tuesday</th>
@@ -15,20 +23,21 @@
         </tr>
         </thead>
         <tbody>
+        <form action="{{ path('ens_lunch_order') }}" method="post">
 
-        {#<form action="{{ path('ens_lunch_create') }}" method="post">#}
             {% for category in categories %}
                 <tr>
-                    <td> {{ user.email }}</td>
                     <td>{{ category }}</td>
                     {% for day in days %}
                         <td>
                             <label>
+                                <select name="{{ category }}[{{ day }}]">
                                     {% for entity in entities %}
-                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
-                                            {{ entity.count }}
+                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) and (entity.active  ==  true )) %}
+                                            <option value="{{ entity.id }}">{{ entity.description }}</option>
                                         {% endif %}
                                     {% endfor %}
+                                </select>
                             </label>
                         </td>
                     {% endfor %}
@@ -40,7 +49,9 @@
                 </td>
             </tr>
 
-        {#</form>#}
+        </form>
         </tbody>
     </table>
+    {% block adminBlock %}
+    {% endblock %}
 {% endblock %}

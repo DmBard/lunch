@@ -72,10 +72,13 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-easy_admin:
-    entities:
-        - Ens\LunchBundle\Entity\Lunch
-        - Ens\LunchBundle\Entity\User
+#easy_admin:
+#    entities:
+#        - Ens\LunchBundle\Entity\Lunch
+#        - Ens\LunchBundle\Entity\User
+#    design:
+#            templates:
+#                list: 'AppBundle:easy_admin:list.html.twig'
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'

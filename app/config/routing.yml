@@ -1,7 +1,3 @@
-#ens_file_upload:
-#    resource: "@EnsFileUploadBundle/Resources/config/routing.yml"
-#    prefix:   /
-
 EnsLunchBundle_lunch:
         resource: "@EnsLunchBundle/Resources/config/routing/lunch.yml"
         prefix:   /lunch
@@ -14,10 +10,11 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-easy_admin_bundle:
-        resource: "@EasyAdminBundle/Controller/"
-        type:     annotation
-        prefix:   /admin
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+#easy_admin_bundle:
+#        resource: "@EasyAdminBundle/Controller/"
+#        type:     annotation
+#        prefix:   /admin

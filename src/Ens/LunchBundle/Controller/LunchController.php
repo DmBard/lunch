@@ -25,6 +25,44 @@ class LunchController extends Controller
     {
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
+        $repoLunch = $em->getRepository('EnsLunchBundle:Lunch');
+
+        /** @var string[] $categories */
+        $categories = [
+            'Salad',
+            'Main_Course',
+            'Soup',
+            'Dessert',
+        ];
+
+        /** @var string[] $days */
+        $days = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+        ];
+
+        $entities = $repoLunch->getActiveLunches();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+
+        return $this->render(
+            'EnsLunchBundle:Lunch:index.html.twig',
+            array(
+                'entities' => $entities,
+                'days' => $days,
+                'categories' => $categories,
+                'user' => $user
+            )
+        );
+    }
+
+    public function adminIndexAction()
+    {
+        /** @var ManagerRegistry $em */
+        $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('EnsLunchBundle:Lunch');
 
         /** @var string[] $categories */
@@ -45,13 +83,17 @@ class LunchController extends Controller
         ];
 
         $entities = $repo->getActiveLunches();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
 
         return $this->render(
-            'EnsLunchBundle:Lunch:index.html.twig',
+            'EnsLunchBundle:Lunch:admin_index.html.twig',
             array(
                 'entities' => $entities,
                 'days' => $days,
-                'categories' => $categories
+                'categories' => $categories,
+                'user' => $user,
+
             )
         );
     }
@@ -70,11 +112,6 @@ class LunchController extends Controller
                 'entities' => $entities
             )
         );
-    }
-
-    public function saveChoiceAction(Request $request)
-    {
-
     }
 
     /**
@@ -240,6 +277,7 @@ class LunchController extends Controller
                 array_push($entities, $entity);
             }
         }
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
         return $this->render(
             'EnsLunchBundle:Lunch:order.html.twig',
@@ -247,6 +285,7 @@ class LunchController extends Controller
                 'days' => $days,
                 'categories' => $categories,
                 'entities' => $entities,
+                'user' => $user,
             )
         );
     }
