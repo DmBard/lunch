@@ -2,12 +2,12 @@
 
 {% block body -%}
     <h4>
-        You are logged as:
-        {% if user %}
-            {{ user.username }}
+        {#You are logged as:#}
+        {#{% if user %}#}
+            {#{{ user.username }}#}
         {#{% else %}#}
             {#guest#}
-        {% endif %}
+        {#{% endif %}#}
        |  <a href="{{ path('fos_user_security_logout') }}"> Logout </a>
     </h4>
     <h1>Lunch list</h1>
