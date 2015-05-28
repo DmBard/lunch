@@ -22,6 +22,11 @@ security:
             logout:       true
             anonymous:    true
 
+        login:
+            pattern: ^/login$
+            logout:       true
+            anonymous:    ~
+
 #        restricted_area:
 #              pattern:          ^/
 #              anonymous:        ~
@@ -45,7 +50,7 @@ security:
 #imag_ldap:
 #      client:
 #        host: tps.local
-#        port: 80
+#        port: 389
 #
 #      user:
 #        base_dn: ou=people,dc=host,dc=foo

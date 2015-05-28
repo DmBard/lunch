@@ -15,32 +15,27 @@
         </tr>
         </thead>
         <tbody>
-
-        {#<form action="{{ path('ens_lunch_create') }}" method="post">#}
+        {% for user in users %}
             {% for category in categories %}
                 <tr>
-                    <td> {{ user.email }}</td>
+                    <td> {{ user.username }}</td>
                     <td>{{ category }}</td>
                     {% for day in days %}
                         <td>
                             <label>
-                                    {% for entity in entities %}
-                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) ) %}
-                                            {{ entity.count }}
+                                {% for lunch in lunches %}
+                                    {% for join in joins %}
+                                        {% if ((join.idUser == user.id) and (join.idLunch == lunch.id) and (lunch.day  ==  day ) and (lunch.categories  ==  category ) ) %}
+                                            {{ lunch.description }}
                                         {% endif %}
                                     {% endfor %}
+                                {% endfor %}
                             </label>
                         </td>
                     {% endfor %}
                 </tr>
             {% endfor %}
-            <tr>
-                <td>
-                    <input type="submit" value="Save">
-                </td>
-            </tr>
-
-        {#</form>#}
+        {% endfor %}
         </tbody>
     </table>
 {% endblock %}

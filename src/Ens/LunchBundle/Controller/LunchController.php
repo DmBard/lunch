@@ -2,6 +2,7 @@
 
 namespace Ens\LunchBundle\Controller;
 
+use Ens\LunchBundle\Entity\Jointable;
 use Ens\LunchBundle\Entity\Lunch;
 use Ens\LunchBundle\Form\LunchType;
 use PHPExcel_IOFactory;
@@ -108,6 +109,22 @@ class LunchController extends Controller
 
         return $this->render(
             'EnsLunchBundle:Lunch:all.html.twig',
+            array(
+                'entities' => $entities
+            )
+        );
+    }
+
+    public function showAllUsersAction()
+    {
+        /** @var ManagerRegistry $em */
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('EnsLunchBundle:User');
+
+        $entities = $repo->findAll();
+
+        return $this->render(
+            'EnsLunchBundle:Lunch:all_users.html.twig',
             array(
                 'entities' => $entities
             )
@@ -250,7 +267,6 @@ class LunchController extends Controller
      */
     public function orderAction()
     {
-        $em = $this->getDoctrine()->getManager();
 
         $categories = [
             'Salad',
@@ -267,25 +283,53 @@ class LunchController extends Controller
             'Thursday',
             'Friday',
         ];
-        $entities = [];
 
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if (!$em->contains($user)) {
+            $em->persist($user);
+        }
+
+        $idUser = $user->getId();
+
+        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($idUser);
+
+        foreach ($pastJoins as $item) {
+            $item->setActive(0);
+            $em->persist($item);
+        }
+        $em->flush();
+
+        $em = $this->getDoctrine()->getManager();
+
+        //insert a user choice in the JoinTable
         foreach ($categories as $category) {
             foreach ($days as $day) {
-                $id = $_POST[$category][$day];
-
-                $entity = $em->getRepository('EnsLunchBundle:Lunch')->find($id);
-                array_push($entities, $entity);
+                $joinTable = new Jointable();
+                $idLunch = $_POST[$category][$day];
+                $joinTable->setIdLunch($idLunch);
+                $joinTable->setIdUser($idUser);
+                $joinTable->setActive(1);
+                $em->persist($joinTable);
             }
         }
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $em->flush();
+
+        $users = $em = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
+        $joins = $em = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Jointable')->getActiveJoinsOrderedByUsers();
+        $lunches = $em = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
+
 
         return $this->render(
             'EnsLunchBundle:Lunch:order.html.twig',
             array(
                 'days' => $days,
                 'categories' => $categories,
-                'entities' => $entities,
-                'user' => $user,
+                'lunches' => $lunches,
+                'users' => $users,
+                'joins' => $joins,
             )
         );
     }

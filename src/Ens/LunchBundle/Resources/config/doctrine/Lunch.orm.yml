@@ -32,27 +32,18 @@ Ens\LunchBundle\Entity\Lunch:
         updated_at:
             type: datetime
             nullable: true
-    manyToMany:
-        user:
-            targetEntity: Ens\LunchBundle\Entity\User
-    joinTable:
-            name: users_lunches
-            joinColumns:
-                      name: lunch_id
-                      referencedColumnName: id
-            inverseJoinColumns:
-                      joinColumn:
-                      name: user_id
-                      referencedColumnName: id
-
-
-#    manyToOne:
-#        day:
-#            targetEntity: Day
-#            inversedBy: lunches
-#            joinColumn:
-#                name: day_id
-#                referencedColumnName: id
+#    manyToMany:
+#        user:
+#            targetEntity: Ens\LunchBundle\Entity\User
+#    joinTable:
+#            name: users_lunches
+#            joinColumns:
+#                      name: lunch_id
+#                      referencedColumnName: id
+#            inverseJoinColumns:
+#                      joinColumn:
+#                      name: user_id
+#                      referencedColumnName: id
 
     lifecycleCallbacks:
         prePersist: [ setCreatedAtValue ]

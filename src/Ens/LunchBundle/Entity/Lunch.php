@@ -321,4 +321,44 @@ class Lunch
 //        }
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \Ens\LunchBundle\Entity\User $user
+     * @return Lunch
+     */
+    public function addUser(\Ens\LunchBundle\Entity\User $user)
+    {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \Ens\LunchBundle\Entity\User $user
+     */
+    public function removeUser(\Ens\LunchBundle\Entity\User $user)
+    {
+        $this->user->removeElement($user);
+    }
 }

@@ -1,0 +1,15 @@
+Ens\LunchBundle\Entity\Jointable:
+    type: entity
+    repositoryClass: Ens\LunchBundle\Repository\Jointable
+    table: jointable
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        id_user:
+            type: integer
+        id_lunch:
+            type: integer
+        active:
+            type: boolean

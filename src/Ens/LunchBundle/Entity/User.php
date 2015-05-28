@@ -10,27 +10,60 @@ use FOS\UserBundle\Model\User as BaseUser;
  */
 class User extends BaseUser
 {
+    /** @var  string */
+    protected $name;
+
+    /** @var  string */
+    protected $surname;
+
     protected $id;
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getId()
+    public function getName()
     {
-        return $this->id;
+        return $this->name;
     }
 
     /**
-     * @param mixed $id
+     * @param string $name
      */
-    public function setId($id)
+    public function setName($name)
     {
-        $this->id = $id;
+        $this->name = $name;
     }
+
+    /**
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+
+    /**
+     * @param string $surname
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+    }
+
 
     public function __construct()
     {
         parent::__construct();
         // your own logic
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }
