@@ -92,7 +92,7 @@ fr3d_ldap:
 #        version:             3
         username:            Барышев Дмитрий Анатольевич # Optional
         password:            tanya220964    # Optional
-        bindRequiresDn:      false   # Optional
+#        bindRequiresDn:      false   # Optional
 #        baseDn: OU=Users,OU=R4S,OU=SVRD-44-B,OU=SPB,OU=RU,OU=Offices,DC=tps,DC=local
 #       accountFilterFormat: (&(uid=%s)) # Optional. sprintf format %s will be the username
 #       optReferrals:        false  # Optional
@@ -102,11 +102,11 @@ fr3d_ldap:
 #       accountDomainName: HOST
 #       accountDomainNameShort: HOST # if you use the Backslash form set both to Hostname than the Username will be converted to HOST\User
     user:
-        baseDn: DC=tps,DC=local
+        baseDn: OU=Users,OU=R4S,OU=SVRD-44-B,OU=SPB,OU=RU,OU=Offices,DC=tps,DC=local
         filter: (&(ObjectClass=Person))
         attributes:          # Specify ldap attributes mapping [ldap attribute, user object method]
 
-           - { ldap_attr: sAMAccountName,  user_method: setUsername } # Default
+           - { ldap_attr: samaccountname,  user_method: setusername } # Default
            - { ldap_attr: name,  user_method: setUsernameCanonical } # Default
 #           - { ldap_attr: name,  user_method: setName } # Default
            - { ldap_attr: mail,  user_method: setEmail }     # Optional
