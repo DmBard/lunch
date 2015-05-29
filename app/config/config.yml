@@ -90,25 +90,28 @@ fr3d_ldap:
         host:                tps.local
         port:                389    # Optional
 #        version:             3
-        username:            Барышев Дмитрий Анатольевич   # Optional
+        username:            Барышев Дмитрий Анатольевич # Optional
         password:            tanya220964    # Optional
-#        bindRequiresDn:      true   # Optional
+        bindRequiresDn:      false   # Optional
 #        baseDn: OU=Users,OU=R4S,OU=SVRD-44-B,OU=SPB,OU=RU,OU=Offices,DC=tps,DC=local
 #       accountFilterFormat: (&(uid=%s)) # Optional. sprintf format %s will be the username
 #       optReferrals:        false  # Optional
-#        useSsl:              true   # Enable SSL negotiation. Optional
+#        useSsl:              false   # Enable SSL negotiation. Optional
 #       useStartTls:         true   # Enable TLS negotiation. Optional
 #       accountCanonicalForm: 3 # ACCTNAME_FORM_BACKSLASH this is only needed if your users have to login with something like HOST\User
 #       accountDomainName: HOST
 #       accountDomainNameShort: HOST # if you use the Backslash form set both to Hostname than the Username will be converted to HOST\User
     user:
-        baseDn: OU=Users,OU=R4S,OU=SVRD-44-B,OU=SPB,OU=RU,OU=Offices,DC=tps,DC=local
+        baseDn: DC=tps,DC=local
         filter: (&(ObjectClass=Person))
         attributes:          # Specify ldap attributes mapping [ldap attribute, user object method]
-           - { ldap_attr: uid,  user_method: setUsername } # Default
-#           - { ldap_attr: mail,   user_method: setEmail }     # Optional
+
+           - { ldap_attr: sAMAccountName,  user_method: setUsername } # Default
+           - { ldap_attr: name,  user_method: setUsernameCanonical } # Default
+#           - { ldap_attr: name,  user_method: setName } # Default
+           - { ldap_attr: mail,  user_method: setEmail }     # Optional
 
 #           - { ldap_attr: ...,  user_method: ... }         # Optional
-    service:
-       user_manager: fos_user.user_manager          # Overrides default user manager
-       ldap_manager: fr3d_ldap.ldap_manager.default # Overrides default ldap manager
+#    service:
+#       user_manager: fos_user.user_manager          # Overrides default user manager
+#       ldap_manager: fr3d_ldap.ldap_manager.default # Overrides default ldap manager

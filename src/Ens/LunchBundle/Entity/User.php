@@ -4,7 +4,7 @@ namespace Ens\LunchBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use IMAG\LdapBundle\User\LdapUserInterface;
+use FR3D\LdapBundle\Model\LdapUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -37,6 +37,10 @@ class User extends BaseUser implements LdapUserInterface
     {
         $this->name = $name;
     }
+
+//    public function setUsername($username){
+//        var_dump($username);die;
+//    }
 
     /**
      * @return string
