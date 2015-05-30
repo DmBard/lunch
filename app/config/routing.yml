@@ -15,6 +15,6 @@ fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
 #easy_admin_bundle:
-#        resource: "@EasyAdminBundle/Controller/"
+#        resource: "@EnsLunchBundle/Controller/AdminController.php"
 #        type:     annotation
 #        prefix:   /admin

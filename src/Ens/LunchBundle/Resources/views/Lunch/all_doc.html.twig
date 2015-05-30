@@ -1,26 +1,20 @@
 {% block body %}
-    <h1>All users</h1>
+    <h1>All files</h1>
 
     <table class="records_list">
         <thead>
         <tr>
             <th>Id</th>
-            <th>Username</th>
+            <th>Path</th>
             <th>Name</th>
-            <th>Surname</th>
-            <th>Password</th>
-            <th>Role</th>
         </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
                 <td>{{ entity.id }}</a></td>
-                <td>{{ entity.username }}</td>
+                <td>{{ entity.path }}</td>
                 <td>{{ entity.name }}</td>
-                <td>{{ entity.surname }}</td>
-                <td>{{ entity.password }}</td>
-                <td>{{ entity.roles[0] }}</td>
             </tr>
         {% endfor %}
         </tbody>

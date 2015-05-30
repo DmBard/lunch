@@ -12,14 +12,15 @@ ens_lunch_show:
     path:     /admin/{id}/show
     defaults: { _controller: "EnsLunchBundle:Lunch:show" }
 
-ens_lunch_new:
-    path:     /admin/new
-    defaults: { _controller: "EnsLunchBundle:Lunch:new" }
+ens_lunch_upload:
+    path:     /admin/upload
+    defaults: { _controller: "EnsLunchBundle:Lunch:upload" }
+
 
 ens_lunch_create:
     path:     /admin/creating
     defaults: { _controller: "EnsLunchBundle:Lunch:create" }
-    methods:  POST
+
 
 ens_lunch_edit:
     path:     /admin/{id}/edit
@@ -48,4 +49,9 @@ ens_lunch_order:
 ens_all_users:
     path:     /admin/users
     defaults: { _controller: "EnsLunchBundle:Lunch:showAllUsers" }
+    methods:  GET
+
+ens_all_docs:
+    path:     /admin/files
+    defaults: { _controller: "EnsLunchBundle:Lunch:showAllDocs" }
     methods:  GET

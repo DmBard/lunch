@@ -6,54 +6,50 @@ use Doctrine\Common\Annotations\Annotation;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Lunch
+ * @ORM\Entity(repositoryClass="Ens\LunchBundle\Repository\LunchRepository")
+ * @ORM\Table(name="lunch")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Lunch
 {
     /**
-     * @var integer
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
     /**
-     * @var integer
+     * @ORM\Column(type="integer")
      */
     private $count;
 
     /**
-     * @var string
-     *
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
-     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
 
     /**
-     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $day;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $categories;
 
     /**
-     * @var User
-     */
-    private $user;
-
-    public $file;
-
-    /**
-     * @var  boolean
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $active;
 
@@ -71,22 +67,6 @@ class Lunch
     public function setActive($active)
     {
         $this->active = $active;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
     }
 
     /**
@@ -275,60 +255,6 @@ class Lunch
         return array_keys(self::getListDays());
     }
 
-    protected function getUploadDir()
-    {
-        return 'uploads/file';
-    }
-
-    protected function getUploadRootDir()
-    {
-        return '/web/sites/lunch.local/web/'.$this->getUploadDir();
-    }
-
-    public function getWebPath()
-    {
-        return $this->getUploadDir().'/'.'menu';
-    }
-
-    public function getAbsolutePath()
-    {
-        return $this->getUploadRootDir().'/'.'menu';
-    }
-
-    /**
-     * @ORM\PostPersist
-     */
-    public function upload()
-    {
-//        if (null === $this->file) {
-//            return;
-//        }
-
-        // if there is an error when moving the file, an exception will
-        // be automatically thrown by move(). This will properly prevent
-        // the entity from being persisted to the database on error
-
-        unset($this->file);
-    }
-
-    /**
-     * @ORM\PostRemove
-     */
-    public function removeUpload()
-    {
-//        if ($file = $this->getAbsolutePath()) {
-//            unlink($file);
-//        }
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
     /**
      * Get active
      *
@@ -339,26 +265,4 @@ class Lunch
         return $this->active;
     }
 
-    /**
-     * Add user
-     *
-     * @param \Ens\LunchBundle\Entity\User $user
-     * @return Lunch
-     */
-    public function addUser(\Ens\LunchBundle\Entity\User $user)
-    {
-        $this->user[] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \Ens\LunchBundle\Entity\User $user
-     */
-    public function removeUser(\Ens\LunchBundle\Entity\User $user)
-    {
-        $this->user->removeElement($user);
-    }
 }

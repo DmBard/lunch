@@ -74,8 +74,17 @@ swiftmailer:
 
 #easy_admin:
 #    entities:
-#        - Ens\LunchBundle\Entity\Lunch
-#        - Ens\LunchBundle\Entity\User
+#        Lunch:
+#            class: Ens\LunchBundle\Entity\Lunch
+#
+#        User:
+#            class: Ens\LunchBundle\Entity\User
+#
+#        Document:
+#            class: Ens\LunchBundle\Entity\Document
+#            list:
+#                fields:
+#                    - { property: 'file', type: 'file' }
 #    design:
 #            templates:
 #                list: 'AppBundle:easy_admin:list.html.twig'
@@ -89,10 +98,9 @@ fr3d_ldap:
     driver:
         host:                tps.local
         port:                389    # Optional
-#        version:             3
         username:            Барышев Дмитрий Анатольевич # Optional
         password:            tanya220964    # Optional
-#        bindRequiresDn:      false   # Optional
+        bindRequiresDn:      true   # Optional
 #        baseDn: OU=Users,OU=R4S,OU=SVRD-44-B,OU=SPB,OU=RU,OU=Offices,DC=tps,DC=local
 #       accountFilterFormat: (&(uid=%s)) # Optional. sprintf format %s will be the username
 #       optReferrals:        false  # Optional

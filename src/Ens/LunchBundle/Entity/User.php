@@ -7,17 +7,22 @@ use FOS\UserBundle\Model\User as BaseUser;
 use FR3D\LdapBundle\Model\LdapUserInterface;
 
 /**
- * User
+ * @ORM\Entity
+ * @ORM\Table(name="user")
  */
 class User extends BaseUser implements LdapUserInterface
 {
-    /** @var  string */
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
     protected $name;
 
     /** @var  string */
     protected $surname;
-
-    protected $id;
 
     private $dn;
 

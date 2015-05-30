@@ -5,26 +5,31 @@ namespace Ens\LunchBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Jointable
+ * @ORM\Entity(repositoryClass="Ens\LunchBundle\Repository\Jointable")
+ * @ORM\Table(name="jointable")
  */
 class Jointable
 {
     /**
-     * @var integer
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var integer
+     * @ORM\Column(type="integer")
      */
     private $id_user;
 
     /**
-     * @var integer
+     * @ORM\Column(type="integer")
      */
     private $id_lunch;
 
-    /** @var  boolean */
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $active;
 
     /**
@@ -98,5 +103,15 @@ class Jointable
     public function getIdLunch()
     {
         return $this->id_lunch;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }
