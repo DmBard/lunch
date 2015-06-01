@@ -2,3 +2,6 @@ services:
 #    ens_lunch.example:
 #        class: Ens\LunchBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+    ens_lunch.user_manager:
+        class: Ens\LunchBundle\Security\UserManager
+        arguments: [@security.encoder_factory, @fos_user.util.username_canonicalizer, @fos_user.util.email_canonicalizer, @fos_user.entity_manager, %fos_user.model.user.class% ]

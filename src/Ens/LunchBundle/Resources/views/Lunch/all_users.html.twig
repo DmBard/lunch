@@ -10,6 +10,7 @@
             <th>Surname</th>
             <th>Password</th>
             <th>Role</th>
+            <th>E-mail</th>
         </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                 <td>{{ entity.surname }}</td>
                 <td>{{ entity.password }}</td>
                 <td>{{ entity.roles[0] }}</td>
+                <td>{{ entity.email }}</td>
             </tr>
         {% endfor %}
         </tbody>

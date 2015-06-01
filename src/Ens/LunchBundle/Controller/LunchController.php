@@ -485,7 +485,7 @@ class LunchController extends Controller
      */
     public function parseXlsFile()
     {
-        $inputFileName = '/home/bard/PhpstormProjects/lunch/web/uploads/documents/'.date('m-d-Y').'menu.xls';
+        $inputFileName = '/web/sites/lunch.local/web/uploads/documents/'.date('m-d-Y').'menu.xls';
 
 //  Read your Excel workbook
         try {
