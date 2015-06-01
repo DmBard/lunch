@@ -18,26 +18,26 @@ use Symfony\Component\HttpFoundation\Request;
 class LunchController extends Controller
 {
 
-    private $categories = [];
-    private $days = [];
+    protected $categories;
+    protected $days ;
 
-    function __construct($categories, $days)
+    function __construct()
     {
-       $this-> $days = [
+
+        $this->days = [
             'Monday',
             'Tuesday',
             'Wednesday',
             'Thursday',
             'Friday',
         ];
-        $this -> $categories = [
+        $this->categories = [
             'Salad',
             'Main_Course',
             'Soup',
             'Dessert',
         ];
     }
-
 
     /**
      * Lists all Lunch entities.
@@ -49,11 +49,6 @@ class LunchController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repoLunch = $em->getRepository('EnsLunchBundle:Lunch');
 
-        //save full name in user table
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $concreteUser = $em->getRepository('EnsLunchBundle:User')->findOneBy(array('username' => $user->getUserName()));
-        $concreteUser->setName($user->getName());
-
         $entities = $repoLunch->getActiveLunches();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -61,8 +56,8 @@ class LunchController extends Controller
             'EnsLunchBundle:Lunch:index.html.twig',
             array(
                 'entities' => $entities,
-                'days' => $this->$days,
-                'categories' => $this->$categories,
+                'days' => $this->days,
+                'categories' => $this->categories,
                 'user' => $user
             )
         );
@@ -77,13 +72,12 @@ class LunchController extends Controller
         $entities = $repo->getActiveLunches();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-
         return $this->render(
             'EnsLunchBundle:Lunch:admin_index.html.twig',
             array(
                 'entities' => $entities,
-                'days' => $this->$days,
-                'categories' => $this->$categories,
+                'days' => $this->days,
+                'categories' => $this->categories,
                 'user' => $user,
             )
         );
@@ -112,7 +106,6 @@ class LunchController extends Controller
 
             return $this->redirectToRoute('ens_lunch_show_all');
         }
-
 
         return $this->render(
             'EnsLunchBundle:Lunch:new.html.twig',
@@ -346,6 +339,9 @@ class LunchController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        $concreteUser = $em->getRepository('EnsLunchBundle:User')->findOneBy(array('username' => $user->getUserName()));
+        $concreteUser->setName($user->getName());
+
         $userName = $user->getUserName();
 
         $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
@@ -359,8 +355,8 @@ class LunchController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         //insert a user choice in the JoinTable
-        foreach ($this->$categories as $category) {
-            foreach ($this->$days as $day) {
+        foreach ($this->categories as $category) {
+            foreach ($this->days as $day) {
                 $joinTable = new Jointable();
                 $idLunch = $_POST[$category][$day];
                 $joinTable->setIdLunch($idLunch);
@@ -382,8 +378,8 @@ class LunchController extends Controller
         return $this->render(
             'EnsLunchBundle:Lunch:order.html.twig',
             array(
-                'days' => $this->$days,
-                'categories' => $this->$categories,
+                'days' => $this->days,
+                'categories' => $this->categories,
                 'lunches' => $lunches,
                 'users' => $users,
                 'joins' => $joins,
