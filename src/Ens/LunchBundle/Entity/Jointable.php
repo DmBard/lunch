@@ -18,9 +18,9 @@ class Jointable
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
-    private $id_user;
+    private $userName;
 
     /**
      * @ORM\Column(type="integer")
@@ -65,9 +65,9 @@ class Jointable
      * @param integer $idUser
      * @return Jointable
      */
-    public function setIdUser($idUser)
+    public function setUserName($idUser)
     {
-        $this->id_user = $idUser;
+        $this->userName = $idUser;
 
         return $this;
     }
@@ -77,9 +77,9 @@ class Jointable
      *
      * @return integer 
      */
-    public function getIdUser()
+    public function getUserName()
     {
-        return $this->id_user;
+        return $this->userName;
     }
 
     /**

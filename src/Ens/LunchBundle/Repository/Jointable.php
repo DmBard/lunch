@@ -18,19 +18,19 @@ class Jointable extends EntityRepository
 
         $qb->where('j.active = :isActive')
             ->setParameter('isActive', true)
-            ->orderBy('j.id_user');
+            ->orderBy('j.userName');
 
         $query = $qb->getQuery();
 
         return $query->getResult();
     }
 
-    public function getPastUserJoins($id)
+    public function getPastUserJoins($nameUser)
     {
         $qb = $this->createQueryBuilder('j');
 
-        $qb->where('j.id_user = :idUser')
-            ->setParameter('idUser', $id);
+        $qb->where('j.userName = :name')
+            ->setParameter('name', $nameUser);
 
         $query = $qb->getQuery();
 

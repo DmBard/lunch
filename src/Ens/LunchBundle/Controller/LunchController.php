@@ -5,7 +5,6 @@ namespace Ens\LunchBundle\Controller;
 use Ens\LunchBundle\Entity\Document;
 use Ens\LunchBundle\Entity\Jointable;
 use Ens\LunchBundle\Entity\Lunch;
-use Ens\LunchBundle\Form\LunchType;
 use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,6 +18,27 @@ use Symfony\Component\HttpFoundation\Request;
 class LunchController extends Controller
 {
 
+    private $categories = [];
+    private $days = [];
+
+    function __construct($categories, $days)
+    {
+       $this-> $days = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+        ];
+        $this -> $categories = [
+            'Salad',
+            'Main_Course',
+            'Soup',
+            'Dessert',
+        ];
+    }
+
+
     /**
      * Lists all Lunch entities.
      *
@@ -29,33 +49,20 @@ class LunchController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repoLunch = $em->getRepository('EnsLunchBundle:Lunch');
 
-        /** @var string[] $categories */
-        $categories = [
-            'Salad',
-            'Main_Course',
-            'Soup',
-            'Dessert',
-        ];
-
-        /** @var string[] $days */
-        $days = [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-        ];
+        //save full name in user table
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $concreteUser = $em->getRepository('EnsLunchBundle:User')->findOneBy(array('username' => $user->getUserName()));
+        $concreteUser->setName($user->getName());
 
         $entities = $repoLunch->getActiveLunches();
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
 
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',
             array(
                 'entities' => $entities,
-                'days' => $days,
-                'categories' => $categories,
+                'days' => $this->$days,
+                'categories' => $this->$categories,
                 'user' => $user
             )
         );
@@ -67,23 +74,6 @@ class LunchController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('EnsLunchBundle:Lunch');
 
-        /** @var string[] $categories */
-        $categories = [
-            'Salad',
-            'Main_Course',
-            'Soup',
-            'Dessert',
-        ];
-
-        /** @var string[] $days */
-        $days = [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-        ];
-
         $entities = $repo->getActiveLunches();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -92,8 +82,8 @@ class LunchController extends Controller
             'EnsLunchBundle:Lunch:admin_index.html.twig',
             array(
                 'entities' => $entities,
-                'days' => $days,
-                'categories' => $categories,
+                'days' => $this->$days,
+                'categories' => $this->$categories,
                 'user' => $user,
             )
         );
@@ -351,32 +341,14 @@ class LunchController extends Controller
     public function orderAction()
     {
 
-        $categories = [
-            'Salad',
-            'Main_Course',
-            'Soup',
-            'Dessert',
-        ];
-
-        /** @var string[] $days */
-        $days = [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-        ];
 
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        if (!$em->contains($user)) {
-            $em->persist($user);
-        }
 
-        $idUser = $user->getId();
+        $userName = $user->getUserName();
 
-        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($idUser);
+        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
 
         foreach ($pastJoins as $item) {
             $item->setActive(0);
@@ -387,12 +359,12 @@ class LunchController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         //insert a user choice in the JoinTable
-        foreach ($categories as $category) {
-            foreach ($days as $day) {
+        foreach ($this->$categories as $category) {
+            foreach ($this->$days as $day) {
                 $joinTable = new Jointable();
                 $idLunch = $_POST[$category][$day];
                 $joinTable->setIdLunch($idLunch);
-                $joinTable->setIdUser($idUser);
+                $joinTable->setUserName($userName);
                 $joinTable->setActive(1);
                 $em->persist($joinTable);
             }
@@ -400,16 +372,18 @@ class LunchController extends Controller
 
         $em->flush();
 
-        $users = $em = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
-        $joins = $em = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Jointable')->getActiveJoinsOrderedByUsers();
-        $lunches = $em = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
+        $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
+        $joins = $this->getDoctrine()->getManager()->getRepository(
+            'EnsLunchBundle:Jointable'
+        )->getActiveJoinsOrderedByUsers();
+        $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
 
 
         return $this->render(
             'EnsLunchBundle:Lunch:order.html.twig',
             array(
-                'days' => $days,
-                'categories' => $categories,
+                'days' => $this->$days,
+                'categories' => $this->$categories,
                 'lunches' => $lunches,
                 'users' => $users,
                 'joins' => $joins,

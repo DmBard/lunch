@@ -11,7 +11,9 @@ class UserManager extends \FOS\UserBundle\Doctrine\UserManager{
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);
 
-        $user = $this->repository->findOneBy(['email'=>$user->getEmail()]);
+        $newUser = $this->repository->findOneBy(['email'=>$user->getEmail()]);
+
+        if ($newUser) $user = $newUser;
 
         $this->objectManager->persist($user);
         if ($andFlush) {
