@@ -469,7 +469,7 @@ class AdminController extends Controller
      */
     public function parseXlsFile()
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.date('m-d-Y').'menu.xls';
+        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.date('d-m-Y').'menu.xls';
 
 //  Read your Excel workbook
         try {
@@ -626,6 +626,5 @@ class AdminController extends Controller
 // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
         $objWriter->save(__DIR__.'/../../../../web/uploads/orders/hui.xlsx');
-
     }
 }
