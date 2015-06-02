@@ -92,8 +92,8 @@ fr3d_ldap:
 #        version:             3
         username:            Барышев Дмитрий анатольевич # Optional
         password:            tanya220964    # Optional
-        bindRequiresDn:      false   # Optional
-        bindRequiresDn: true
+#        bindRequiresDn:      false   # Optional
+#        bindRequiresDn: true
         accountFilterFormat: (&(samaccountname=%s))
 #        baseDn: OU=Users,OU=R4S,OU=SVRD-44-B,OU=SPB,OU=RU,OU=Offices,DC=tps,DC=local
 #       accountFilterFormat: (&(uid=%s)) # Optional. sprintf format %s will be the username

@@ -81,7 +81,6 @@ class AdminController extends Controller
 
             $this->parseXlsFile();
 
-
             return $this->redirectToRoute('ens_lunch_show_all');
         }
 
@@ -298,6 +297,79 @@ class AdminController extends Controller
         return $this->redirect($this->generateUrl('ens_lunch'));
     }
 
+    public function formArrayOfUserChoices()
+    {
+        $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
+
+//array of user choices
+        $userChoices = [];
+        $names = [];
+        foreach ($users as $itemUser) {
+            $joinList = $this->getDoctrine()->getManager()->getRepository(
+                'EnsLunchBundle:Jointable'
+            )->getActiveJoinsByOneUser($itemUser);
+
+            if ($joinList) {
+                array_push($names, $joinList[0]->getName());
+                $lunchList = [];
+                foreach ($joinList as $joinItem) {
+                    array_push(
+                        $lunchList,
+                        $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->findOneBy(
+                            array('id' => $joinItem->getIdLunch())
+                        )
+                    );
+                }
+
+                foreach ($this->categories as $itemCategory) {
+                    foreach ($this->days as $itemDay) {
+                        foreach ($lunchList as $itemLunch) {
+                            if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay() == $itemDay)) {
+                                array_push($userChoices, $itemLunch->getCount());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->writeXlsFile($names, $userChoices);
+    }
+
+    /**
+     * @param $user
+     */
+    public function addDataInJointable($user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userName = $user->getUserName();
+        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
+
+        foreach ($pastJoins as $item) {
+            $item->setActive(0);
+            $em->persist($item);
+        }
+        $em->flush();
+
+        $em = $this->getDoctrine()->getManager();
+
+
+        //insert a user choice in the JoinTable
+        foreach ($this->categories as $category) {
+            foreach ($this->days as $day) {
+                $joinTable = new Jointable();
+                $idLunch = $_POST[$category][$day];
+                $joinTable->setIdLunch($idLunch);
+                $joinTable->setUserName($userName);
+                $joinTable->setName($user->getName());
+                $joinTable->setActive(1);
+                $em->persist($joinTable);
+            }
+        }
+
+        $em->flush();
+    }
+
 
     /**
      * Creates a form to create a Lunch entity.
@@ -367,68 +439,17 @@ class AdminController extends Controller
      */
     public function orderAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $userName = $user->getUserName();
 
-        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
+        $this->addDataInJointable($user);
 
-        foreach ($pastJoins as $item) {
-            $item->setActive(0);
-            $em->persist($item);
-        }
-
-        //insert a user choice in the JoinTable
-        foreach ($this->categories as $category) {
-            foreach ($this->days as $day) {
-                $joinTable = new Jointable();
-                $idLunch = $_POST[$category][$day];
-                $joinTable->setIdLunch($idLunch);
-                $joinTable->setUserName($userName);
-                $joinTable->setName($user->getName());
-                $joinTable->setActive(1);
-                $em->persist($joinTable);
-            }
-        }
-
-        $em->flush();
-
-        $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
         $joins = $this->getDoctrine()->getManager()->getRepository(
             'EnsLunchBundle:Jointable'
-        )->getActiveJoinsOrderedByUsers();
+        )->getActiveJoinsByOneUser($user);
         $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
 
-        //array of user choices
-        $userChoices = [];
-        foreach ($users as $itemUser) {
-            $joinList = $this->getDoctrine()->getManager()->getRepository(
-                'EnsLunchBundle:Jointable'
-            )->getActiveJoinsByOneUser($itemUser);
 
-            $lunchList = [];
-            foreach ($joinList as $joinItem) {
-                array_push(
-                    $lunchList,
-                    $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->findOneBy(
-                        array('id' => $joinItem->getIdLunch())
-                    )
-                );
-            }
-
-            foreach ($this->categories as $itemCategory) {
-                foreach ($this->days as $itemDay) {
-                    foreach ($lunchList as $itemLunch) {
-                        if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay() == $itemDay)) {
-                            array_push($userChoices, $itemLunch->getCount());
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->writeXlsFile($users, $userChoices);
+        $this->formArrayOfUserChoices();
 
         return $this->render(
             'EnsLunchBundle:Lunch:order.html.twig',
@@ -436,7 +457,7 @@ class AdminController extends Controller
                 'days' => $this->days,
                 'categories' => $this->categories,
                 'lunches' => $lunches,
-                'users' => $users,
+                'user' => $user,
                 'joins' => $joins,
             )
         );
@@ -504,7 +525,7 @@ class AdminController extends Controller
                     $description = $sheet->getCell($arrayLabel[$column].$row)->getValue();
                     $em = $this->getDoctrine()->getManager();
                     $lunch = new Lunch();
-                    //== display each cell value
+// display each cell value
                     $lunch->setCategories($categories[$num_category]);
                     $lunch->setDay($days[$column]);
                     $lunch->setCount($num);
@@ -527,9 +548,9 @@ class AdminController extends Controller
      * @return mixed
      * @throws \PHPExcel_Reader_Exception
      */
-    public function writeXlsFile($users, $userChoices)
+    public function writeXlsFile($names, $userChoices)
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/orders/form_order.xls';
+        $inputFileName = __DIR__.'/../../../../web/uploads/orders/form_order.xlsx';
 
 //  Read your Excel workbook
         try {
@@ -542,9 +563,10 @@ class AdminController extends Controller
 
 //  Get worksheet dimensions
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
-        $firstRow = 5;
-        $highestRow = $firstRow + 4 * count($users) - 1;
-        $arrayLabel = array('C', 'D', 'E', 'F', 'G', 'H');
+        $firstRow = 2;
+        $countOfDishes = 4;
+        $highestRow = $firstRow + $countOfDishes * count($names) - 1;
+        $arrayLabel = array('B', 'C', 'D', 'E', 'F', 'G');
 
         /** @var string[] $categoriesRus */
         $categoriesRus = [
@@ -554,34 +576,56 @@ class AdminController extends Controller
             'Дессерт',
         ];
 
+        /** @var string[] $categoriesRus */
+        $daysRus = [
+            'Пн.',
+            'Вт.',
+            'Ср.',
+            'Чт.',
+            'Пт.',
+        ];
+
 // Change the file
         $num = 0;
         $numCategory = 0;
-        $i = 0;
+        $numChoice = 0;
+        $numLabel = 1;
 
-        foreach ($users as $user) {
-            $sheet->setCellValue('B'.($firstRow + $num*4), 'ФИО');
-            $sheet->setCellValue('B'.($firstRow + $num*4 + 1), $user->getname());
+        //insert name
+        foreach ($names as $name) {
+            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes), 'ФИО');
+            $partsOfName = explode(" ", $name);
+            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes + 1), $partsOfName[0]);
+            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes + 2), $partsOfName[1]);
+            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes + 3), $partsOfName[2]);
             $num++;
         }
+
+        //insert days of week
+        foreach ($daysRus as $day) {
+            $sheet->setCellValue($arrayLabel[$numLabel].'1', $day);
+            $numLabel++;
+        }
+
+        //insert user choices and categories of dishes
         for ($row = $firstRow; $row <= $highestRow; $row++) {
             foreach ($arrayLabel as $column) {
-                if ($column == 'C') {
+                if ($column == 'B') {
                     $sheet->setCellValue($column.$row, $categoriesRus[$numCategory]);
                     $numCategory++;
-                    if ($numCategory == 4) {
+                    if ($numCategory == $countOfDishes) {
                         $numCategory = 0;
                     }
                 } else {
-                    $sheet->setCellValue($column.$row, $userChoices[$i]);
-                    $i++;
+                    $sheet->setCellValue($column.$row, $userChoices[$numChoice]);
+                    $numChoice++;
                 }
             }
         }
 
 // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
-        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/hui.xls');
+        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/hui.xlsx');
 
     }
 }

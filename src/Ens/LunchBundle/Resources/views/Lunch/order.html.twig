@@ -6,7 +6,6 @@
         <thead>
         <tr>
             <th></th>
-            <th></th>
             <th>Monday</th>
             <th>Tuesday</th>
             <th>Wednesday</th>
@@ -15,18 +14,16 @@
         </tr>
         </thead>
         <tbody>
-        {% for user in users %}
             {% for category in categories %}
                 <tr>
-                    <td> {{ user.name }}</td>
                     <td>{{ category }}</td>
                     {% for day in days %}
                         <td>
                             <label>
                                 {% for lunch in lunches %}
                                     {% for join in joins %}
-                                        {% if ((join.userName == user.userName) and (join.idLunch == lunch.id) and (lunch.day  ==  day ) and (lunch.categories  ==  category)) %}
-                                            {{ lunch.count }}
+                                        {% if ((join.idLunch == lunch.id) and (lunch.day  ==  day ) and (lunch.categories  ==  category)) %}
+                                            {{ lunch.description }}
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
@@ -35,7 +32,6 @@
                     {% endfor %}
                 </tr>
             {% endfor %}
-        {% endfor %}
         </tbody>
     </table>
 {% endblock %}

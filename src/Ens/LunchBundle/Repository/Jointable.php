@@ -12,18 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class Jointable extends EntityRepository
 {
-    public function getActiveJoinsOrderedByUsers()
-    {
-        $qb = $this->createQueryBuilder('j');
-
-        $qb->where('j.active = :isActive')
-            ->setParameter('isActive', true)
-            ->orderBy('j.userName');
-
-        $query = $qb->getQuery();
-
-        return $query->getResult();
-    }
+//    public function getActiveJoinsOrderedByUsers()
+//    {
+//        $qb = $this->createQueryBuilder('j');
+//
+//        $qb->where('j.active = :isActive')
+//            ->setParameter('isActive', true)
+//            ->orderBy('j.userName');
+//
+//        $query = $qb->getQuery();
+//
+//        return $query->getResult();
+//    }
 
     public function getActiveJoinsByOneUser($user)
     {
@@ -31,7 +31,7 @@ class Jointable extends EntityRepository
 
         $qb->where('j.active = :isActive')
             ->andWhere('j.userName = :user')
-            ->setParameter('user', $user->getUserName())
+            ->setParameter('user', $user->getUsername())
             ->setParameter('isActive', true);
 
         $query = $qb->getQuery();

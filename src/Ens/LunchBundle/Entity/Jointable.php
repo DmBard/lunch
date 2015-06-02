@@ -27,7 +27,6 @@ class Jointable
      */
     private $name;
 
-
     /**
      * @ORM\Column(type="integer")
      */
@@ -53,7 +52,6 @@ class Jointable
     {
         $this->active = $active;
     }
-
 
     /**
      * Get id
