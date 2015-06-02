@@ -8,7 +8,7 @@ use FR3D\LdapBundle\Model\LdapUserInterface;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user_table")
  */
 class User extends BaseUser implements LdapUserInterface
 {

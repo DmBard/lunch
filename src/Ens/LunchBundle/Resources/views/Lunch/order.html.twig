@@ -25,7 +25,7 @@
                             <label>
                                 {% for lunch in lunches %}
                                     {% for join in joins %}
-                                        {% if ((join.userName == user.userName) and (join.idLunch == lunch.id) and (lunch.day  ==  day ) and (lunch.categories  ==  category ) ) %}
+                                        {% if ((join.userName == user.userName) and (join.idLunch == lunch.id) and (lunch.day  ==  day ) and (lunch.categories  ==  category)) %}
                                             {{ lunch.count }}
                                         {% endif %}
                                     {% endfor %}

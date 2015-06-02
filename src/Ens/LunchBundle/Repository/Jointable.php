@@ -25,6 +25,20 @@ class Jointable extends EntityRepository
         return $query->getResult();
     }
 
+    public function getActiveJoinsByOneUser($user)
+    {
+        $qb = $this->createQueryBuilder('j');
+
+        $qb->where('j.active = :isActive')
+            ->andWhere('j.userName = :user')
+            ->setParameter('user', $user->getUserName())
+            ->setParameter('isActive', true);
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
     public function getPastUserJoins($nameUser)
     {
         $qb = $this->createQueryBuilder('j');

@@ -23,6 +23,12 @@ class Jointable
     private $userName;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $id_lunch;
@@ -113,5 +119,21 @@ class Jointable
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }
