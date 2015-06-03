@@ -11,7 +11,6 @@ namespace Ens\LunchBundle\Controller;
 use Ens\LunchBundle\Entity\Document;
 use Ens\LunchBundle\Entity\Jointable;
 use Ens\LunchBundle\Entity\Lunch;
-use Ens\LunchBundle\Entity\Order;
 use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,6 +22,7 @@ class AdminController extends Controller
 
     protected $categories;
     protected $days;
+    private $dateperiod;
 
     function __construct()
     {
@@ -40,6 +40,8 @@ class AdminController extends Controller
             'Soup',
             'Dessert',
         ];
+
+        $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
     }
 
     public function adminIndexAction()
@@ -81,35 +83,6 @@ class AdminController extends Controller
             $em->flush();
 
             $this->parseXlsFile();
-
-            return $this->redirectToRoute('ens_lunch_show_all');
-        }
-
-        return $this->render(
-            'EnsLunchBundle:Lunch:new.html.twig',
-            array(
-                'form' => $form->createView(),
-            )
-        );
-    }
-
-    public function uploadOrderAction(Request $request)
-    {
-        $order = new Order();
-        $form = $this->createFormBuilder($order)
-            ->add('name')
-            ->add('file')
-            ->add('submit', 'submit', array('label' => 'Create'))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $order->upload();
-
-            $em->persist($order);
-            $em->flush();
 
             return $this->redirectToRoute('ens_lunch_show_all');
         }
@@ -300,42 +273,51 @@ class AdminController extends Controller
 
     public function formArrayOfUserChoices()
     {
-        $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
+
+        $floorList = [
+            'floor_4',
+            'floor_5',
+        ];
+
+        foreach ($floorList as $floor) {
+            $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
 
 //array of user choices
-        $userChoices = [];
-        $names = [];
-        foreach ($users as $itemUser) {
-            $joinList = $this->getDoctrine()->getManager()->getRepository(
-                'EnsLunchBundle:Jointable'
-            )->getActiveJoinsByOneUser($itemUser);
+            $userChoices = [];
+            $names = [];
+            foreach ($users as $itemUser) {
+                $joinList = $this->getDoctrine()->getManager()->getRepository(
+                    'EnsLunchBundle:Jointable'
+                )->getActiveJoinsByOneUserAndFloor($itemUser, $floor);
 
-            if ($joinList) {
-                array_push($names, $joinList[0]->getName());
-                $lunchList = [];
-                foreach ($joinList as $joinItem) {
-                    array_push(
-                        $lunchList,
-                        $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->findOneBy(
-                            array('id' => $joinItem->getIdLunch())
-                        )
-                    );
-                }
+                if ($joinList) {
+                    array_push($names, $joinList[0]->getName());
+                    $lunchList = [];
+                    foreach ($joinList as $joinItem) {
+                        array_push(
+                            $lunchList,
+                            $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->findOneBy(
+                                array('id' => $joinItem->getIdLunch())
+                            )
+                        );
+                    }
 
-                foreach ($this->categories as $itemCategory) {
-                    foreach ($this->days as $itemDay) {
-                        foreach ($lunchList as $itemLunch) {
-                            if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay() == $itemDay)) {
-                                array_push($userChoices, $itemLunch->getCount());
+                    foreach ($this->categories as $itemCategory) {
+                        foreach ($this->days as $itemDay) {
+                            foreach ($lunchList as $itemLunch) {
+                                if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay(
+                                        ) == $itemDay)
+                                ) {
+                                    array_push($userChoices, $itemLunch->getCount());
+                                }
                             }
                         }
                     }
                 }
             }
+            $this->writeOrderXlsFile($names, $userChoices, $floor);
+            $this->writeMenuXlsFile($floor);
         }
-
-        $this->writeOrderXlsFile($names, $userChoices);
-        $this->writeMenuXlsFile();
     }
 
     /**
@@ -345,6 +327,7 @@ class AdminController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $userName = $user->getUserName();
+
         $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
 
         foreach ($pastJoins as $item) {
@@ -355,15 +338,16 @@ class AdminController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-
         //insert a user choice in the JoinTable
         foreach ($this->categories as $category) {
             foreach ($this->days as $day) {
                 $joinTable = new Jointable();
                 $idLunch = $_POST[$category][$day];
+                $floor = $_POST['floor'];
                 $joinTable->setIdLunch($idLunch);
                 $joinTable->setUserName($userName);
                 $joinTable->setName($user->getName());
+                $joinTable->setFloor($floor);
                 $joinTable->setActive(1);
                 $em->persist($joinTable);
             }
@@ -465,33 +449,35 @@ class AdminController extends Controller
         );
     }
 
-    public function downloadMenuFileAction()
+    public function downloadFile4FloorMenuAction()
     {
-//        $path = $this->get('kernel')->getRootDir(). "/reports/" . $filename;
-        $path = __DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'menu.xlsx';
-        $content = file_get_contents($path);
-
-        $response = new Response();
-
-        $response->headers->set('Content-Type', 'xls/xlsx');
-        $response->headers->set('Content-Disposition', 'attachment;filename="'.date('d-m-Y').'menu.xlsx');
-
-        $response->setContent($content);
-        return $response;
+        return $this->downloadFile('floor_4_menu');
     }
 
-    public function downloadOrderFileAction()
+    public function downloadFile5FloorMenuAction()
     {
-//        $path = $this->get('kernel')->getRootDir(). "/reports/" . $filename;
-        $path = __DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'order.xlsx';
+        return $this->downloadFile('floor_5_menu');
+    }
+
+    public function downloadFile4FloorOrderAction()
+    {
+        return $this->downloadFile('floor_4_order');
+    }
+
+    public function downloadFile5FloorOrderAction()
+    {
+        return $this->downloadFile('floor_5_order');
+    }
+
+    public function downloadFile($name)
+    {
+        $path = __DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$name.'.xlsx';
         $content = file_get_contents($path);
-
         $response = new Response();
-
         $response->headers->set('Content-Type', 'xls/xlsx');
-        $response->headers->set('Content-Disposition', 'attachment;filename="'.date('d-m-Y').'order.xlsx');
-
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$this->dateperiod.'_'.$name.'.xlsx');
         $response->setContent($content);
+
         return $response;
     }
 
@@ -501,7 +487,7 @@ class AdminController extends Controller
      */
     public function parseXlsFile()
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.date('d-m-Y').'menu.xlsx';
+        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.$this->dateperiod.'_menu.xlsx';
 
 //  Read your Excel workbook
         try {
@@ -581,7 +567,7 @@ class AdminController extends Controller
      * @return mixed
      * @throws \PHPExcel_Reader_Exception
      */
-    public function writeOrderXlsFile($names, $userChoices)
+    public function writeOrderXlsFile($names, $userChoices, $floor)
     {
         $inputFileName = __DIR__.'/../../../../web/uploads/orders/form_order.xlsx';
 
@@ -658,12 +644,12 @@ class AdminController extends Controller
 
 // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
-        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'order.xlsx');
+        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$floor.'_order.xlsx');
     }
 
-    public function writeMenuXlsFile()
+    public function writeMenuXlsFile($floor)
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.date('d-m-Y').'menu.xlsx';
+        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.$this->dateperiod.'_menu.xlsx';
 
 //  Read your Excel workbook
         try {
@@ -685,8 +671,11 @@ class AdminController extends Controller
         $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
         foreach ($lunches as $lunch) {
             $countOneLunch = count(
-                $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Jointable')->getActiveJoinsByOneLunch(
-                    $lunch
+                $this->getDoctrine()->getManager()->getRepository(
+                    'EnsLunchBundle:Jointable'
+                )->getActiveJoinsByOneLunchAndFloor(
+                    $lunch,
+                    $floor
                 )
             );
             array_push($numServings, $countOneLunch);
@@ -707,6 +696,6 @@ class AdminController extends Controller
 
 // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
-        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'menu.xlsx');
+        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$floor.'_menu.xlsx');
     }
 }

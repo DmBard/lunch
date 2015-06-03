@@ -3,7 +3,7 @@
 {% block body -%}
     <h4>
         You are logged as:
-       {{ user.username  }} ({{ user.name }}) | <a href="{{ path('fos_user_security_logout') }}"> Logout </a>
+        {{ user.username }} ({{ user.name }}) | <a href="{{ path('fos_user_security_logout') }}"> Logout </a>
     </h4>
 
     <style>
@@ -12,20 +12,27 @@
         }
     </style>
     <h1>Lunch list</h1>
-    <table class="records_list">
-        <thead>
-        <tr>
-            <th></th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-        </tr>
-        </thead>
-        <tbody>
-        <form action="{{ path('ens_lunch_order') }}" method="post">
+    <form action="{{ path('ens_lunch_order') }}" method="post">
+        <label>
+            <select name="floor">
+                <option value="floor_4">4 floor</option>
+                <option value="floor_5">5 floor</option>
+            </select>
+        </label>
 
+
+        <table class="records_list">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for category in categories %}
                 <tr>
                     <td>{{ category }}</td>
@@ -49,10 +56,10 @@
                     <input type="submit" value="Save">
                 </td>
             </tr>
+            </tbody>
+        </table>
+    </form>
 
-        </form>
-        </tbody>
-    </table>
     {% block adminBlock %}
     {% endblock %}
 {% endblock %}

@@ -38,6 +38,27 @@ class Jointable
     private $active;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $floor;
+
+    /**
+     * @return mixed
+     */
+    public function getFloor()
+    {
+        return $this->floor;
+    }
+
+    /**
+     * @param mixed $floor
+     */
+    public function setFloor($floor)
+    {
+        $this->floor = $floor;
+    }
+
+    /**
      * @return boolean
      */
     public function isActive()

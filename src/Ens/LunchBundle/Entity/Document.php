@@ -95,7 +95,8 @@ class Document
         // target filename to move to
 
         $upFile = $this->getFile();
-        $upFile->setOriginalName(date('d-m-Y').'menu.xlsx');
+        $datePeriod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        $upFile->setOriginalName($datePeriod.'_menu.xlsx');
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $this->getFile()->getClientOriginalName()

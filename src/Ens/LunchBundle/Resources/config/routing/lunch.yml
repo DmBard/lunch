@@ -16,10 +16,6 @@ ens_lunch_upload:
     path:     /admin/upload
     defaults: { _controller: "EnsLunchBundle:Admin:upload" }
 
-ens_lunch_upload_order:
-    path:     /admin/upload_order
-    defaults: { _controller: "EnsLunchBundle:Admin:uploadOrder" }
-
 ens_lunch_edit:
     path:     /admin/{id}/edit
     defaults: { _controller: "EnsLunchBundle:Admin:edit" }
@@ -54,12 +50,23 @@ ens_all_docs:
     defaults: { _controller: "EnsLunchBundle:Admin:showAllDocs" }
     methods:  GET
 
-ens_download_menu:
-    path:     /admin/download_menu
-    defaults: { _controller: "EnsLunchBundle:Admin:downloadMenuFile" }
+ens_download_4_menu:
+    path:     /admin/download_4_menu
+    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile4FloorMenu" }
     methods:  GET
 
-ens_download_order:
-    path:     /admin/download_order
-    defaults: { _controller: "EnsLunchBundle:Admin:downloadOrderFile" }
+ens_download_5_menu:
+    path:     /admin/download_5_menu
+    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile5FloorMenu" }
     methods:  GET
+
+ens_download_4_order:
+    path:     /admin/download_4_order
+    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile4FloorOrder" }
+    methods:  GET
+
+ens_download_5_order:
+    path:     /admin/download_5_order
+    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile5FloorOrder" }
+    methods:  GET
+

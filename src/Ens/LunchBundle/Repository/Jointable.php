@@ -25,6 +25,22 @@ class Jointable extends EntityRepository
 //        return $query->getResult();
 //    }
 
+    public function getActiveJoinsByOneUserAndFloor($user, $floor)
+    {
+        $qb = $this->createQueryBuilder('j');
+
+        $qb->where('j.active = :isActive')
+            ->andWhere('j.userName = :user')
+            ->andWhere('j.floor = :floor')
+            ->setParameter('user', $user->getUsername())
+            ->setParameter('floor', $floor)
+            ->setParameter('isActive', true);
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
     public function getActiveJoinsByOneUser($user)
     {
         $qb = $this->createQueryBuilder('j');
@@ -39,13 +55,15 @@ class Jointable extends EntityRepository
         return $query->getResult();
     }
 
-    public function getActiveJoinsByOneLunch($lunch)
+    public function getActiveJoinsByOneLunchAndFloor($lunch, $floor)
     {
         $qb = $this->createQueryBuilder('j');
 
         $qb->where('j.active = :isActive')
             ->andWhere('j.id_lunch = :lunch')
+            ->andWhere('j.floor = :floor')
             ->setParameter('lunch', $lunch->getId())
+            ->setParameter('floor', $floor)
             ->setParameter('isActive', true);
 
         $query = $qb->getQuery();
