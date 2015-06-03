@@ -333,7 +333,8 @@ class AdminController extends Controller
             }
         }
 
-        $this->writeXlsFile($names, $userChoices);
+        $this->writeOrderXlsFile($names, $userChoices);
+        $this->writeMenuXlsFile();
     }
 
     /**
@@ -469,7 +470,7 @@ class AdminController extends Controller
      */
     public function parseXlsFile()
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.date('d-m-Y').'menu.xls';
+        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.date('d-m-Y').'menu.xlsx';
 
 //  Read your Excel workbook
         try {
@@ -508,6 +509,7 @@ class AdminController extends Controller
         /** @var integer $num */
         $num = 0;
 
+        //The last lunches are not active
         $em = $this->getDoctrine()->getManager();
         $lunches = $em->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
 
@@ -548,7 +550,7 @@ class AdminController extends Controller
      * @return mixed
      * @throws \PHPExcel_Reader_Exception
      */
-    public function writeXlsFile($names, $userChoices)
+    public function writeOrderXlsFile($names, $userChoices)
     {
         $inputFileName = __DIR__.'/../../../../web/uploads/orders/form_order.xlsx';
 
@@ -586,19 +588,19 @@ class AdminController extends Controller
         ];
 
 // Change the file
-        $num = 0;
+        $numName = 0;
         $numCategory = 0;
         $numChoice = 0;
         $numLabel = 1;
 
         //insert name
         foreach ($names as $name) {
-            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes), 'ФИО');
+            $sheet->setCellValue('A'.($firstRow + $numName * $countOfDishes), 'ФИО');
             $partsOfName = explode(" ", $name);
-            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes + 1), $partsOfName[0]);
-            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes + 2), $partsOfName[1]);
-            $sheet->setCellValue('A'.($firstRow + $num * $countOfDishes + 3), $partsOfName[2]);
-            $num++;
+            $sheet->setCellValue('A'.($firstRow + $numName * $countOfDishes + 1), $partsOfName[0]);
+            $sheet->setCellValue('A'.($firstRow + $numName * $countOfDishes + 2), $partsOfName[1]);
+            $sheet->setCellValue('A'.($firstRow + $numName * $countOfDishes + 3), $partsOfName[2]);
+            $numName++;
         }
 
         //insert days of week
@@ -625,6 +627,55 @@ class AdminController extends Controller
 
 // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
-        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/hui.xlsx');
+        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'order.xlsx');
+    }
+
+    public function writeMenuXlsFile()
+    {
+        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.date('d-m-Y').'menu.xlsx';
+
+//  Read your Excel workbook
+        try {
+            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load($inputFileName);
+        } catch (Exception $e) {
+            die('Error loading file "'.pathinfo($inputFileName, PATHINFO_BASENAME).'": '.$e->getMessage());
+        }
+
+//  Get worksheet dimensions
+        $firstRow = 2;
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $highestRow = $sheet->getHighestRow();
+        $arrayLabel = array('C', 'E', 'G', 'I', 'K');
+
+        //get the number of servings of each dish
+        $numServings = [];
+        $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
+        foreach ($lunches as $lunch) {
+            $countOneLunch = count(
+                $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Jointable')->getActiveJoinsByOneLunch(
+                    $lunch
+                )
+            );
+            array_push($numServings, $countOneLunch);
+        }
+
+// Change the file
+        $numLunch = 0;
+
+       //insert user choices and categories of dishes
+        for ($row = $firstRow; $row <= $highestRow; $row++) {
+            foreach ($arrayLabel as $column) {
+                if ($sheet->getCell('A'.$row)->getValue() != '') {
+                    $sheet->setCellValue($column.$row, $numServings[$numLunch]);
+                    $numLunch++;
+                }
+            }
+        }
+
+// Write the file
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
+        $objWriter->save( __DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'menu.xlsx');
     }
 }

@@ -16,8 +16,9 @@ class LunchRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('l');
 
-            $qb->where('l.active = :isActive')
-                ->setParameter('isActive', true);
+        $qb->where('l.active = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('l.id');
 
         $query = $qb->getQuery();
 

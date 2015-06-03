@@ -95,7 +95,7 @@ class Document
         // target filename to move to
 
         $upFile = $this->getFile();
-        $upFile->setOriginalName(date('d-m-Y').'menu.xls');
+        $upFile->setOriginalName(date('d-m-Y').'menu.xlsx');
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $this->getFile()->getClientOriginalName()
