@@ -16,6 +16,7 @@ use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
@@ -464,6 +465,36 @@ class AdminController extends Controller
         );
     }
 
+    public function downloadMenuFileAction()
+    {
+//        $path = $this->get('kernel')->getRootDir(). "/reports/" . $filename;
+        $path = __DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'menu.xlsx';
+        $content = file_get_contents($path);
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'xls/xlsx');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.date('d-m-Y').'menu.xlsx');
+
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function downloadOrderFileAction()
+    {
+//        $path = $this->get('kernel')->getRootDir(). "/reports/" . $filename;
+        $path = __DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'order.xlsx';
+        $content = file_get_contents($path);
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'xls/xlsx');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.date('d-m-Y').'order.xlsx');
+
+        $response->setContent($content);
+        return $response;
+    }
+
     /**
      * @return mixed
      * @throws \PHPExcel_Reader_Exception
@@ -664,7 +695,7 @@ class AdminController extends Controller
 // Change the file
         $numLunch = 0;
 
-       //insert user choices and categories of dishes
+        //insert user choices and categories of dishes
         for ($row = $firstRow; $row <= $highestRow; $row++) {
             foreach ($arrayLabel as $column) {
                 if ($sheet->getCell('A'.$row)->getValue() != '') {
@@ -676,6 +707,6 @@ class AdminController extends Controller
 
 // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
-        $objWriter->save( __DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'menu.xlsx');
+        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.date('d-m-Y').'menu.xlsx');
     }
 }

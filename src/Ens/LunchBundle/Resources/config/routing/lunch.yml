@@ -53,3 +53,13 @@ ens_all_docs:
     path:     /admin/files
     defaults: { _controller: "EnsLunchBundle:Admin:showAllDocs" }
     methods:  GET
+
+ens_download_menu:
+    path:     /admin/download_menu
+    defaults: { _controller: "EnsLunchBundle:Admin:downloadMenuFile" }
+    methods:  GET
+
+ens_download_order:
+    path:     /admin/download_order
+    defaults: { _controller: "EnsLunchBundle:Admin:downloadOrderFile" }
+    methods:  GET
