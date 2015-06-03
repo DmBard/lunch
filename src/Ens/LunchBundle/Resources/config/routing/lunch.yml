@@ -40,6 +40,12 @@ ens_lunch_order:
     defaults: { _controller: "EnsLunchBundle:Admin:order" }
     methods:  POST
 
+ens_lunch_my_order:
+    path:     /my_order
+    defaults: { _controller: "EnsLunchBundle:Admin:userOrder" }
+    methods:  GET
+
+
 ens_all_users:
     path:     /admin/users
     defaults: { _controller: "EnsLunchBundle:Admin:showAllUsers" }

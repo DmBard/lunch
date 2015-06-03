@@ -2,8 +2,8 @@
 
 {% block body -%}
     <h4>
-        You are logged as:
-        {{ user.username }} ({{ user.name }}) | <a href="{{ path('fos_user_security_logout') }}"> Logout </a>
+        You are logged as:<a href="{{ path('ens_lunch_my_order') }}">
+            {{ user.username }} ({{ user.name }}) </a> | <a href="{{ path('fos_user_security_logout') }}"> Logout </a>
     </h4>
 
     <style>
@@ -11,15 +11,16 @@
             width: 300px;
         }
     </style>
-    <h1>Lunch list</h1>
+    <h1>MENU {{ dateperiod }}</h1>
     <form action="{{ path('ens_lunch_order') }}" method="post">
+
+        <label> Select your floor! </label>
         <label>
             <select name="floor">
                 <option value="floor_4">4 floor</option>
                 <option value="floor_5">5 floor</option>
             </select>
         </label>
-
 
         <table class="records_list">
             <thead>
@@ -54,11 +55,15 @@
             <tr>
                 <td>
                     <input type="submit" value="Save">
+                    <input type="checkbox" name="random_mode">Random<Br>
                 </td>
             </tr>
             </tbody>
         </table>
     </form>
+    {#<h5>#}
+        {#<a href="{{ path('ens_lunch_order_random') }}"> Random </a>#}
+    {#</h5>#}
 
     {% block adminBlock %}
     {% endblock %}

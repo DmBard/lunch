@@ -16,6 +16,7 @@ class LunchController extends Controller
 
     protected $categories;
     protected $days ;
+    private $dateperiod;
 
     function __construct()
     {
@@ -33,6 +34,8 @@ class LunchController extends Controller
             'Soup',
             'Dessert',
         ];
+
+        $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
     }
 
     /**
@@ -54,7 +57,8 @@ class LunchController extends Controller
                 'entities' => $entities,
                 'days' => $this->days,
                 'categories' => $this->categories,
-                'user' => $user
+                'user' => $user,
+                'dateperiod' => $this->dateperiod,
             )
         );
     }

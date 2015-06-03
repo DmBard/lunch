@@ -59,6 +59,7 @@ class AdminController extends Controller
                 'days' => $this->days,
                 'categories' => $this->categories,
                 'user' => $user,
+                'dateperiod' => $this->dateperiod,
             )
         );
     }
@@ -142,24 +143,6 @@ class AdminController extends Controller
             )
         );
     }
-
-//    /**
-//     * Displays a form to create a new Lunch entity.
-//     *
-//     */
-//    public function newAction()
-//    {
-//        $entity = new Lunch();
-//        $form = $this->createCreateForm($entity);
-//
-//        return $this->render(
-//            'EnsLunchBundle:Lunch:new.html.twig',
-//            array(
-//                'entity' => $entity,
-//                'form' => $form->createView(),
-//            )
-//        );
-//    }
 
     /**
      * Finds and displays a Lunch entity.
@@ -271,7 +254,7 @@ class AdminController extends Controller
         return $this->redirect($this->generateUrl('ens_lunch'));
     }
 
-    public function formArrayOfUserChoices()
+    private function formArrayOfUserChoices()
     {
 
         $floorList = [
@@ -325,7 +308,7 @@ class AdminController extends Controller
     /**
      * @param $user
      */
-    public function addDataInJointable($user)
+    private function addDataInJointable($user)
     {
         $em = $this->getDoctrine()->getManager();
         $userName = $user->getUserName();
@@ -345,6 +328,40 @@ class AdminController extends Controller
             foreach ($this->days as $day) {
                 $joinTable = new Jointable();
                 $idLunch = $_POST[$category][$day];
+                $floor = $_POST['floor'];
+                $joinTable->setIdLunch($idLunch);
+                $joinTable->setUserName($userName);
+                $joinTable->setName($user->getName());
+                $joinTable->setFloor($floor);
+                $joinTable->setActive(1);
+                $em->persist($joinTable);
+            }
+        }
+
+        $em->flush();
+    }
+
+    private function addRandomDataInJointable($user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userName = $user->getUserName();
+
+        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
+
+        foreach ($pastJoins as $item) {
+            $item->setActive(0);
+            $em->persist($item);
+        }
+        $em->flush();
+
+        $em = $this->getDoctrine()->getManager();
+
+        //insert a user choice in the JoinTable
+        foreach ($this->categories as $category) {
+            foreach ($this->days as $day) {
+                $joinTable = new Jointable();
+                $lunches = $em->getRepository('EnsLunchBundle:Lunch')->getActiveCategoryAndDayLunches($category, $day);
+                $idLunch = $lunches[rand(0, count($lunches)-1)]->getId();
                 $floor = $_POST['floor'];
                 $joinTable->setIdLunch($idLunch);
                 $joinTable->setUserName($userName);
@@ -428,14 +445,16 @@ class AdminController extends Controller
     public function orderAction()
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $this->addDataInJointable($user);
+        if (!isset($_POST['random_mode'])) {
+            $this->addDataInJointable($user);
+        } else {
+            $this->addRandomDataInJointable($user);
+        }
 
         $joins = $this->getDoctrine()->getManager()->getRepository(
             'EnsLunchBundle:Jointable'
         )->getActiveJoinsByOneUser($user);
         $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
-
 
         $this->formArrayOfUserChoices();
 
@@ -471,7 +490,7 @@ class AdminController extends Controller
         return $this->downloadFile('floor_5_order');
     }
 
-    public function downloadFile($name)
+    private function downloadFile($name)
     {
         $path = __DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$name.'.xlsx';
         $content = file_get_contents($path);
@@ -483,5 +502,23 @@ class AdminController extends Controller
         return $response;
     }
 
+    public function userOrderAction()
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $joins = $this->getDoctrine()->getManager()->getRepository(
+            'EnsLunchBundle:Jointable'
+        )->getActiveJoinsByOneUser($user);
+        $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
 
+        return $this->render(
+            'EnsLunchBundle:Lunch:order.html.twig',
+            array(
+                'days' => $this->days,
+                'categories' => $this->categories,
+                'lunches' => $lunches,
+                'user' => $user,
+                'joins' => $joins,
+            )
+        );
+    }
 }

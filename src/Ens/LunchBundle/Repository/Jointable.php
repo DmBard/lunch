@@ -71,12 +71,12 @@ class Jointable extends EntityRepository
         return $query->getResult();
     }
 
-    public function getPastUserJoins($nameUser)
+    public function getPastUserJoins($userName)
     {
         $qb = $this->createQueryBuilder('j');
 
         $qb->where('j.userName = :name')
-            ->setParameter('name', $nameUser);
+            ->setParameter('name', $userName);
 
         $query = $qb->getQuery();
 
