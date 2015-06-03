@@ -7,7 +7,6 @@ class UserManager extends \FOS\UserBundle\Doctrine\UserManager{
 
     public function updateUser(UserInterface $user, $andFlush = true)
     {
-
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);
 

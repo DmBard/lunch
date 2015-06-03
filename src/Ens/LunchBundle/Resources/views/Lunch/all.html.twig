@@ -23,16 +23,6 @@
                 <td>{{ entity.active }}</td>
                 <td>{% if entity.createdat %}{{ entity.createdat|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if entity.updatedat %}{{ entity.updatedat|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('ens_lunch_show', { 'id': entity.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('ens_lunch_edit', { 'id': entity.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
             </tr>
         {% endfor %}
         </tbody>

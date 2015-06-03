@@ -5,3 +5,7 @@ services:
     ens_lunch.user_manager:
         class: Ens\LunchBundle\Security\UserManager
         arguments: [@security.encoder_factory, @fos_user.util.username_canonicalizer, @fos_user.util.email_canonicalizer, @fos_user.entity_manager, %fos_user.model.user.class% ]
+
+    ens_lunch.xls_manager:
+        class: Ens\LunchBundle\Security\XlsManager
+        arguments: ["@doctrine.orm.entity_manager"]
