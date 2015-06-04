@@ -1,0 +1,12 @@
+{% block body %}
+    <form action="{{ path('ens_lunch') }}" method="post">
+        <p><b>Username:</b> {{ user.username }}</p>
+        <p><b>Name:</b> {{ user.name }}</p>
+        <p><b>E-mail:</b> {{ user.email }}</p>
+        <p><b>Your default action if you will forget to do the order  next week:</b><Br>
+        <input type="radio" name="def_action" value="1" checked>Skip my order<Br>
+            <input type="radio" name="def_action" value="2">Random choice<Br>
+            <input type="radio" name="def_action" value="3">Previous choice<Br></p>
+            <input type="submit" value="Save">
+    </form>
+{% endblock %}

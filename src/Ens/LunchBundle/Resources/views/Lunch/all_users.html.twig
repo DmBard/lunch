@@ -7,10 +7,10 @@
             <th>Id</th>
             <th>Username</th>
             <th>Name</th>
-            <th>Surname</th>
             <th>Password</th>
             <th>Role</th>
             <th>E-mail</th>
+            <th>Default action</th>
         </tr>
         </thead>
         <tbody>
@@ -19,13 +19,12 @@
                 <td>{{ entity.id }}</a></td>
                 <td>{{ entity.username }}</td>
                 <td>{{ entity.name }}</td>
-                <td>{{ entity.surname }}</td>
                 <td>{{ entity.password }}</td>
                 <td>{{ entity.roles[0] }}</td>
                 <td>{{ entity.email }}</td>
+                <td>{{ entity.defaultAction }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
 {% endblock %}

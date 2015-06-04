@@ -24,6 +24,9 @@ class User extends BaseUser implements LdapUserInterface
      */
     private $defaultAction = 1; //1-delete mode; 2-random mode; 3-previous choice
 
+    /**
+     * @ORM\Column(type="string", length=255 )
+     */
     private $name;
 
     private $dn;

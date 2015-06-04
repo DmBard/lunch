@@ -1,12 +1,16 @@
 ens_lunch:
     path:     /
     defaults: { _controller: "EnsLunchBundle:Lunch:index" }
-    methods:  GET
+    methods:  POST
 
 ens_lunch_admin:
     path:     /admin
     defaults: { _controller: "EnsLunchBundle:Admin:adminIndex" }
     methods:  GET
+
+ens_lunch_profile:
+    path:     /user_profile
+    defaults: { _controller: "EnsLunchBundle:Admin:profile" }
 
 ens_lunch_show:
     path:     /admin/{id}/show
@@ -51,10 +55,10 @@ ens_all_users:
     defaults: { _controller: "EnsLunchBundle:Admin:showAllUsers" }
     methods:  GET
 
-ens_all_docs:
+ens_order_menu_files:
     path:     /admin/files
-    defaults: { _controller: "EnsLunchBundle:Admin:showAllDocs" }
-    methods:  GET
+    defaults: { _controller: "EnsLunchBundle:Admin:generateFiles" }
+    methods:  POST
 
 ens_download_4_menu:
     path:     /admin/download_4_menu

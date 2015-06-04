@@ -1,5 +1,6 @@
-{% extends '::index.html.twig' %}
 {% block adminBlock %}
+    <h1>Admin panel {{ dateperiod }}</h1>
+
     <ul>
         <li>
             <a href="{{ path('ens_lunch_upload') }}">
@@ -21,39 +22,7 @@
             </a>
         </li>
     </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_all_docs') }}">
-                Show all files
-            </a>
-        </li>
-    </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_download_4_menu') }}">
-                Download menu files (4 floor)
-            </a>
-        </li>
-    </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_download_5_menu') }}">
-                Download menu files (5 floor)
-            </a>
-        </li>
-    </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_download_4_order') }}">
-                Download order files (4 floor)
-            </a>
-        </li>
-    </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_download_5_order') }}">
-                Download order files (5 floor)
-            </a>
-        </li>
-    </ul>
+    <form action="{{ path('ens_order_menu_files') }}" method="post">
+        <input type="submit" value="Generate order and menu files">
+    </form>
 {% endblock %}

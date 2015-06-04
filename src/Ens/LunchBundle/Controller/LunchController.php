@@ -15,7 +15,7 @@ class LunchController extends Controller
 {
 
     protected $categories;
-    protected $days ;
+    protected $days;
     private $dateperiod;
 
     function __construct()
@@ -47,9 +47,23 @@ class LunchController extends Controller
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
         $repoLunch = $em->getRepository('EnsLunchBundle:Lunch');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $request = $this->get('request');
+
+        if (!empty($_POST['def_action'])) {
+            $repoUser = $em->getRepository('EnsLunchBundle:User');
+            $foundUser = $repoUser->findOneBy(['username' => $user->getUsername()]);
+            $def_action = $request->request->get('def_action');
+            $foundUser->setName($user->getName());
+//            $foundUser->setRoles('ROLE_ADMIN');
+            $foundUser->setDefaultAction($def_action);
+            $em->persist($foundUser);
+        }
 
         $entities = $repoLunch->getActiveLunches();
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $em->flush();
+
 
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',
@@ -62,6 +76,4 @@ class LunchController extends Controller
             )
         );
     }
-
-
 }
