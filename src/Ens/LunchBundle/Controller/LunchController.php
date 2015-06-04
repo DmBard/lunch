@@ -55,7 +55,7 @@ class LunchController extends Controller
             $foundUser = $repoUser->findOneBy(['username' => $user->getUsername()]);
             $def_action = $request->request->get('def_action');
             $foundUser->setName($user->getName());
-//            $foundUser->setRoles('ROLE_ADMIN');
+            $foundUser->setRoles(['ROLE_ADMIN']);
             $foundUser->setDefaultAction($def_action);
             $em->persist($foundUser);
         }
