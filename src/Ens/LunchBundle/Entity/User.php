@@ -19,12 +19,22 @@ class User extends BaseUser implements LdapUserInterface
      */
     protected $id;
 
-    protected $name;
+    /**
+     * @ORM\Column(type="integer", )
+     */
+    private $defaultAction = 1; //1-delete mode; 2-random mode; 3-previous choice
 
-    /** @var  string */
-    protected $surname;
+    private $name;
 
     private $dn;
+
+    public function __construct()
+    {
+        parent::__construct();
+        if (empty($this->roles)) {
+            $this->roles[] = 'ROLE_USER';
+        }
+    }
 
     /**
      * @return string
@@ -42,33 +52,12 @@ class User extends BaseUser implements LdapUserInterface
         $this->name = $name;
     }
 
-//    public function setUsername($username){
-//        var_dump($username);die;
-//    }
-
-    /**
-     * @return string
-     */
-    public function getSurname()
-    {
-        return $this->surname;
-    }
-
     /**
      * @param string $surname
      */
     public function setSurname($surname)
     {
         $this->surname = $surname;
-    }
-
-
-    public function __construct()
-    {
-        parent::__construct();
-        if (empty($this->roles)) {
-            $this->roles[] = 'ROLE_USER';
-        }
     }
 
     /**
@@ -99,5 +88,21 @@ class User extends BaseUser implements LdapUserInterface
     public function getDn()
     {
         return $this->dn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultAction()
+    {
+        return $this->defaultAction;
+    }
+
+    /**
+     * @param mixed $defaultAction
+     */
+    public function setDefaultAction($defaultAction)
+    {
+        $this->defaultAction = $defaultAction;
     }
 }

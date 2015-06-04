@@ -32,7 +32,6 @@ class LunchRepository extends EntityRepository
         $qb->where('l.active = :isActive')
             ->andWhere('l.categories = :category')
             ->andWhere('l.day = :day')
-            ->andWhere('l.active = :isActive')
             ->setParameter('isActive', true)
             ->setParameter('category', $category)
             ->setParameter('day', $day);
@@ -41,5 +40,20 @@ class LunchRepository extends EntityRepository
 
         return $query->getResult();
     }
+
+    public function getActiveLunchesById($id)
+    {
+        $qb = $this->createQueryBuilder('l');
+
+        $qb->where('l.active = :isActive')
+            ->andWhere('l.id = :id')
+            ->setParameter('isActive', true)
+            ->setParameter('id', $id);
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
 
 }
