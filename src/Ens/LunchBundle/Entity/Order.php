@@ -28,7 +28,28 @@ class Order
     /**
      * @ORM\Column(type="string", length=255)
      */
-    public $name;
+    private $name;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $orderTime;
+
+    /**
+     * @return mixed
+     */
+    public function getOrderTime()
+    {
+        return $this->orderTime;
+    }
+
+    /**
+     * @param mixed $orderTime
+     */
+    public function setOrderTime($orderTime)
+    {
+        $this->orderTime = $orderTime;
+    }
 
     /**
      * @return mixed

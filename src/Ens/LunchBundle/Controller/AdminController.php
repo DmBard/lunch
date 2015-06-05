@@ -45,10 +45,22 @@ class AdminController extends Controller
 
     public function adminIndexAction()
     {
+        /** @var ManagerRegistry $em */
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('EnsLunchBundle:Lunch');
+
+        $entities = $repo->getActiveLunches();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         return $this->render(
-            'EnsLunchBundle:Lunch:admin_index.html.twig'
+            'EnsLunchBundle:Lunch:admin_index.html.twig',
+            array(
+                'entities' => $entities,
+                'days' => $this->days,
+                'categories' => $this->categories,
+                'user' => $user,
+                'dateperiod' => $this->dateperiod,
+            )
         );
     }
 
@@ -118,8 +130,8 @@ class AdminController extends Controller
             $em->persist($document);
             $em->flush();
 
-            $xlsWriter = $this->get('ens_lunch.xls_manager');
-            $xlsWriter->parseXlsFile();
+            $xlsParser = $this->get('ens_lunch.xls_manager');
+            $xlsParser->parseXlsFile();
 
             return $this->redirectToRoute('ens_lunch_show_all');
         }
@@ -356,9 +368,32 @@ class AdminController extends Controller
         );
     }
 
-    public function setOrderTimeAction()
+    public function setOrderTimeAction(Request $request)
     {
 
+        $order = new Order();
+        $form = $this->createFormBuilder($order)
+            ->add('orderTime')
+            ->add('submit', 'submit', array('label' => 'Create'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($order);
+            $em->flush();
+
+            return $this->redirectToRoute('ens_lunch_admin');
+        }
+
+        return $this->render(
+            'EnsLunchBundle:Lunch:order_time.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
     }
 
     /**

@@ -80,3 +80,7 @@ ens_download_5_order:
     defaults: { _controller: "EnsLunchBundle:Admin:downloadFile5FloorOrder" }
     methods:  GET
 
+ens_lunch_set_time:
+    path:     /admin/set_time
+    defaults: { _controller: "EnsLunchBundle:Admin:setOrderTime" }
+    methods:  GET

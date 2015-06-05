@@ -55,15 +55,12 @@ class LunchController extends Controller
             $foundUser = $repoUser->findOneBy(['username' => $user->getUsername()]);
             $def_action = $request->request->get('def_action');
             $foundUser->setName($user->getName());
-            $foundUser->setRoles(['ROLE_ADMIN']);
             $foundUser->setDefaultAction($def_action);
             $em->persist($foundUser);
         }
 
         $entities = $repoLunch->getActiveLunches();
-        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em->flush();
-
 
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',

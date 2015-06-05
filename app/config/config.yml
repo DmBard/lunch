@@ -115,5 +115,5 @@ fr3d_ldap:
 
 #           - { ldap_attr: ...,  user_method: ... }         # Optional
     service:
-       user_manager: ens_lunch.user_manager          # Overrides default user manager
-#       ldap_manager: fr3d_ldap.ldap_manager.default # Overrides default ldap manager
+       user_manager: ens_lunch.user_manager
+       ldap_manager: ens_lunch.ldap_manager # Overrides default ldap manager

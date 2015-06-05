@@ -9,3 +9,7 @@ services:
     ens_lunch.xls_manager:
         class: Ens\LunchBundle\Security\XlsManager
         arguments: ["@doctrine.orm.entity_manager"]
+
+    ens_lunch.ldap_manager:
+            class: Ens\LunchBundle\Security\LdapManager
+            arguments: [@fr3d_ldap.ldap_driver, @ens_lunch.user_manager, %fr3d_ldap.ldap_manager.parameters%, @fos_user.entity_manager]
