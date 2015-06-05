@@ -13,4 +13,9 @@ class EnsLunchBundle extends Bundle
 
         $containerBuilder->addCompilerPass(new OverrideUserManager());
     }
+
+    public function getParent()
+    {
+        return 'FOSUserBundle';
+    }
 }

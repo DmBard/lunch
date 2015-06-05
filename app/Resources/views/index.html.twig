@@ -7,7 +7,7 @@
         }
     </style>
     <form action="{{ path('ens_lunch_order') }}" method="post">
-        <h4>
+        <div align="right"><h4>
             You are logged as:
             <a href="{{ path('ens_lunch_my_order') }}">
                 {{ user.username }} ({{ user.name }}) </a> |
@@ -17,7 +17,7 @@
             {% endif %}
             <a href="{{ path('fos_user_security_logout') }}">
                 Logout  </a>
-        </h4>
+        </h4></div>
         <h2>MENU {{ dateperiod }}</h2>
 
         <label> Select your floor! </label>
