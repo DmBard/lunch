@@ -45,22 +45,10 @@ class AdminController extends Controller
 
     public function adminIndexAction()
     {
-        /** @var ManagerRegistry $em */
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('EnsLunchBundle:Lunch');
-
-        $entities = $repo->getActiveLunches();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         return $this->render(
-            'EnsLunchBundle:Lunch:admin_index.html.twig',
-            array(
-                'entities' => $entities,
-                'days' => $this->days,
-                'categories' => $this->categories,
-                'user' => $user,
-                'dateperiod' => $this->dateperiod,
-            )
+            'EnsLunchBundle:Lunch:admin_index.html.twig'
         );
     }
 
@@ -295,6 +283,7 @@ class AdminController extends Controller
 
         $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
         foreach ($floorList as $floor) {
+
 //array of user choices
             $userChoices = [];
             $names = [];
@@ -337,7 +326,9 @@ class AdminController extends Controller
                             $floor
                         );
 
-                    } else {
+                    }
+                    //lunch list is not empty
+                    else {
                         foreach ($this->categories as $itemCategory) {
                             foreach ($this->days as $itemDay) {
                                 foreach ($lunchList as $itemLunch) {
@@ -354,6 +345,7 @@ class AdminController extends Controller
                 }
             }
 
+            //create order and menu xls files
             $xlsWriter = $this->get('ens_lunch.xls_manager');
             $xlsWriter->writeOrderXlsFile($names, $userChoices, $floor);
             $xlsWriter->writeMenuXlsFile($floor);
@@ -362,6 +354,11 @@ class AdminController extends Controller
         return $this->render(
             'EnsLunchBundle:Lunch:order_files.html.twig'
         );
+    }
+
+    public function setOrderTimeAction()
+    {
+
     }
 
     /**
@@ -565,7 +562,7 @@ class AdminController extends Controller
         }
         $em->flush();
 
-        return  $userChoices;
+        return $userChoices;
     }
 
 
