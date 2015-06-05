@@ -6,7 +6,6 @@ use Ens\LunchBundle\Entity\Lunch;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-
 /**
  * Lunch controller.
  *
@@ -47,12 +46,13 @@ class LunchController extends Controller
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
         $repoLunch = $em->getRepository('EnsLunchBundle:Lunch');
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $request = $this->get('request');
 
         if (!empty($_POST['def_action'])) {
             $repoUser = $em->getRepository('EnsLunchBundle:User');
             $foundUser = $repoUser->findOneBy(['username' => $user->getUsername()]);
+            $request = $this->get('request');
             $def_action = $request->request->get('def_action');
             $foundUser->setName($user->getName());
             $foundUser->setDefaultAction($def_action);
@@ -62,6 +62,9 @@ class LunchController extends Controller
         $entities = $repoLunch->getActiveLunches();
         $em->flush();
 
+        $isShowAdminLink = in_array('ROLE_ADMIN', $user->getRoles());
+//        var_dump($isShowAdminLink);die;
+
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',
             array(
@@ -70,6 +73,7 @@ class LunchController extends Controller
                 'categories' => $this->categories,
                 'user' => $user,
                 'dateperiod' => $this->dateperiod,
+                'isShowAdminLink' => $isShowAdminLink,
             )
         );
     }

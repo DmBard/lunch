@@ -84,3 +84,8 @@ ens_lunch_set_time:
     path:     /admin/set_time
     defaults: { _controller: "EnsLunchBundle:Admin:setOrderTime" }
     methods:  GET
+
+ens_lunch_send_email:
+    path:     /admin/send_email
+    defaults: { _controller: "EnsLunchBundle:Admin:sendEmail" }
+    methods:  GET

@@ -67,10 +67,12 @@ doctrine:
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
+    encryption: "%mailer_encryption%"
+    auth_mode: "%mailer_auth_mode%"
     host:      "%mailer_host%"
-    username:  "%mailer_user%"
+    username:  "%mailer_username%"
     password:  "%mailer_password%"
-    spool:     { type: memory }
+#    spool:     { type: memory }
 
 #easy_admin:
 #    entities:

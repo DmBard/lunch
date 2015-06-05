@@ -1,17 +1,11 @@
-{% block adminBlock %}
-    <h1>Admin panel {{ dateperiod }}</h1>
+{% extends '::base.html.twig' %}
+{% block body %}
+    <h2>Admin panel {{ dateperiod }}</h2>
 
     <ul>
         <li>
             <a href="{{ path('ens_lunch_upload') }}">
                 Create a new menu
-            </a>
-        </li>
-    </ul>
-    <ul>
-        <li>
-            <a href="{{ path('ens_lunch_set_time') }}">
-                Set the order time
             </a>
         </li>
     </ul>

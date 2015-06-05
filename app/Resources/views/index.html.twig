@@ -8,11 +8,17 @@
     </style>
     <form action="{{ path('ens_lunch_order') }}" method="post">
         <h4>
-            You are logged as:<a href="{{ path('ens_lunch_my_order') }}">
-                {{ user.username }} ({{ user.name }}) </a> | <a href="{{ path('fos_user_security_logout') }}">
-                Logout </a>
+            You are logged as:
+            <a href="{{ path('ens_lunch_my_order') }}">
+                {{ user.username }} ({{ user.name }}) </a> |
+            {% if  isShowAdminLink %}
+                <a href="{{ path('ens_lunch_admin') }}">
+                Admin panel | </a>
+            {% endif %}
+            <a href="{{ path('fos_user_security_logout') }}">
+                Logout  </a>
         </h4>
-        <h1>MENU {{ dateperiod }}</h1>
+        <h2>MENU {{ dateperiod }}</h2>
 
         <label> Select your floor! </label>
         <label>

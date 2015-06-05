@@ -714,4 +714,21 @@ class AdminController extends Controller
             )
         );
     }
+
+//    public function sendEmailAction()
+//    {
+//        $message = \Swift_Message::newInstance()
+//            ->setSubject('Hello Email')
+//            ->setFrom('dm.baryshev@gmail.com')
+//            ->setTo('d.baryshev@redmond-rus.com')
+//            ->setBody('ХУ*')
+//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_5_order.xlsx'))
+//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_4_order.xlsx'))
+//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_4_menu.xlsx'))
+//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_5_menu.xlsx'))
+//        ;
+//        $this->get('mailer')->send($message);
+//
+//        return $this->render('EnsLunchBundle:Lunch:email.html.twig');
+//    }
 }
