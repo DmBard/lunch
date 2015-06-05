@@ -100,6 +100,7 @@ class AdminController extends Controller
         );
     }
 
+    //user profile
     public function profileAction()
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -112,6 +113,7 @@ class AdminController extends Controller
         );
     }
 
+    //upload xls file and parse it
     public function uploadAction(Request $request)
     {
         $document = new Document();
@@ -130,6 +132,7 @@ class AdminController extends Controller
             $em->persist($document);
             $em->flush();
 
+            //parse a xls file and form the menu
             $xlsParser = $this->get('ens_lunch.xls_manager');
             $xlsParser->parseXlsFile();
 
@@ -144,6 +147,7 @@ class AdminController extends Controller
         );
     }
 
+    //show all dishes
     public function showAllAction()
     {
         /** @var ManagerRegistry $em */
@@ -174,116 +178,6 @@ class AdminController extends Controller
                 'entities' => $entities
             )
         );
-    }
-
-    /**
-     * Finds and displays a Lunch entity.
-     *
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('EnsLunchBundle:Lunch')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Lunch entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render(
-            'EnsLunchBundle:Lunch:show.html.twig',
-            array(
-                'entity' => $entity,
-                'delete_form' => $deleteForm->createView(),
-            )
-        );
-    }
-
-    /**
-     * Displays a form to edit an existing Lunch entity.
-     *
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('EnsLunchBundle:Lunch')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Lunch entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render(
-            'EnsLunchBundle:Lunch:edit.html.twig',
-            array(
-                'entity' => $entity,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            )
-        );
-    }
-
-    /**
-     * Edits an existing Lunch entity.
-     *
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('EnsLunchBundle:Lunch')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Lunch entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('ens_lunch_edit', array('id' => $id)));
-        }
-
-        return $this->render(
-            'EnsLunchBundle:Lunch:edit.html.twig',
-            array(
-                'entity' => $entity,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            )
-        );
-    }
-
-    /**
-     * Deletes a Lunch entity.
-     *
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('EnsLunchBundle:Lunch')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Lunch entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('ens_lunch'));
     }
 
     public function generateFilesAction()
@@ -370,7 +264,6 @@ class AdminController extends Controller
 
     public function setOrderTimeAction(Request $request)
     {
-
         $order = new Order();
         $form = $this->createFormBuilder($order)
             ->add('orderTime')
@@ -471,7 +364,7 @@ class AdminController extends Controller
      * @param $userName
      * @return array
      */
-    public function clearPastJoins($em, $userName)
+    private function clearPastJoins($em, $userName)
     {
         $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
 
@@ -493,7 +386,7 @@ class AdminController extends Controller
      * @param $floor
      * @return array
      */
-    public function createNewJoins($em, $itemDay, $itemCategory, $itemLunch, $userName, $itemUser, $floor)
+    private function createNewJoins($em, $itemDay, $itemCategory, $itemLunch, $userName, $itemUser, $floor)
     {
         $join = new Jointable();
         $lunch = $em->getRepository('EnsLunchBundle:Lunch')->findOneBy(
@@ -520,7 +413,7 @@ class AdminController extends Controller
      * @param $floor
      * @return array
      */
-    public function setPreviousChoice($joinList, $itemUser, $floor)
+    private function setPreviousChoice($joinList, $itemUser, $floor)
     {
         $lunches = [];
         $userChoices = [];
@@ -567,7 +460,7 @@ class AdminController extends Controller
      * @param $floor
      * @return array
      */
-    public function setRandomChoice($itemUser, $floor)
+    private function setRandomChoice($itemUser, $floor)
     {
         $userChoices = [];
         $em = $this->getDoctrine()->getManager();
@@ -598,69 +491,6 @@ class AdminController extends Controller
         $em->flush();
 
         return $userChoices;
-    }
-
-
-    /**
-     * Creates a form to create a Lunch entity.
-     *
-     * @param Lunch $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Lunch $entity)
-    {
-        $form = $this->createForm(
-            new LunchType(),
-            $entity,
-            array(
-                'action' => $this->generateUrl('ens_lunch_create'),
-                'method' => 'POST',
-            )
-        );
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
-     * Creates a form to edit a Lunch entity.
-     *
-     * @param Lunch $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createEditForm(Lunch $entity)
-    {
-        $form = $this->createForm(
-            new LunchType(),
-            $entity,
-            array(
-                'action' => $this->generateUrl('ens_lunch_update', array('id' => $entity->getId())),
-                'method' => 'PUT',
-            )
-        );
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-    }
-
-    /**
-     * Creates a form to delete a Lunch entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('ens_lunch_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm();
     }
 
     public function downloadFile4FloorMenuAction()

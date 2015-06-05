@@ -20,20 +20,6 @@ ens_lunch_upload:
     path:     /admin/upload
     defaults: { _controller: "EnsLunchBundle:Admin:upload" }
 
-ens_lunch_edit:
-    path:     /admin/{id}/edit
-    defaults: { _controller: "EnsLunchBundle:Admin:edit" }
-
-ens_lunch_update:
-    path:     /admin/{id}/update
-    defaults: { _controller: "EnsLunchBundle:Admin:update" }
-    methods:  [POST, PUT]
-
-ens_lunch_delete:
-    path:     /admin/{id}/delete
-    defaults: { _controller: "EnsLunchBundle:Admin:delete" }
-    methods:  [POST, DELETE]
-
 ens_lunch_show_all:
     path:     /admin/all
     defaults: { _controller: "EnsLunchBundle:Admin:showAll" }

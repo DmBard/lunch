@@ -16,7 +16,7 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('ens_lunch_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.id }}</td>
                 <td>{{ entity.categories }}</td>
                 <td>{{ entity.day }}</td>
                 <td>{{ entity.description }}</td>
@@ -32,7 +32,7 @@
     <ul>
         <li>
             <a href="{{ path('ens_lunch_upload') }}">
-                Create a new entry
+                Create a new menu
             </a>
         </li>
     </ul>
