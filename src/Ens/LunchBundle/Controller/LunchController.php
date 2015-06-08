@@ -57,6 +57,7 @@ class LunchController extends Controller
             $foundUser->setName($user->getName());
             $foundUser->setDefaultAction($def_action);
             $em->persist($foundUser);
+
         }
 
         $entities = $repoLunch->getActiveLunches();
