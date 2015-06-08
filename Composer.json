@@ -15,7 +15,7 @@
     "doctrine/doctrine-bundle": "~1.2",
     "twig/extensions": "~1.0",
     "ext-ldap": "*",
-   "symfony/symfony": "2.6.*",
+    "symfony/symfony": "2.6.*",
     "symfony/assetic-bundle": "~2.3",
     "symfony/swiftmailer-bundle": "~2.3",
     "symfony/monolog-bundle": "~2.4",
