@@ -51,8 +51,18 @@ class AdminController extends Controller
     {
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('EnsLunchBundle:Document');
-        $documents = $repo->findAll();
+        $repoDocs = $em->getRepository('EnsLunchBundle:Document');
+        $documents = $repoDocs->findAll();
+
+        //Set the remaining time
+        $remainingTime = '';
+        if ($documents) {
+            $lastDoc = $repoDocs->findBy(array(), array('id' => 'DESC'));
+            $doc = $repoDocs->findOneBy(array('id' => $lastDoc[0]));
+            $planingTime = $doc->getTime();
+            $currentTime = new \DateTime();
+            $remainingTime = 'Remaining time to generate files of orders: '.$planingTime->diff($currentTime)->format('%d days, %h hours, %I minutes');
+        }
 
         //Get the list of names of all uploading files and search the dateperiod in names
         $docNames = [];
@@ -64,7 +74,8 @@ class AdminController extends Controller
         //If no match is found will show the warning
         $warning = '';
         if (!$isNewMenu) {
-            $warning = 'The menu is not updated';
+            $warning = 'The menu is not updated. Please, update it!';
+            $remainingTime = '';
         }
 
         return $this->render(
@@ -72,6 +83,7 @@ class AdminController extends Controller
             array(
                 'dateperiod' => $this->dateperiod,
                 'warning' => $warning,
+                'remainingTime' => $remainingTime,
             )
         );
     }
@@ -95,6 +107,7 @@ class AdminController extends Controller
         $document = new Document();
         $form = $this->createFormBuilder($document)
             ->add('file')
+            ->add('time')
             ->add('submit', 'submit', array('label' => 'Create'))
             ->getForm();
 

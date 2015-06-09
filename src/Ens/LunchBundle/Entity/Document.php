@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="DocumentRepository")
  * @ORM\Table(name="document")
  */
 class Document
@@ -32,6 +32,34 @@ class Document
      * @Assert\File(maxSize="6000000")
      */
     private $file;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $time;
+
+    public function __construct(){
+        $this->time =  new \DateTime('next friday');
+        $this->time ->setTime(17, 00);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param mixed $time
+     * @return Document
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+        return $this;
+    }
 
     /**
      * Sets file.

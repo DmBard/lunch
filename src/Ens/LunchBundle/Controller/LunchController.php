@@ -56,6 +56,44 @@ class LunchController extends Controller
         $repoJoins = $em->getRepository('EnsLunchBundle:Jointable');
         $documents = $repoDocs->findAll();
 
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if (!empty($_POST['def_action'])) {
+            $foundUser = $repoUser->findOneBy(['username' => $user->getUsername()]);
+            $request = $this->get('request');
+            $def_action = $request->request->get('def_action');
+            $foundUser->setName($user->getName());
+            $foundUser->setDefaultAction($def_action);
+            $em->persist($foundUser);
+        }
+
+        //Show warning if the user has not the order
+        $warning = '';
+        $remainingTime = '';
+        $warningText = 'You have not done the order on the current week';
+        $joins = $repoJoins->getActiveJoinsByOneUser($user);
+        if (count($joins) == 0) {
+            $warning = $warningText;
+
+            //Set the remaining time
+            $remainingTime = $this->setRemainingTime($documents, $repoDocs);
+        } else {
+            foreach ($joins as $join) {
+                $myLunch = $repoLunch->findOneBy(
+                    array(
+                        'id' => $join->getIdLunch(),
+                    )
+                );
+                if (!$myLunch->getActive()) {
+                    $warning = $warningText;
+
+                    //Set the remaining time
+                    $remainingTime = $this->setRemainingTime($documents, $repoDocs);
+                    break;
+                }
+            }
+        }
+
         //Get the list of names of all uploading files and search the dateperiod in names
         $docNames = [];
         foreach ($documents as $doc) {
@@ -70,38 +108,8 @@ class LunchController extends Controller
                 $lunch->setActive(0);
                 $em->persist($lunch);
             }
-        }
-        $em->flush();
-
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        if (!empty($_POST['def_action'])) {
-            $foundUser = $repoUser->findOneBy(['username' => $user->getUsername()]);
-            $request = $this->get('request');
-            $def_action = $request->request->get('def_action');
-            $foundUser->setName($user->getName());
-            $foundUser->setDefaultAction($def_action);
-            $em->persist($foundUser);
-        }
-
-        //Show warning if the user has not the order
-        $warning = '';
-        $warningText = 'You have not done the order on the current week';
-        $joins = $repoJoins->getActiveJoinsByOneUser($user);
-        if (count($joins) == 0) {
-            $warning = $warningText;
-        } else {
-            foreach ($joins as $join) {
-                $myLunch = $repoLunch->findOneBy(
-                    array(
-                        'id' => $join->getIdLunch(),
-                    )
-                );
-                if (!$myLunch->getActive()) {
-                    $warning = $warningText;
-                    break;
-                }
-            }
+            $warning = 'The menu is not updated';
+            $remainingTime = '';
         }
 
         $entities = $repoLunch->getActiveLunches();
@@ -119,6 +127,7 @@ class LunchController extends Controller
                 'dateperiod' => $this->dateperiod,
                 'isShowAdminLink' => $isShowAdminLink,
                 'warning' => $warning,
+                'remainingTime' => $remainingTime,
             )
         );
     }
@@ -251,5 +260,28 @@ class LunchController extends Controller
             }
         }
         $em->flush();
+    }
+
+    /**
+     * @param $documents
+     * @param $repoDocs
+     * @return string
+     */
+    private function setRemainingTime($documents, $repoDocs)
+    {
+        if ($documents) {
+            $lastDoc = $repoDocs->findBy(array(), array('id' => 'DESC'));
+            $doc = $repoDocs->findOneBy(array('id' => $lastDoc[0]));
+            $planingTime = $doc->getTime();
+        } else {
+            $planingTime = new \DateTime('next friday');
+            $planingTime->setTime(17, 00);
+        }
+        $currentTime = new \DateTime('+ 1 hour');
+        $remainingTime = 'Remaining time to do the order: '.$planingTime->diff($currentTime)->format(
+                '%d days, %h hours, %I minutes'
+            );
+
+        return $remainingTime;
     }
 }
