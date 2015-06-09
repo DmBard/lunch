@@ -27,12 +27,12 @@ ens_lunch_show_all:
 
 ens_lunch_order:
     path:     /order
-    defaults: { _controller: "EnsLunchBundle:Admin:order" }
+    defaults: { _controller: "EnsLunchBundle:Lunch:order" }
     methods:  POST
 
 ens_lunch_my_order:
     path:     /my_order
-    defaults: { _controller: "EnsLunchBundle:Admin:userOrder" }
+    defaults: { _controller: "EnsLunchBundle:Lunch:userOrder" }
     methods:  GET
 
 

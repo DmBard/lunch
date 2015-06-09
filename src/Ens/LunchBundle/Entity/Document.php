@@ -16,17 +16,17 @@ class Document
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    public $name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public $path;
+    private $path;
 
     /**
      * @Assert\File(maxSize="6000000")
@@ -95,8 +95,12 @@ class Document
         // target filename to move to
 
         $upFile = $this->getFile();
-        $datePeriod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        $upFile->setOriginalName($datePeriod.'_menu.xlsx');
+        if (date('D') == 'Mon') {
+            $dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        } else {
+            $dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        }
+        $upFile->setOriginalName($dateperiod.'_menu.xlsx');
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $this->getFile()->getClientOriginalName()
@@ -107,5 +111,21 @@ class Document
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }

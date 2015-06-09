@@ -20,7 +20,11 @@ class XlsManager {
 
     function __construct($em)
     {
-        $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        if (date('D') == 'Mon') {
+            $this->dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        } else {
+            $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        }
         $this->em = $em;
     }
 
@@ -167,20 +171,24 @@ class XlsManager {
             $numLabel++;
         }
 
+        try {
         //insert user choices and categories of dishes
-        for ($row = $firstRow; $row <= $highestRow; $row++) {
-            foreach ($arrayLabel as $column) {
-                if ($column == 'B') {
-                    $sheet->setCellValue($column.$row, $categoriesRus[$numCategory]);
-                    $numCategory++;
-                    if ($numCategory == $countOfDishes) {
-                        $numCategory = 0;
+            for ($row = $firstRow; $row <= $highestRow; $row++) {
+                foreach ($arrayLabel as $column) {
+                    if ($column == 'B') {
+                        $sheet->setCellValue($column.$row, $categoriesRus[$numCategory]);
+                        $numCategory++;
+                        if ($numCategory == $countOfDishes) {
+                            $numCategory = 0;
+                        }
+                    } else {
+                        $sheet->setCellValue($column.$row, $userChoices[$numChoice]);
+                        $numChoice++;
                     }
-                } else {
-                    $sheet->setCellValue($column.$row, $userChoices[$numChoice]);
-                    $numChoice++;
                 }
             }
+        } catch (Exception $e) {
+            die('Please, reload the page');
         }
 
 // Write the file
@@ -192,7 +200,7 @@ class XlsManager {
     {
         $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.$this->dateperiod.'_menu.xlsx';
 
-//  Read your Excel workbook
+        //  Read your Excel workbook
         try {
             $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
             $objReader = PHPExcel_IOFactory::createReader($inputFileType);
@@ -201,7 +209,7 @@ class XlsManager {
             die('Error loading file "'.pathinfo($inputFileName, PATHINFO_BASENAME).'": '.$e->getMessage());
         }
 
-//  Get worksheet dimensions
+        // Get worksheet dimensions
         $firstRow = 2;
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
         $highestRow = $sheet->getHighestRow();
@@ -222,7 +230,7 @@ class XlsManager {
             array_push($numServings, $countOneLunch);
         }
 
-// Change the file
+        // Change the file
         $numLunch = 0;
 
         //insert user choices and categories of dishes
@@ -235,7 +243,7 @@ class XlsManager {
             }
         }
 
-// Write the file
+        // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
         $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$floor.'_menu.xlsx');
     }

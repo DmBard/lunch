@@ -29,6 +29,11 @@ class User extends BaseUser implements LdapUserInterface
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="string", length=255 )
+     */
+    private $floor = 'floor_4';
+
     private $dn;
 
     public function __construct()
@@ -37,6 +42,22 @@ class User extends BaseUser implements LdapUserInterface
         if (empty($this->roles)) {
             $this->roles[] = 'ROLE_USER';
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFloor()
+    {
+        return $this->floor;
+    }
+
+    /**
+     * @param mixed $floor
+     */
+    public function setFloor($floor)
+    {
+        $this->floor = $floor;
     }
 
     /**

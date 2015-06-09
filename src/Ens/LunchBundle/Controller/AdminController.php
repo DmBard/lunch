@@ -40,62 +40,38 @@ class AdminController extends Controller
             'Dessert',
         ];
 
-        $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        if (date('D') == 'Mon') {
+            $this->dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        } else {
+            $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
+        }
     }
 
     public function adminIndexAction()
     {
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('EnsLunchBundle:Lunch');
+        $repo = $em->getRepository('EnsLunchBundle:Document');
+        $documents = $repo->findAll();
 
-        $entities = $repo->getActiveLunches();
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        //Get the list of names of all uploading files and search the dateperiod in names
+        $docNames = [];
+        foreach ($documents as $doc) {
+            array_push($docNames, $doc->getName());
+        }
+        $isNewMenu = in_array($this->dateperiod, $docNames);
+
+        //If no match is found will show the warning
+        $warning = '';
+        if (!$isNewMenu) {
+            $warning = 'The menu is not updated';
+        }
 
         return $this->render(
             'EnsLunchBundle:Lunch:admin_index.html.twig',
             array(
-                'entities' => $entities,
-                'days' => $this->days,
-                'categories' => $this->categories,
-                'user' => $user,
                 'dateperiod' => $this->dateperiod,
-            )
-        );
-    }
-
-    /**
-     * Displays a order form
-     *
-     */
-    public function orderAction()
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $request = $this->get('request');
-        $randomMode = $request->request->get('random_mode');
-
-        //Add data into jointable
-        if (!$randomMode) {
-            $this->addDataInJointable($user);
-        } else {
-            $this->addRandomDataInJointable($user);
-        }
-
-        $joins = $this->getDoctrine()->getManager()->getRepository(
-            'EnsLunchBundle:Jointable'
-        )->getActiveJoinsByOneUser($user);
-
-        $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
-
-        return $this->render(
-            'EnsLunchBundle:Lunch:order.html.twig',
-            array(
-                'days' => $this->days,
-                'categories' => $this->categories,
-                'lunches' => $lunches,
-                'user' => $user,
-                'joins' => $joins,
+                'warning' => $warning,
             )
         );
     }
@@ -118,7 +94,6 @@ class AdminController extends Controller
     {
         $document = new Document();
         $form = $this->createFormBuilder($document)
-            ->add('name')
             ->add('file')
             ->add('submit', 'submit', array('label' => 'Create'))
             ->getForm();
@@ -128,6 +103,7 @@ class AdminController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $document->upload();
+            $document->setName($this->dateperiod);
 
             $em->persist($document);
             $em->flush();
@@ -187,19 +163,21 @@ class AdminController extends Controller
             'floor_5',
         ];
 
-        $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findAll();
         foreach ($floorList as $floor) {
+            $users = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:User')->findBy(
+                ['floor' => $floor]
+            );
 
-//array of user choices
+            //array of user choices
             $userChoices = [];
             $names = [];
             foreach ($users as $itemUser) {
                 $joinList = $this->getDoctrine()->getManager()->getRepository(
                     'EnsLunchBundle:Jointable'
-                )->getActiveJoinsByOneUserAndFloor($itemUser, $floor);
+                )->getActiveJoinsByOneUser($itemUser);
 
+                $lunchList = [];
                 if ($joinList) {
-                    $lunchList = [];
                     foreach ($joinList as $joinItem) {
                         array_push(
                             $lunchList,
@@ -208,47 +186,64 @@ class AdminController extends Controller
                             )->findOneBy(array('id' => $joinItem->getIdLunch(), 'active' => 1))
                         );
                     }
+                }
 
-                    //lunch list is empty, because user didn't do the order, then default mode is on
-                    //default mode (action) - delete user order
-                    if (($lunchList[0] == null) and ($itemUser->getDefaultAction() == 1)) {
-                        continue;
-                    }
+                //lunch list is empty, because user didn't do the order, then default mode is on
+                //default mode (action) - delete user order
+                if ((!$lunchList || $joinList == null || $lunchList[0] == null) && ($itemUser->getDefaultAction() == 1)
+                ) {
+                    continue;
+                }
 
-                    //lunch list is empty, because user didn't do the order, then default mode is on
-                    //default mode (action) - random choice
-                    elseif (($lunchList[0] == null) and ($itemUser->getDefaultAction() == 2)) {
-                        $userChoices = $this->setRandomChoice(
-                            $itemUser,
-                            $floor
+                //lunch list is empty, because user didn't do the order, then default mode is on
+                //default mode (action) - random choice
+                elseif ((!$lunchList || $joinList == null || $lunchList[0] == null) && ($itemUser->getDefaultAction(
+                        ) == 2)
+                ) {
+                    $randomChoices = $this->setRandomChoice(
+                        $itemUser,
+                        $floor
+                    );
+                    foreach ($randomChoices as $randomChoice) {
+                        array_push(
+                            $userChoices,
+                            $randomChoice
                         );
                     }
-                    //lunch list is empty, because user didn't do the order, then default mode is on
-                    //default mode (action) - previous choice
-                    elseif (($lunchList[0] == null) and ($itemUser->getDefaultAction() == 3)) {
-                        $userChoices = $this->setPreviousChoice(
-                            $joinList,
-                            $itemUser,
-                            $floor
-                        );
+                }
+                //lunch list is empty, because user didn't do the order, then default mode is on
+                //default mode (action) - previous choice
+                elseif ((!$lunchList || $joinList == null || $lunchList[0] == null) && ($itemUser->getDefaultAction(
+                        ) == 3)
+                ) {
 
+                    $previousChoices = $this->setPreviousChoice(
+                        $joinList,
+                        $itemUser,
+                        $floor
+                    );
+                    foreach ($previousChoices as $previousChoice) {
+                        array_push(
+                            $userChoices,
+                            $previousChoice
+                        );
                     }
-                    //lunch list is not empty
-                    else {
-                        foreach ($this->categories as $itemCategory) {
-                            foreach ($this->days as $itemDay) {
-                                foreach ($lunchList as $itemLunch) {
-                                    if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay(
-                                            ) == $itemDay)
-                                    ) {
-                                        array_push($userChoices, $itemLunch->getCount());
-                                    }
+                } //lunch list is not empty
+                else {
+                    foreach ($this->categories as $itemCategory) {
+                        foreach ($this->days as $itemDay) {
+                            foreach ($lunchList as $itemLunch) {
+
+                                if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay(
+                                        ) == $itemDay)
+                                ) {
+                                    array_push($userChoices, $itemLunch->getCount());
                                 }
                             }
                         }
                     }
-                    array_push($names, $joinList[0]->getName());
                 }
+                array_push($names, $itemUser->getName());
             }
 
             //create order and menu xls files
@@ -290,76 +285,6 @@ class AdminController extends Controller
     }
 
     /**
-     * @param $user
-     */
-    private function addDataInJointable($user)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $userName = $user->getUserName();
-
-        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
-
-        foreach ($pastJoins as $item) {
-            $item->setActive(0);
-            $em->persist($item);
-        }
-        $em->flush();
-
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->get('request');
-
-        //insert a user choice in the JoinTable
-        foreach ($this->categories as $category) {
-            foreach ($this->days as $day) {
-                $join = new Jointable();
-                $floor = $request->request->get('floor');
-                $idLunch = $_POST[$category][$day];
-                $join->setIdLunch($idLunch);
-                $join->setUserName($userName);
-                $join->setName($user->getName());
-                $join->setFloor($floor);
-                $join->setActive(1);
-                $em->persist($join);
-            }
-        }
-        $em->flush();
-    }
-
-    private function addRandomDataInJointable($user)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $userName = $user->getUserName();
-
-        $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
-
-        foreach ($pastJoins as $item) {
-            $item->setActive(0);
-            $em->persist($item);
-        }
-        $em->flush();
-
-        $em = $this->getDoctrine()->getManager();
-
-        //insert a user choice in the JoinTable
-        foreach ($this->categories as $category) {
-            foreach ($this->days as $day) {
-                $joinTable = new Jointable();
-                $lunches = $em->getRepository('EnsLunchBundle:Lunch')->getActiveCategoryAndDayLunches($category, $day);
-                $idLunch = $lunches[rand(0, count($lunches) - 1)]->getId();
-                $floor = $_POST['floor'];
-                $joinTable->setIdLunch($idLunch);
-                $joinTable->setUserName($userName);
-                $joinTable->setName($user->getName());
-                $joinTable->setFloor($floor);
-                $joinTable->setActive(1);
-                $em->persist($joinTable);
-            }
-        }
-
-        $em->flush();
-    }
-
-    /**
      * @param $em
      * @param $userName
      * @return array
@@ -368,12 +293,16 @@ class AdminController extends Controller
     {
         $pastJoins = $em->getRepository('EnsLunchBundle:Jointable')->getPastUserJoins($userName);
 
-        foreach ($pastJoins as $item) {
-            $item->setActive(0);
-            $em->persist($item);
-        }
+        if ($pastJoins) {
+            foreach ($pastJoins as $item) {
+                $item->setActive(0);
+                $em->persist($item);
+            }
 
-        return array($pastJoins, $item);
+            return array($pastJoins);
+        } else {
+            return;
+        }
     }
 
     /**
@@ -383,7 +312,6 @@ class AdminController extends Controller
      * @param $itemLunch
      * @param $userName
      * @param $itemUser
-     * @param $floor
      * @return array
      */
     private function createNewJoins($em, $itemDay, $itemCategory, $itemLunch, $userName, $itemUser, $floor)
@@ -403,8 +331,6 @@ class AdminController extends Controller
         $join->setFloor($floor);
         $join->setActive(1);
         $em->persist($join);
-
-        return array($join, $lunch);
     }
 
     /**
@@ -415,44 +341,49 @@ class AdminController extends Controller
      */
     private function setPreviousChoice($joinList, $itemUser, $floor)
     {
-        $lunches = [];
-        $userChoices = [];
-        foreach ($joinList as $joinItem) {
-            array_push(
-                $lunches,
-                $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->findOneBy(
-                    array('id' => $joinItem->getIdLunch())
-                )
-            );
-        }
-        $em = $this->getDoctrine()->getManager();
-        $userName = $itemUser->getUserName();
 
-        $this->clearPastJoins($em, $userName);
+        if ($joinList) {
+            $lunches = [];
+            $userChoices = [];
+            foreach ($joinList as $joinItem) {
+                array_push(
+                    $lunches,
+                    $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->findOneBy(
+                        array('id' => $joinItem->getIdLunch())
+                    )
+                );
+            }
+            $em = $this->getDoctrine()->getManager();
+            $userName = $itemUser->getUserName();
 
-        foreach ($this->categories as $itemCategory) {
-            foreach ($this->days as $itemDay) {
-                foreach ($lunches as $itemLunch) {
-                    if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay() == $itemDay)
-                    ) {
-                        array_push($userChoices, $itemLunch->getCount());
+            $this->clearPastJoins($em, $userName);
 
-                        $this->createNewJoins(
-                            $em,
-                            $itemDay,
-                            $itemCategory,
-                            $itemLunch,
-                            $userName,
-                            $itemUser,
-                            $floor
-                        );
+            foreach ($this->categories as $itemCategory) {
+                foreach ($this->days as $itemDay) {
+                    foreach ($lunches as $itemLunch) {
+                        if (($itemLunch->getCategories() == $itemCategory) and ($itemLunch->getDay() == $itemDay)
+                        ) {
+                            array_push($userChoices, $itemLunch->getCount());
+
+                            $this->createNewJoins(
+                                $em,
+                                $itemDay,
+                                $itemCategory,
+                                $itemLunch,
+                                $userName,
+                                $itemUser,
+                                $floor
+                            );
+                        }
                     }
                 }
             }
-        }
-        $em->flush();
+            $em->flush();
 
-        return $userChoices;
+            return $userChoices;
+        } else {
+            return;
+        }
     }
 
     /**
@@ -467,7 +398,14 @@ class AdminController extends Controller
 
         $userName = $itemUser->getUserName();
 
-        $this->clearPastJoins($em, $userName);
+        $joins = $em->getRepository('EnsLunchBundle:Jointable')->findBy(
+            [
+                'userName' => $userName,
+            ]
+        );
+        if ($joins) {
+            $this->clearPastJoins($em, $userName);
+        }
 
         foreach ($this->categories as $itemCategory) {
             foreach ($this->days as $itemDay) {
@@ -523,26 +461,6 @@ class AdminController extends Controller
         $response->setContent($content);
 
         return $response;
-    }
-
-    public function userOrderAction()
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $joins = $this->getDoctrine()->getManager()->getRepository(
-            'EnsLunchBundle:Jointable'
-        )->getActiveJoinsByOneUser($user);
-        $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
-
-        return $this->render(
-            'EnsLunchBundle:Lunch:order.html.twig',
-            array(
-                'days' => $this->days,
-                'categories' => $this->categories,
-                'lunches' => $lunches,
-                'user' => $user,
-                'joins' => $joins,
-            )
-        );
     }
 
 //    public function sendEmailAction()
