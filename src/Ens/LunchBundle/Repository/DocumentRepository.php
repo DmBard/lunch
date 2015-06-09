@@ -1,6 +1,6 @@
 <?php
 
-namespace Ens\LunchBundle\Entity;
+namespace Ens\LunchBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

@@ -265,34 +265,12 @@ class AdminController extends Controller
             $xlsWriter->writeMenuXlsFile($floor);
         }
 
-        return $this->render(
-            'EnsLunchBundle:Lunch:order_files.html.twig'
-        );
-    }
-
-    public function setOrderTimeAction(Request $request)
-    {
-        $order = new Order();
-        $form = $this->createFormBuilder($order)
-            ->add('orderTime')
-            ->add('submit', 'submit', array('label' => 'Create'))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($order);
-            $em->flush();
-
-            return $this->redirectToRoute('ens_lunch_admin');
-        }
+        $fileNames = ['floor_4_menu', 'floor_5_menu', 'floor_4_order', 'floor_5_order'];
 
         return $this->render(
-            'EnsLunchBundle:Lunch:order_time.html.twig',
+            'EnsLunchBundle:Lunch:order_files.html.twig',
             array(
-                'form' => $form->createView(),
+                'fileNames' => $fileNames
             )
         );
     }
@@ -444,27 +422,7 @@ class AdminController extends Controller
         return $userChoices;
     }
 
-    public function downloadFile4FloorMenuAction()
-    {
-        return $this->downloadFile('floor_4_menu');
-    }
-
-    public function downloadFile5FloorMenuAction()
-    {
-        return $this->downloadFile('floor_5_menu');
-    }
-
-    public function downloadFile4FloorOrderAction()
-    {
-        return $this->downloadFile('floor_4_order');
-    }
-
-    public function downloadFile5FloorOrderAction()
-    {
-        return $this->downloadFile('floor_5_order');
-    }
-
-    private function downloadFile($name)
+    public function downloadFileAction($name)
     {
         $path = __DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$name.'.xlsx';
         $content = file_get_contents($path);

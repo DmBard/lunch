@@ -46,32 +46,12 @@ ens_order_menu_files:
     defaults: { _controller: "EnsLunchBundle:Admin:generateFiles" }
     methods:  POST
 
-ens_download_4_menu:
-    path:     /admin/download_4_menu
-    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile4FloorMenu" }
+ens_download:
+    path:     /admin/download/{name}
+    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile" }
     methods:  GET
 
-ens_download_5_menu:
-    path:     /admin/download_5_menu
-    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile5FloorMenu" }
-    methods:  GET
-
-ens_download_4_order:
-    path:     /admin/download_4_order
-    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile4FloorOrder" }
-    methods:  GET
-
-ens_download_5_order:
-    path:     /admin/download_5_order
-    defaults: { _controller: "EnsLunchBundle:Admin:downloadFile5FloorOrder" }
-    methods:  GET
-
-ens_lunch_set_time:
-    path:     /admin/set_time
-    defaults: { _controller: "EnsLunchBundle:Admin:setOrderTime" }
-    methods:  GET
-
-ens_lunch_send_email:
-    path:     /admin/send_email
-    defaults: { _controller: "EnsLunchBundle:Admin:sendEmail" }
-    methods:  GET
+#ens_lunch_send_email:
+#    path:     /admin/send_email
+#    defaults: { _controller: "EnsLunchBundle:Admin:sendEmail" }
+#    methods:  GET

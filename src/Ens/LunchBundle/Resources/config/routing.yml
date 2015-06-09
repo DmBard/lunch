@@ -2,10 +2,6 @@ EnsLunchBundle_lunch:
     resource: "@EnsLunchBundle/Resources/config/routing/lunch.yml"
     prefix:   /
 
-ens_lunch_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: EnsLunchBundle:Default:index }
-
 EnsLunchBundle_homepage:
         pattern:  /
         defaults: { _controller: EnsLunchBundle:Lunch:index}

@@ -13,8 +13,3 @@ app:
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
-
-#easy_admin_bundle:
-#        resource: "@EnsLunchBundle/Controller/AdminController.php"
-#        type:     annotation
-#        prefix:   /admin

@@ -19,9 +19,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new Ens\LunchBundle\EnsLunchBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-//            new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-//            new IMAG\LdapBundle\IMAGLdapBundle(),
             new FR3D\LdapBundle\FR3DLdapBundle(),
         );
 

@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="DocumentRepository")
+ * @ORM\Entity(repositoryClass="Ens\LunchBundle\Repository\DocumentRepository")
  * @ORM\Table(name="document")
  */
 class Document
