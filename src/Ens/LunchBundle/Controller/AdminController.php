@@ -26,7 +26,6 @@ class AdminController extends Controller
 
     function __construct()
     {
-
         $this->days = [
             'Monday',
             'Tuesday',
@@ -50,10 +49,6 @@ class AdminController extends Controller
 
     public function adminIndexAction()
     {
-        $pathManager = $this->get('service_container')->get('ens_lunch.path_manager');
-        $this->pathDocuments = $pathManager->getDocumentPath();
-        $this->pathOrders = $pathManager->getOrderPath();
-
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
         $repoDocs = $em->getRepository('EnsLunchBundle:Document');
@@ -435,7 +430,9 @@ class AdminController extends Controller
 
     public function downloadFileAction($name)
     {
-        $path = $this->pathOrders.$this->dateperiod.'_'.$name.'.xlsx';
+        $pathManager = $this->get('ens_lunch.path_manager');
+        $pathOrders = $pathManager->getOrderPath();
+        $path = $pathOrders.$this->dateperiod.'_'.$name.'.xlsx';
         $content = file_get_contents($path);
         $response = new Response();
         $response->headers->set('Content-Type', 'xls/xlsx');
@@ -444,21 +441,4 @@ class AdminController extends Controller
 
         return $response;
     }
-
-//    public function sendEmailAction()
-//    {
-//        $message = \Swift_Message::newInstance()
-//            ->setSubject('Hello Email')
-//            ->setFrom('dm.baryshev@gmail.com')
-//            ->setTo('d.baryshev@redmond-rus.com')
-//            ->setBody('')
-//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_5_order.xlsx'))
-//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_4_order.xlsx'))
-//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_4_menu.xlsx'))
-//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_5_menu.xlsx'))
-//        ;
-//        $this->get('mailer')->send($message);
-//
-//        return $this->render('EnsLunchBundle:Lunch:email.html.twig');
-//    }
 }

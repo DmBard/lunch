@@ -196,9 +196,6 @@ class XlsManager {
 
     public function writeMenuXlsFile($floor)
     {
-        $pathManager = $this->container->get('ens_lunch.path_manager');
-        $this->pathDocuments = $pathManager->getDocumentPath();
-        $this->pathOrders = $pathManager->getOrderPath();
         $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
 
         //  Read your Excel workbook

@@ -50,8 +50,3 @@ ens_download:
     path:     /admin/download/{name}
     defaults: { _controller: "EnsLunchBundle:Admin:downloadFile" }
     methods:  GET
-
-#ens_lunch_send_email:
-#    path:     /admin/send_email
-#    defaults: { _controller: "EnsLunchBundle:Admin:sendEmail" }
-#    methods:  GET
