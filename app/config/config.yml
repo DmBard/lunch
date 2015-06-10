@@ -84,3 +84,10 @@ fr3d_ldap:
     service:
        user_manager: ens_lunch.user_manager
        ldap_manager: ens_lunch.ldap_manager
+
+parameters:
+    upload_path:
+      base: ../web/uploads
+      documents: /documents
+      orders: /orders
+

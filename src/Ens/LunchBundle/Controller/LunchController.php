@@ -70,7 +70,7 @@ class LunchController extends Controller
         //Show warning if the user has not the order
         $warning = '';
         $remainingTime = '';
-        $warningText = 'You have not done the order on the current week';
+        $warningText = 'You have not completed the order on the current week';
         $joins = $repoJoins->getActiveJoinsByOneUser($user);
         if (count($joins) == 0) {
             $warning = $warningText;
@@ -94,7 +94,7 @@ class LunchController extends Controller
             }
         }
 
-        //Get the list of names of all uploading files and search the dateperiod in names
+        //Get the list of names of all uploading files and search the current dateperiod in names
         $docNames = [];
         foreach ($documents as $doc) {
             array_push($docNames, $doc->getName());
@@ -278,7 +278,7 @@ class LunchController extends Controller
             $planingTime->setTime(17, 00);
         }
         $currentTime = new \DateTime('+ 1 hour');
-        $remainingTime = 'Remaining time to do the order: '.$planingTime->diff($currentTime)->format(
+        $remainingTime = 'Remaining time to complete the order: '.$planingTime->diff($currentTime)->format(
                 '%d days, %h hours, %I minutes'
             );
 

@@ -7,8 +7,12 @@ services:
         arguments: [@security.encoder_factory, @fos_user.util.username_canonicalizer, @fos_user.util.email_canonicalizer, @fos_user.entity_manager, %fos_user.model.user.class% ]
 
     ens_lunch.xls_manager:
-        class: Ens\LunchBundle\Security\XlsManager
-        arguments: ["@doctrine.orm.entity_manager"]
+        class: Ens\LunchBundle\Service\XlsManager
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+
+    ens_lunch.path_manager:
+            class: Ens\LunchBundle\Service\PathManager
+            arguments: ["@service_container"]
 
     ens_lunch.ldap_manager:
             class: Ens\LunchBundle\Security\LdapManager

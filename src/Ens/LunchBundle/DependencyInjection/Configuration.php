@@ -20,6 +20,17 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('ens_lunch');
 
+        $rootNode
+            ->children()
+            ->arrayNode('upload_path')
+            ->children()
+            ->scalarNode('base')->end()
+            ->scalarNode('documents')->end()
+            ->scalarNode('orders')->end()
+            ->end()
+            ->end()// upload_path
+            ->end();
+
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.

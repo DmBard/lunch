@@ -6,19 +6,21 @@
  * Time: 16:46
  */
 
-namespace Ens\LunchBundle\Security;
+namespace Ens\LunchBundle\Service;
 
 use Ens\LunchBundle\Entity\Lunch;
 use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\DependencyInjection\Container;
 
 
 class XlsManager {
 
     private $dateperiod;
     protected $em;
+    protected $container;
 
-    function __construct($em)
+    function __construct($em, Container $container)
     {
         if (date('D') == 'Mon') {
             $this->dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
@@ -34,16 +36,12 @@ class XlsManager {
      */
     public function parseXlsFile()
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.$this->dateperiod.'_menu.xlsx';
+        $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
 
 //  Read your Excel workbook
-        try {
             $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
             $objReader = PHPExcel_IOFactory::createReader($inputFileType);
             $objPHPExcel = $objReader->load($inputFileName);
-        } catch (Exception $e) {
-            die('Error loading file "'.pathinfo($inputFileName, PATHINFO_BASENAME).'": '.$e->getMessage());
-        }
 
 //  Get worksheet dimensions
         $sheet = $objPHPExcel->getSheet(0);
@@ -114,16 +112,12 @@ class XlsManager {
      */
     public function writeOrderXlsFile($names, $userChoices, $floor)
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/orders/form_order.xlsx';
+        $inputFileName = $this->pathOrders.'form_order.xlsx';
 
 //  Read your Excel workbook
-        try {
             $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
             $objReader = PHPExcel_IOFactory::createReader($inputFileType);
             $objPHPExcel = $objReader->load($inputFileName);
-        } catch (Exception $e) {
-            die('Error loading file "'.pathinfo($inputFileName, PATHINFO_BASENAME).'": '.$e->getMessage());
-        }
 
 //  Get worksheet dimensions
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
@@ -170,7 +164,6 @@ class XlsManager {
             $sheet->setCellValue($arrayLabel[$numLabel].'1', $day);
             $numLabel++;
         }
-
         try {
         //insert user choices and categories of dishes
             for ($row = $firstRow; $row <= $highestRow; $row++) {
@@ -193,12 +186,12 @@ class XlsManager {
 
 // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
-        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$floor.'_order.xlsx');
+        $objWriter->save($this->pathOrders.$this->dateperiod.'_'.$floor.'_order.xlsx');
     }
 
     public function writeMenuXlsFile($floor)
     {
-        $inputFileName = __DIR__.'/../../../../web/uploads/documents/'.$this->dateperiod.'_menu.xlsx';
+        $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
 
         //  Read your Excel workbook
         try {
@@ -245,7 +238,6 @@ class XlsManager {
 
         // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
-        $objWriter->save(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$floor.'_menu.xlsx');
+        $objWriter->save($this->pathOrders.$this->dateperiod.'_'.$floor.'_menu.xlsx');
     }
-
 }

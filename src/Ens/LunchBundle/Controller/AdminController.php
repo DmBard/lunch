@@ -18,10 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
-
     protected $categories;
     protected $days;
     private $dateperiod;
+    private $pathDocuments;
+    private $pathOrders;
 
     function __construct()
     {
@@ -45,6 +46,10 @@ class AdminController extends Controller
         } else {
             $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
         }
+
+        $this->get('service_container')->getParameter('upload_path');
+        $this->pathDocuments = $path['documents'];
+        $this->pathOrders = $path['orders'];
     }
 
     public function adminIndexAction()
@@ -61,7 +66,9 @@ class AdminController extends Controller
             $doc = $repoDocs->findOneBy(array('id' => $lastDoc[0]));
             $planingTime = $doc->getTime();
             $currentTime = new \DateTime();
-            $remainingTime = 'Remaining time to generate files of orders: '.$planingTime->diff($currentTime)->format('%d days, %h hours, %I minutes');
+            $remainingTime = 'Remaining time to generate files of orders: '.$planingTime->diff($currentTime)->format(
+                    '%d days, %h hours, %I minutes'
+                );
         }
 
         //Get the list of names of all uploading files and search the dateperiod in names
@@ -122,8 +129,12 @@ class AdminController extends Controller
             $em->flush();
 
             //parse a xls file and form the menu
-            $xlsParser = $this->get('ens_lunch.xls_manager');
-            $xlsParser->parseXlsFile();
+            try {
+                $xlsParser = $this->get('ens_lunch.xls_manager');
+                $xlsParser->parseXlsFile();
+            } catch (\Exception $e) {
+                $this->render('EnsLunchBundle:Lunch:error.html.twig');
+            }
 
             return $this->redirectToRoute('ens_lunch_show_all');
         }
@@ -424,7 +435,7 @@ class AdminController extends Controller
 
     public function downloadFileAction($name)
     {
-        $path = __DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_'.$name.'.xlsx';
+        $path = $this->pathOrders.$this->dateperiod.'_'.$name.'.xlsx';
         $content = file_get_contents($path);
         $response = new Response();
         $response->headers->set('Content-Type', 'xls/xlsx');
@@ -440,11 +451,11 @@ class AdminController extends Controller
 //            ->setSubject('Hello Email')
 //            ->setFrom('dm.baryshev@gmail.com')
 //            ->setTo('d.baryshev@redmond-rus.com')
-//            ->setBody('ХУ*')
-//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_5_order.xlsx'))
-//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_4_order.xlsx'))
-//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_4_menu.xlsx'))
-//            ->attach(Swift_Attachment::fromPath(__DIR__.'/../../../../web/uploads/orders/'.$this->dateperiod.'_floor_5_menu.xlsx'))
+//            ->setBody('')
+//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_5_order.xlsx'))
+//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_4_order.xlsx'))
+//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_4_menu.xlsx'))
+//            ->attach(Swift_Attachment::fromPath($this->pathOrders.$this->dateperiod.'_floor_5_menu.xlsx'))
 //        ;
 //        $this->get('mailer')->send($message);
 //
