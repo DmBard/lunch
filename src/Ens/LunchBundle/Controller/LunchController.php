@@ -115,8 +115,6 @@ class LunchController extends Controller
         $entities = $repoLunch->getActiveLunches();
         $em->flush();
 
-        $isShowAdminLink = in_array('ROLE_ADMIN', $user->getRoles());
-
         return $this->render(
             'EnsLunchBundle:Lunch:index.html.twig',
             array(
@@ -125,7 +123,6 @@ class LunchController extends Controller
                 'categories' => $this->categories,
                 'user' => $user,
                 'dateperiod' => $this->dateperiod,
-                'isShowAdminLink' => $isShowAdminLink,
                 'warning' => $warning,
                 'remainingTime' => $remainingTime,
             )

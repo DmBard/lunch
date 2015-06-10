@@ -13,7 +13,8 @@ use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 
-class XlsManager {
+class XlsManager
+{
 
     protected $dateperiod;
     protected $em;
@@ -44,9 +45,9 @@ class XlsManager {
         $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
 
 //  Read your Excel workbook
-            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-            $objPHPExcel = $objReader->load($inputFileName);
+        $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+        $objPHPExcel = $objReader->load($inputFileName);
 
 //  Get worksheet dimensions
         $sheet = $objPHPExcel->getSheet(1);
@@ -75,9 +76,18 @@ class XlsManager {
 
         /** @var integer $num */
         $num = 0;
+        /** @var integer $firstRow */
+        $firstRow = 1;
+
+        //search first row for parsing
+        for ($row = $firstRow; $row <= $highestRow; $row++) {
+            if ($sheet->getCell('A'.$row)->getValue() == 'Салат №1') {
+                $firstRow = $row;
+                break;
+            }
+        }
 
         //The last lunches are not active
-
         $lunches = $this->em->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
 
         foreach ($lunches as $item) {
@@ -86,7 +96,7 @@ class XlsManager {
         }
 
 //  Loop through each row of the worksheet in turn
-        for ($row = 6; $row <= $highestRow; $row++) {
+        for ($row = $firstRow; $row <= $highestRow; $row++) {
             $num++;
             if ($sheet->getCell('B'.$row)->getValue() != '') {
                 for ($column = 0; $column < count($arrayLabel); $column++) {
@@ -120,9 +130,9 @@ class XlsManager {
         $inputFileName = $this->pathOrders.'/form_order.xlsx';
 
 //  Read your Excel workbook
-            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-            $objPHPExcel = $objReader->load($inputFileName);
+        $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+        $objPHPExcel = $objReader->load($inputFileName);
 
 //  Get worksheet dimensions
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
@@ -170,7 +180,7 @@ class XlsManager {
             $numLabel++;
         }
         try {
-        //insert user choices and categories of dishes
+            //insert user choices and categories of dishes
             for ($row = $firstRow; $row <= $highestRow; $row++) {
                 foreach ($arrayLabel as $column) {
                     if ($column == 'B') {
@@ -185,7 +195,7 @@ class XlsManager {
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             die('Please, reload the page');
         }
 
@@ -199,19 +209,23 @@ class XlsManager {
         $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
 
         //  Read your Excel workbook
-        try {
-            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-            $objPHPExcel = $objReader->load($inputFileName);
-        } catch (Exception $e) {
-            die('Error loading file "'.pathinfo($inputFileName, PATHINFO_BASENAME).'": '.$e->getMessage());
-        }
+        $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+        $objPHPExcel = $objReader->load($inputFileName);
 
-        // Get worksheet dimensions
-        $firstRow = 6;
         $sheet = $objPHPExcel->setActiveSheetIndex(1);
         $highestRow = $sheet->getHighestRow();
         $arrayLabel = array('C', 'E', 'G', 'I', 'K');
+
+        // Get worksheet dimensions
+        //search first row for parsing
+        $firstRow = 1;
+        for ($row = $firstRow; $row <= $highestRow; $row++) {
+            if ($sheet->getCell('A'.$row)->getValue() == 'Салат №1') {
+                $firstRow = $row;
+                break;
+            }
+        }
 
         //get the number of servings of each dish
         $numServings = [];
@@ -231,7 +245,7 @@ class XlsManager {
         // Change the file
         $numLunch = 0;
 
-        //insert user choices and categories of dishes
+        // Insert user choices and categories of dishes
         for ($row = $firstRow; $row <= $highestRow; $row++) {
             foreach ($arrayLabel as $column) {
                 if ($sheet->getCell('B'.$row)->getValue() != '') {

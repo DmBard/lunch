@@ -21,8 +21,6 @@ class AdminController extends Controller
     protected $categories;
     protected $days;
     private $dateperiod;
-    private $pathDocuments;
-    private $pathOrders;
 
     function __construct()
     {
