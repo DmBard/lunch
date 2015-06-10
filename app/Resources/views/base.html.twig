@@ -11,13 +11,19 @@
     <div align="center"> <a href="{{ path('ens_lunch') }}"><img src="{{ asset('/uploads/documents/lunch_logo.png') }}"/></a></div>
     <div align="right"><h4>
             You are logged as:
-            <a href="{{ path('ens_lunch_my_order') }}">{{ app.user.username }} ({{ app.user.name }}) |</a>
+            {% if is_granted('ROLE_USER') %}
+
+            <a href="{{ path('ens_lunch_my_order') }}">
+                {{ app.user.username }} {{ app.user.name }} |
+            </a>
             {% if  is_granted("ROLE_ADMIN") %}
                 <a href="{{ path('ens_lunch_admin') }}">
                     Admin panel | </a>
             {% endif %}
             <a href="{{ path('fos_user_security_logout') }}">
                 Logout </a>
+                {% else %} Anonim
+            {% endif %}
         </h4></div>
 {% endblock %}
 {% block body %}{% endblock %}

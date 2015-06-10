@@ -84,6 +84,7 @@ class AdminController extends Controller
                 'dateperiod' => $this->dateperiod,
                 'warning' => $warning,
                 'remainingTime' => $remainingTime,
+                'isNewMenu' => $isNewMenu,
             )
         );
     }
