@@ -87,7 +87,6 @@ fr3d_ldap:
 
 parameters:
     upload_path:
-      base: ../web/uploads
       documents: /documents
       orders: /orders
 

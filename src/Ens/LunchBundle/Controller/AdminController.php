@@ -46,14 +46,14 @@ class AdminController extends Controller
         } else {
             $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
         }
-
-        $this->get('service_container')->getParameter('upload_path');
-        $this->pathDocuments = $path['documents'];
-        $this->pathOrders = $path['orders'];
     }
 
     public function adminIndexAction()
     {
+        $pathManager = $this->get('service_container')->get('ens_lunch.path_manager');
+        $this->pathDocuments = $pathManager->getDocumentPath();
+        $this->pathOrders = $pathManager->getOrderPath();
+
         /** @var ManagerRegistry $em */
         $em = $this->getDoctrine()->getManager();
         $repoDocs = $em->getRepository('EnsLunchBundle:Document');

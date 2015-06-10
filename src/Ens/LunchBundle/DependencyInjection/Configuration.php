@@ -24,7 +24,6 @@ class Configuration implements ConfigurationInterface
             ->children()
             ->arrayNode('upload_path')
             ->children()
-            ->scalarNode('base')->end()
             ->scalarNode('documents')->end()
             ->scalarNode('orders')->end()
             ->end()

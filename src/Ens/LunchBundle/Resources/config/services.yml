@@ -8,11 +8,11 @@ services:
 
     ens_lunch.xls_manager:
         class: Ens\LunchBundle\Service\XlsManager
-        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+        arguments: [@doctrine.orm.entity_manager, @ens_lunch.path_manager]
 
     ens_lunch.path_manager:
             class: Ens\LunchBundle\Service\PathManager
-            arguments: ["@service_container"]
+            arguments: ["@service_container", '%kernel.root_dir%']
 
     ens_lunch.ldap_manager:
             class: Ens\LunchBundle\Security\LdapManager

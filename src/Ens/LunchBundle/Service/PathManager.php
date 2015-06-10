@@ -19,20 +19,22 @@ class PathManager {
     function __construct(Container $container)
     {
         $this->container = $container;
-        $this->container->getParameter('kernel.root_dir')
-        $this->webPath = $this->get('kernel')->getRootDir() . '/../web' ;
+        $this->webPath = realpath('%kernel.root_dir%'). '/web/uploads';
     }
 
     public function getOrderPath()
     {
-        $webPath = $this->get('kernel')->getRootDir() . '/../web' ;
-        $this->pathDocuments = $path['documents'];
-        $this->pathOrders = $path['orders'];
-
+        $rootPath = $this->webPath;
+        $orderPath = $this->container->getParameter('upload_path')['orders'];
+        $result = sprintf('%s%s', $rootPath, $orderPath);
+        return $result;
     }
 
     public function getDocumentPath()
     {
-
+        $rootPath = $this->webPath;
+        $docPath = $this->container->getParameter('upload_path')['documents'];
+        $result = sprintf('%s%s', $rootPath, $docPath);
+        return $result;
     }
 }

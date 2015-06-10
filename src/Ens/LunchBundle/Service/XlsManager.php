@@ -11,16 +11,18 @@ namespace Ens\LunchBundle\Service;
 use Ens\LunchBundle\Entity\Lunch;
 use PHPExcel_IOFactory;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
-use Symfony\Component\DependencyInjection\Container;
 
 
 class XlsManager {
 
-    private $dateperiod;
+    protected $dateperiod;
     protected $em;
     protected $container;
 
-    function __construct($em, Container $container)
+    protected $pathDocuments;
+    protected $pathOrders;
+
+    function __construct($em, $pathManager)
     {
         if (date('D') == 'Mon') {
             $this->dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
@@ -28,6 +30,9 @@ class XlsManager {
             $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
         }
         $this->em = $em;
+
+        $this->pathDocuments = $pathManager->getDocumentPath();
+        $this->pathOrders = $pathManager->getOrderPath();
     }
 
     /**
@@ -44,7 +49,7 @@ class XlsManager {
             $objPHPExcel = $objReader->load($inputFileName);
 
 //  Get worksheet dimensions
-        $sheet = $objPHPExcel->getSheet(0);
+        $sheet = $objPHPExcel->getSheet(1);
         $highestRow = $sheet->getHighestRow();
         $arrayLabel = array('B', 'D', 'F', 'H', 'J');
 
@@ -81,7 +86,7 @@ class XlsManager {
         }
 
 //  Loop through each row of the worksheet in turn
-        for ($row = 2; $row <= $highestRow; $row++) {
+        for ($row = 6; $row <= $highestRow; $row++) {
             $num++;
             if ($sheet->getCell('B'.$row)->getValue() != '') {
                 for ($column = 0; $column < count($arrayLabel); $column++) {
@@ -112,7 +117,7 @@ class XlsManager {
      */
     public function writeOrderXlsFile($names, $userChoices, $floor)
     {
-        $inputFileName = $this->pathOrders.'form_order.xlsx';
+        $inputFileName = $this->pathOrders.'/form_order.xlsx';
 
 //  Read your Excel workbook
             $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
@@ -191,6 +196,9 @@ class XlsManager {
 
     public function writeMenuXlsFile($floor)
     {
+        $pathManager = $this->container->get('ens_lunch.path_manager');
+        $this->pathDocuments = $pathManager->getDocumentPath();
+        $this->pathOrders = $pathManager->getOrderPath();
         $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
 
         //  Read your Excel workbook
@@ -203,8 +211,8 @@ class XlsManager {
         }
 
         // Get worksheet dimensions
-        $firstRow = 2;
-        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $firstRow = 6;
+        $sheet = $objPHPExcel->setActiveSheetIndex(1);
         $highestRow = $sheet->getHighestRow();
         $arrayLabel = array('C', 'E', 'G', 'I', 'K');
 
@@ -229,7 +237,7 @@ class XlsManager {
         //insert user choices and categories of dishes
         for ($row = $firstRow; $row <= $highestRow; $row++) {
             foreach ($arrayLabel as $column) {
-                if ($sheet->getCell('A'.$row)->getValue() != '') {
+                if ($sheet->getCell('B'.$row)->getValue() != '') {
                     $sheet->setCellValue($column.$row, $numServings[$numLunch]);
                     $numLunch++;
                 }
