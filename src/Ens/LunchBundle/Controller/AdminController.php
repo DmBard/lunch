@@ -38,11 +38,10 @@ class AdminController extends Controller
             'Dessert',
         ];
 
-        if (date('D') == 'Mon') {
-            $this->dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        } else {
-            $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        }
+        $this->dateperiod = date("d.m.Y", strtotime("next Monday")).'-'.date(
+                "d.m.Y",
+                strtotime("next Monday + 4 days")
+            );
     }
 
     public function adminIndexAction()
@@ -127,7 +126,7 @@ class AdminController extends Controller
                 $xlsParser = $this->get('ens_lunch.xls_manager');
                 $xlsParser->parseXlsFile();
             } catch (\Exception $e) {
-                $this->render('EnsLunchBundle:Lunch:error.html.twig');
+                return $this->render('EnsLunchBundle:Lunch:error.html.twig');
             }
 
             return $this->redirectToRoute('ens_lunch_show_all');
@@ -284,8 +283,6 @@ class AdminController extends Controller
     {
         $adminManager = $this->get('ens_lunch.ldap_manager');
         $adminManager->addRoleAdmin($user);
-
-            // do some sort of processing
 
         return $this->redirect($this->generateUrl('ens_all_users'));
     }

@@ -26,11 +26,11 @@ class XlsManager
 
     function __construct($em, $pathManager)
     {
-        if (date('D') == 'Mon') {
-            $this->dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        } else {
-            $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        }
+        $this->dateperiod = date("d.m.Y", strtotime("next Monday")).'-'.date(
+                "d.m.Y",
+                strtotime("next Monday + 4 days")
+            );
+
         $this->em = $em;
 
         $this->pathDocuments = $pathManager->getDocumentPath();
@@ -48,7 +48,7 @@ class XlsManager
             $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xls';
         }
 
-//  Read your Excel workbook
+        //  Read your Excel workbook
         $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         $objPHPExcel = $objReader->load($inputFileName);
@@ -109,14 +109,14 @@ class XlsManager
             $this->em->persist($item);
         }
 
-//  Loop through each row of the worksheet in turn
+        //  Loop through each row of the worksheet in turn
         for ($row = $firstRow; $row <= $highestRow; $row++) {
             $num++;
             if ($sheet->getCell('B'.$row)->getValue() != '') {
                 for ($column = 0; $column < count($arrayLabel); $column++) {
                     $description = $sheet->getCell($arrayLabel[$column].$row)->getValue();
                     $lunch = new Lunch();
-// display each cell value
+        // display each cell value
                     $lunch->setCategories($categories[$num_category]);
                     $lunch->setDay($days[$column]);
                     $lunch->setCount($num);
@@ -146,12 +146,12 @@ class XlsManager
             $inputFileName = $this->pathOrders.'/form_order.xls';
         }
 
-//  Read your Excel workbook
+        //  Read your Excel workbook
         $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         $objPHPExcel = $objReader->load($inputFileName);
 
-//  Get worksheet dimensions
+        //  Get worksheet dimensions
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
         $firstRow = 2;
         $countOfDishes = 4;
@@ -175,7 +175,7 @@ class XlsManager
             'Пт.',
         ];
 
-// Change the file
+        // Change the file
         $numName = 0;
         $numCategory = 0;
         $numChoice = 0;
@@ -216,7 +216,7 @@ class XlsManager
             die('Please, reload the page');
         }
 
-// Write the file
+        // Write the file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, $inputFileType);
         $objWriter->save($this->pathOrders.$this->dateperiod.'_'.$floor.'_order.xlsx');
     }

@@ -6,9 +6,9 @@
         <p><b>Name:</b> {{ user.name }}</p>
         <p><b>E-mail:</b> {{ user.email }}</p>
         <p><b>Your default action if you will forget to do the order  next week:</b><Br>
-            <input type="radio" name="def_action" value="1" checked>Skip my order<Br>
-            <input type="radio" name="def_action" value="2">Random choice<Br>
-            <input type="radio" name="def_action" value="3">Previous choice<Br></p>
+            <input type="radio" name="def_action" value="1" {% if defAction == 1 %}  {% endif %}>Skip my order<Br>
+            <input type="radio" name="def_action" value="2" {% if defAction == 2 %} checked {% endif %}>Random choice<Br>
+            <input type="radio" name="def_action" value="3" {% if defAction == 3 %} checked {% endif %}>Previous choice<Br></p>
         <input type="submit" value="Save">
     </form>
 {% endblock %}

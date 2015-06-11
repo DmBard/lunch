@@ -42,9 +42,10 @@ class Document
      */
     private $time;
 
-    public function __construct(){
-        $this->time =  new \DateTime('next friday');
-        $this->time ->setTime(17, 00);
+    public function __construct()
+    {
+        $this->time = new \DateTime('next friday');
+        $this->time->setTime(17, 00);
     }
 
     /**
@@ -62,6 +63,7 @@ class Document
     public function setTime($time)
     {
         $this->time = $time;
+
         return $this;
     }
 
@@ -126,11 +128,10 @@ class Document
         // move takes the target directory and then the
         // target filename to move to
 
-        if (date('D') == 'Mon') {
-            $dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        } else {
-            $dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        }
+        $dateperiod = date("d.m.Y", strtotime("next Monday")).'-'.date(
+                "d.m.Y",
+                strtotime("next Monday + 4 days")
+            );
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $dateperiod.'_menu.xlsx'
@@ -157,5 +158,15 @@ class Document
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @Assert\True(message = "Set time in future")
+     */
+    public function isDateLegal()
+    {
+        $currentTime = new \DateTime("now");
+
+        return ($currentTime < $this->time);
     }
 }

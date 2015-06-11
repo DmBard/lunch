@@ -2,10 +2,10 @@
 
 {% block body -%}
 
-        <h2>MENU {{ dateperiod }}</h2>
+    <h2>MENU {{ dateperiod }}</h2>
 
-        <h3><font color="red">{{ warning }}</font></h3>
-        <h3><font color="red">{{ remainingTime }}</font></h3>
+    <h3><font color="red">{{ warning }}</font></h3>
+    <h3><font color="red">{{ remainingTime }}</font></h3>
 
     <form action="{{ path('ens_lunch_order') }}" method="post">
         Select your floor!
@@ -15,10 +15,10 @@
             }
         </style>
 
-            <select name="floor">
-                <option value="floor_4">4 floor</option>
-                <option value="floor_5">5 floor</option>
-            </select>
+        <select name="floor">
+            <option value="floor_4">4 floor</option>
+            <option value="floor_5">5 floor</option>
+        </select>
 
         <table class="records_list">
             <thead>
@@ -40,8 +40,8 @@
                             <label>
                                 <select name="{{ category }}[{{ day }}]">
                                     {% for entity in entities %}
-                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category ) and (entity.active  ==  true )) %}
-                                            <option value="{{ entity.id }}">{{ entity.description }}</option>
+                                        {% if ((entity.day  ==  day ) and (entity.categories  ==  category )) %}
+                                            <option value="{{ entity.id }}" {% if entity.id in joins %} selected {% endif %}>{{ entity.description }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>

@@ -35,11 +35,10 @@ class LunchController extends Controller
             'Dessert',
         ];
 
-        if (date('D') == 'Mon') {
-            $this->dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        } else {
-            $this->dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
-        }
+        $this->dateperiod = date("d.m.Y", strtotime("next Monday")).'-'.date(
+                "d.m.Y",
+                strtotime("next Monday + 4 days")
+            );
     }
 
     /**
@@ -72,11 +71,19 @@ class LunchController extends Controller
         $remainingTime = '';
         $warningText = 'You have not completed the order on the current week';
         $joins = $repoJoins->getActiveJoinsByOneUser($user);
+
+        //get the array of id lunches
+        $joinsLunchIds = [];
+        foreach ($joins as $join) {
+            array_push($joinsLunchIds, $join->getIdLunch());
+        }
+
+        //set the warning text
         if (count($joins) == 0) {
             $warning = $warningText;
 
-            //Set the remaining time
-            $remainingTime = $this->setRemainingTime($documents, $repoDocs);
+        //Set the remaining time
+        $remainingTime = $this->setRemainingTime($documents, $repoDocs);
         } else {
             foreach ($joins as $join) {
                 $myLunch = $repoLunch->findOneBy(
@@ -125,6 +132,7 @@ class LunchController extends Controller
                 'dateperiod' => $this->dateperiod,
                 'warning' => $warning,
                 'remainingTime' => $remainingTime,
+                'joins' => $joinsLunchIds,
             )
         );
     }
@@ -136,6 +144,11 @@ class LunchController extends Controller
             'EnsLunchBundle:Jointable'
         )->getActiveJoinsByOneUser($user);
         $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
+        $searchUser = $this->getDoctrine()->getManager()->getRepository(
+            'EnsLunchBundle:User'
+        )->findOneBy(array('username' => $user->getUsername()));
+
+        $defAction = $searchUser->getDefaultAction();
 
         return $this->render(
             'EnsLunchBundle:Lunch:order.html.twig',
@@ -146,6 +159,7 @@ class LunchController extends Controller
                 'user' => $user,
                 'joins' => $joins,
                 'dateperiod' => $this->dateperiod,
+                'defAction' => $defAction,
             )
         );
     }
@@ -177,6 +191,8 @@ class LunchController extends Controller
 
         $lunches = $this->getDoctrine()->getManager()->getRepository('EnsLunchBundle:Lunch')->getActiveLunches();
 
+        $defAction = $searchUser->getDefaultAction();
+
         return $this->render(
             'EnsLunchBundle:Lunch:order.html.twig',
             array(
@@ -186,6 +202,7 @@ class LunchController extends Controller
                 'user' => $user,
                 'joins' => $joins,
                 'dateperiod' => $this->dateperiod,
+                'defAction' => $defAction,
             )
         );
     }
