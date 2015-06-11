@@ -107,8 +107,8 @@ class AdminController extends Controller
     {
         $document = new Document();
         $form = $this->createFormBuilder($document)
-            ->add('file')
-            ->add('time')
+            ->add('file', null, array('label' => 'Upload menu file (only xlsx)'))
+            ->add('time', null, array('label' => 'Set time to complete orders'))
             ->add('submit', 'submit', array('label' => 'Create'))
             ->getForm();
 

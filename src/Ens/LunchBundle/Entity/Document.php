@@ -29,7 +29,11 @@ class Document
     private $path;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     mimeTypes = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+     *     mimeTypesMessage = "Please upload a valid .xlsx"
+     * )
      */
     private $file;
 
@@ -122,16 +126,14 @@ class Document
         // move takes the target directory and then the
         // target filename to move to
 
-        $upFile = $this->getFile();
         if (date('D') == 'Mon') {
             $dateperiod = date("d.m.Y", strtotime("Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
         } else {
             $dateperiod = date("d.m.Y", strtotime("last Monday")).'-'.date("d.m.Y", strtotime("Sunday"));
         }
-        $upFile->setOriginalName($dateperiod.'_menu.xlsx');
         $this->getFile()->move(
             $this->getUploadRootDir(),
-            $this->getFile()->getClientOriginalName()
+            $dateperiod.'_menu.xlsx'
         );
 
         // set the path property to the filename where you've saved the file

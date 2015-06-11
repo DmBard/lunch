@@ -43,6 +43,9 @@ class XlsManager
     public function parseXlsFile()
     {
         $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
+        if (!file_exists($inputFileName)) {
+            $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xls';
+        }
 
 //  Read your Excel workbook
         $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
@@ -128,6 +131,9 @@ class XlsManager
     public function writeOrderXlsFile($names, $userChoices, $floor)
     {
         $inputFileName = $this->pathOrders.'/form_order.xlsx';
+        if (!file_exists($inputFileName)) {
+            $inputFileName = $this->pathOrders.'/form_order.xls';
+        }
 
 //  Read your Excel workbook
         $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
@@ -207,6 +213,9 @@ class XlsManager
     public function writeMenuXlsFile($floor)
     {
         $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xlsx';
+        if (!file_exists($inputFileName)) {
+            $inputFileName = $this->pathDocuments.$this->dateperiod.'_menu.xls';
+        }
 
         //  Read your Excel workbook
         $inputFileType = PHPExcel_IOFactory::identify($inputFileName);

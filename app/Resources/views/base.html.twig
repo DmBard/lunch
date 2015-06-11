@@ -14,7 +14,7 @@
             {% if is_granted('ROLE_USER') %}
 
             <a href="{{ path('ens_lunch_my_order') }}">
-                {{ app.user.username }} {{ app.user.name }} |
+                {{ app.user.username }}|
             </a>
             {% if  is_granted("ROLE_ADMIN") %}
                 <a href="{{ path('ens_lunch_admin') }}">
@@ -22,11 +22,12 @@
             {% endif %}
             <a href="{{ path('fos_user_security_logout') }}">
                 Logout </a>
-                {% else %} Anonim
+                {% else %} Guest
             {% endif %}
         </h4></div>
 {% endblock %}
 {% block body %}{% endblock %}
+{% block body2 %}{% endblock %}
 {% block javascripts %}{% endblock %}
 </body>
 </html>

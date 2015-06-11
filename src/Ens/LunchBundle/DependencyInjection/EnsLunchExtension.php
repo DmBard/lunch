@@ -22,11 +22,6 @@ class EnsLunchExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-//        $container->setParameter('lunch.base', $config['upload_path']['base']);
-//        $container->setParameter('lunch.documents', $config['upload_path']['documents']);
-//        $container->setParameter('lunch.orders', $config['upload_path']['orders']);
-
-
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
