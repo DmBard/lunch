@@ -280,6 +280,38 @@ class AdminController extends Controller
         );
     }
 
+    public function addAdminRoleAction($user)
+    {
+        $adminManager = $this->get('ens_lunch.ldap_manager');
+        $adminManager->addRoleAdmin($user);
+
+            // do some sort of processing
+
+        return $this->render('EnsLunchBundle:Lunch:add_role_admin.html.twig');
+    }
+
+    public function removeAdminRoleAction($user)
+    {
+        $adminManager = $this->get('ens_lunch.ldap_manager');
+        $adminManager->removeRoleAdmin($user);
+
+        return $this->render('EnsLunchBundle:Lunch:rem_role_admin.html.twig');
+    }
+
+    public function downloadFileAction($name)
+    {
+        $pathManager = $this->get('ens_lunch.path_manager');
+        $pathOrders = $pathManager->getOrderPath();
+        $path = $pathOrders.$this->dateperiod.'_'.$name.'.xlsx';
+        $content = file_get_contents($path);
+        $response = new Response();
+        $response->headers->set('Content-Type', 'xls/xlsx');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$this->dateperiod.'_'.$name.'.xlsx');
+        $response->setContent($content);
+
+        return $response;
+    }
+
     /**
      * @param $em
      * @param $userName
@@ -425,19 +457,5 @@ class AdminController extends Controller
         $em->flush();
 
         return $userChoices;
-    }
-
-    public function downloadFileAction($name)
-    {
-        $pathManager = $this->get('ens_lunch.path_manager');
-        $pathOrders = $pathManager->getOrderPath();
-        $path = $pathOrders.$this->dateperiod.'_'.$name.'.xlsx';
-        $content = file_get_contents($path);
-        $response = new Response();
-        $response->headers->set('Content-Type', 'xls/xlsx');
-        $response->headers->set('Content-Disposition', 'attachment;filename="'.$this->dateperiod.'_'.$name.'.xlsx');
-        $response->setContent($content);
-
-        return $response;
     }
 }

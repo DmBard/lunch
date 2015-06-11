@@ -11,6 +11,7 @@
             <th>Role</th>
             <th>E-mail</th>
             <th>Default action</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +31,22 @@
                 </td>
                 <td>{{ entity.email }}</td>
                 <td>{{ entity.defaultAction }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ens_add_admin_role', { 'user':  entity.username } ) }}">
+                                Add admin role
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ens_remove_admin_role', { 'user':  entity.username } ) }}">
+                                Remove admin role
+                            </a>
+                        </li>
+                    </ul>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

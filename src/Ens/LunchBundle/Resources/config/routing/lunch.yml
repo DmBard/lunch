@@ -35,10 +35,19 @@ ens_lunch_my_order:
     defaults: { _controller: "EnsLunchBundle:Lunch:userOrder" }
     methods:  GET
 
-
 ens_all_users:
     path:     /admin/users
     defaults: { _controller: "EnsLunchBundle:Admin:showAllUsers" }
+    methods:  GET
+
+ens_add_admin_role:
+    path:     /admin/addAdminRole/{user}
+    defaults: { _controller: "EnsLunchBundle:Admin:addAdminRole" }
+    methods:  GET
+
+ens_remove_admin_role:
+    path:     /admin/removeAdminRole/{user}
+    defaults: { _controller: "EnsLunchBundle:Admin:removeAdminRole" }
     methods:  GET
 
 ens_order_menu_files:

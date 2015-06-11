@@ -31,6 +31,29 @@ class LdapManager extends BaseLdapManager
         if (count($allUsers) == 0 ||($searchUser && in_array('ROLE_ADMIN', $searchUser->getRoles()))) {
             $user->addRole('ROLE_ADMIN');
         }
+    }
 
+    public function addRoleAdmin($user)
+    {
+        $em = $this->entityManager;
+        $searchUser = $em->getRepository(
+            'EnsLunchBundle:User'
+        )->findOneBy(array('username' => $user));
+
+        $searchUser->addRole('ROLE_ADMIN');
+        $em->persist($searchUser);
+        $em->flush();
+    }
+
+    public function removeRoleAdmin($user)
+    {
+        $em = $this->entityManager;
+        $searchUser = $em->getRepository(
+            'EnsLunchBundle:User'
+        )->findOneBy(array('username' => $user));
+
+        $searchUser->removeRole('ROLE_ADMIN');
+        $em->persist($searchUser);
+        $em->flush();
     }
 }
