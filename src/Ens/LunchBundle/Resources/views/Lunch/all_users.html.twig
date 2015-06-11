@@ -32,20 +32,23 @@
                 <td>{{ entity.email }}</td>
                 <td>{{ entity.defaultAction }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('ens_add_admin_role', { 'user':  entity.username } ) }}">
-                                Add admin role
-                            </a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a href="{{ path('ens_remove_admin_role', { 'user':  entity.username } ) }}">
-                                Remove admin role
-                            </a>
-                        </li>
-                    </ul>
+                    {% if ("ROLE_SUPER_ADMIN" in entity.roles) or ("ROLE_ADMIN" in entity.roles) %}
+                        <ul>
+                            <li>
+                                <a href="{{ path('ens_remove_admin_role', { 'user':  entity.username } ) }}">
+                                    Remove admin role
+                                </a>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <ul>
+                            <li>
+                                <a href="{{ path('ens_add_admin_role', { 'user':  entity.username } ) }}">
+                                    Add admin role
+                                </a>
+                            </li>
+                        </ul>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

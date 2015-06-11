@@ -287,7 +287,7 @@ class AdminController extends Controller
 
             // do some sort of processing
 
-        return $this->render('EnsLunchBundle:Lunch:add_role_admin.html.twig');
+        return $this->redirect($this->generateUrl('ens_all_users'));
     }
 
     public function removeAdminRoleAction($user)
@@ -295,7 +295,7 @@ class AdminController extends Controller
         $adminManager = $this->get('ens_lunch.ldap_manager');
         $adminManager->removeRoleAdmin($user);
 
-        return $this->render('EnsLunchBundle:Lunch:rem_role_admin.html.twig');
+        return $this->redirect($this->generateUrl('ens_all_users'));
     }
 
     public function downloadFileAction($name)
