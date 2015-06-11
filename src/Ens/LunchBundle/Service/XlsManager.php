@@ -10,6 +10,7 @@ namespace Ens\LunchBundle\Service;
 
 use Ens\LunchBundle\Entity\Lunch;
 use PHPExcel_IOFactory;
+use PHPExcel_Worksheet;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 
@@ -52,8 +53,18 @@ class XlsManager
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         $objPHPExcel = $objReader->load($inputFileName);
 
-//  Get worksheet dimensions
-        $sheet = $objPHPExcel->getSheet(1);
+        // Get Active sheet
+        $sheet = $objPHPExcel->getSheet(0);
+        $sheetCount = $objPHPExcel->getSheetCount();
+        for ($i = 0; $i < $sheetCount; $i++) {
+            $sheet = $objPHPExcel->getSheet($i);
+            $sheetState = $sheet->getSheetState();
+            if ($sheetState != PHPExcel_Worksheet::SHEETSTATE_HIDDEN) {
+                break;
+            }
+        }
+
+        //  Get worksheet dimensions
         $highestRow = $sheet->getHighestRow();
         $arrayLabel = array('B', 'D', 'F', 'H', 'J');
 
@@ -222,7 +233,19 @@ class XlsManager
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         $objPHPExcel = $objReader->load($inputFileName);
 
-        $sheet = $objPHPExcel->setActiveSheetIndex(1);
+        // Get number of the first not hidden sheet
+        $numActiveSheet = 0;
+        $sheetCount = $objPHPExcel->getSheetCount();
+        for ($i = 0; $i < $sheetCount; $i++) {
+            $sheet = $objPHPExcel->getSheet($i);
+            $sheetState = $sheet->getSheetState();
+            if ($sheetState != PHPExcel_Worksheet::SHEETSTATE_HIDDEN) {
+                $numActiveSheet = $i;
+                break;
+            }
+        }
+
+        $sheet = $objPHPExcel->setActiveSheetIndex($numActiveSheet);
         $highestRow = $sheet->getHighestRow();
         $arrayLabel = array('C', 'E', 'G', 'I', 'K');
 

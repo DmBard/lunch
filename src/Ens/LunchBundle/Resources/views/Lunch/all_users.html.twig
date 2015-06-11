@@ -21,7 +21,12 @@
                 <td>{{ entity.name }}</td>
                 <td>
                     {% for role in entity.roles %}
-                    {{ role }}
+                        <ul>
+                            <li>
+                                {{ role }}
+                            </li>
+                        </ul>
+                    {% endfor %}
                 </td>
                 <td>{{ entity.email }}</td>
                 <td>{{ entity.defaultAction }}</td>
