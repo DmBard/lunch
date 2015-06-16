@@ -24,9 +24,7 @@
     "incenteev/composer-parameter-handler": "~2.0",
     "doctrine/doctrine-fixtures-bundle": "dev-master",
     "phpoffice/phpexcel": "dev-master",
-//    "javiereguiluz/easyadmin-bundle": "dev-master",
     "friendsofsymfony/user-bundle": "dev-master",
-//    "imag/ldap-bundle": "dev-master",
     "fr3d/ldap-bundle": "2.0.*@dev"
 
   },
